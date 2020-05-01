@@ -1,0 +1,105 @@
+# チューナー設定
+
+チャンネル設定と同様に，チューナー設定もMirakurunと一定の互換性があります．
+
+Mirakurunの`tuners.yml`の例:
+
+```yaml
+- name: gr1
+  types: [GR]
+  command: recpt1 --device /dev/px4video2 <channel> - -
+  decoder: /usr/local/bin/decoder
+```
+
+mirakcの`config.yml`の例:
+
+```yaml
+tuners:
+  - name: gr1
+    types: [GR]
+    command: recpt1 --device /dev/px4video2 {{channel}} - -
+```
+
+ここで，`tuners[].command`にはテンプレート文字列が指定されており，`{{`と`}}`で囲
+われた識別子（上記の例では`channel`）は，テンプレートパラメーターと呼ばれる特別
+な値です．mirakcは，テンプレート言語として[Mustache]を採用しており，リスト型のテ
+ンプレートパラメーターの展開もサポートしています．`tuners[].command`以外にもいく
+つかの設定項目でテンプレート文字列が指定可能で，設定項目毎に使用可能なテンプレー
+トパラメーターは異なります．
+
+mirakcのチューナー設定には`decoder`プロパティは存在しません．その代わりに，後述
+するフィルター設定を使用します．
+
+Dockerを使用している場合，以下のように`docker-compose.yml`に使用するデバイスファ
+イルを記述する必要があります．
+
+```yaml
+version: '3.7'
+
+services:
+  mirakc:
+    image: masnagam/mirakc:alpine
+    container_name: mirakc
+    init: true
+    restart: unless-stopped
+    # `devices`を追加
+    devices:
+      # チューナーコマンドで利用するデバイスファイルを列挙
+      - /dev/px4video2
+    ports:
+      - 40772:40772
+    volumes:
+      - ./config.yml:/etc/mirakc/config.yml:ro
+    environment:
+      TZ: Asia/Tokyo
+      RUST_LOG: info
+```
+
+ここまで設定すると，EPGデータの取得が可能になります．動くか試してみましょう．
+
+```console
+# mirakcコンテナーの起動（Ctrl+Cで停止）
+$ docker-compose up -d
+...
+... scan-services: performing...
+...
+... scan-services: Done successfully, 13s 714ms 157us 639ns elapsed
+...
+^CGracefully stopping... (press Ctrl+C again to force)
+Stopping mirakc ... done
+```
+
+ここで，各行の始めの`...`は実際に表示されるテキストではなく，ログの省略を意味し
+ます．
+
+たくさんのログが表示されますが，正しく動作していれば，上記のようなログを見つける
+ことができます．
+
+## 既に稼働しているMirakurun/mirakcをチューナーとして利用する
+
+ちょっとした動作確認のために，わざわざチューナーのデバイスドライバーをインストー
+ルするのは面倒な作業です．このような場合には，以下のような設定を行い，既に稼働し
+ているMirakurunまたはmirakcをチューナーとして利用することをお勧めします（同様の
+ことはMirakurunでも可能です）．
+
+```yaml
+tuners:
+  - name: upstream
+    types: [GR, BS]
+    command: >-
+      curl -s http://upstream:40772/api/channels/{{channel_type}}/{{channel}}/stream
+```
+
+上記の`http://upstream:40772`の部分は接続先のMirakurunまたはmirakcサーバーのURL
+に置き換えてください．
+
+Mirakurunとは異なり，mirakcの`/api/channels/{{channel_type}}/{{channel}}/stream`
+APIは，チューナーからの出力をそのまま送出します．NULLパケットすらドロップしま
+せん．そのため，TSパケットを処理するツールのテストなどにも使えて便利です．
+
+```shell
+curl -s http://mirakc:40772/api/channels/GR/27/stream | \
+  MIRAKC_ARIB_LOG=debug mirakc-arib scan-services
+```
+
+[Mustache]: https://mustache.github.io/
