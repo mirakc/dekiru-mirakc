@@ -52,9 +52,10 @@ sudo docker events
 sudo docker stop custom-mirakc
 ```
 
-より実用的な例としては， collelogさんのtv-recorderが参考になります．
+より実用的な例としては，以下のDockerfileを参考にしてください．
 
-* [tv-recorder/mirakc/Dockerfile](https://github.com/collelog/tv-recorder/blob/master/mirakc/Dockerfile)
+* [tv-recorder/mirakc](https://github.com/collelog/tv-recorder/tree/master/mirakc)
+* [docker-bon-mirakurun/dockerfiles/mirakc](https://github.com/68fpjc/docker-bon-mirakurun/blob/master/dockerfiles/mirakc)
 
 Dockerイメージのビルド時に，追加するソフトウェアをクロスビルドする場合などは，以
 下を参考にしてください．
