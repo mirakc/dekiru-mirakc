@@ -71,9 +71,9 @@ filters:
 ```yaml
 filters:
   post-filter: >-
-    # 標準入力から入力されるTSストリームをリモートホストtsdのTCP 40774ポートに転
+    # 標準入力から入力されるTSストリームをリモートホストtsdのTCP 40773ポートに転
     # 送し，tsdから返されたTSストリームを標準出力に出力
-    socat - tcp-connect:tsd:40774
+    socat - tcp-connect:tsd:40773
 ```
 
 [socat]は，配布している`masnagam/mirakc`イメージにも含まれているツールです．詳し

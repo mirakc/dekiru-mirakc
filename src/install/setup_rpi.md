@@ -7,11 +7,13 @@ Raspberry Piのセットアップ手順については，「Raspberry Pi 4で構
 
 * Raspberry Pi 3B
 * 2020-02-13-raspbian-buster-lite.img
+* PX-Q3U4 + [nns779/px4_drv]
 
 で動作確認をしましたが，以下のような環境でも動作します．
 
-* Raspberry Pi 2B以上 + Raspbian
-* ROCK64 + Armbian
+* Raspberry Pi 2B以上 + Raspbian (arm32v7)
+* ZeroPi + [Armbian] (arm32v7)
+* ROCK64 + Armbian (arm64v8)
 
 ## デバイスの準備
 
@@ -27,6 +29,13 @@ echo "dtoverlay=pi3-disable-wifi" >>/Volumes/boot/config.txt
 
 # Bluetoothの無効化（使わない場合）
 echo "dtoverlay=pi3-disable-bt" >>/Volumes/boot/config.txt
+```
+
+必要に応じて以下のカーネルパラメーターを設定してください．
+
+```text
+# cmdline.txt
+... coherent_pool=4M ...
 ```
 
 マイクロSDカードをRaspberry Piに挿入し，電源をオン．有効化してある`ssh`を使って
@@ -83,3 +92,6 @@ sudo apt-get update
 sudo apt-get dist-upgrade
 sudo reboot
 ```
+
+[nns779/px4_drv]: https://github.com/nns779/px4_drv
+[Armbian]: https://en.wikipedia.org/wiki/Armbian

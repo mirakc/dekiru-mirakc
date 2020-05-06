@@ -1,8 +1,8 @@
 # masnagam/mirakcイメージ
 
-Docker Hubで配布している[masnagam/mirakc]イメージには，起動に必要なツールがすべ
-て含まれています．各自でツールをソースからビルドしたりインストールする必要はあり
-ません．
+Docker Hubで配布している[masnagam/mirakc]イメージには，mirakcと`recpt1`などの主
+要なツールがすでに含まれています．多くの場合，各自でツールをソースからビルドした
+りインストールする必要はありません．
 
 [mirakc/docs/docker.md]に記載されているように，`masnagam/mirakc`イメージには複数
 のタグがあり，この中から自分の目的に合ったタグを選択します．以下に代表的なタグを
@@ -11,15 +11,15 @@ Docker Hubで配布している[masnagam/mirakc]イメージには，起動に�
 * latest
   * debianのエイリアス
 * debian
-  * Debian/Busterベースの最新リリースイメージ
+  * 最新リリースのDebian/Busterベースのイメージ
 * alpine
-  * Alpine/3.11ベースの最新リリースイメージ
+  * 最新リリースのAlpine/3.11ベースのイメージ
 * master
   * master-debianのエイリアス
 * master-debian
-  * Debian/BusterベースのGitHub masterブランチの最新コミットから作成したイメージ
+  * GitHub masterブランチの最新コミットから作成したDebian/Busterベースのイメージ
 * alpine
-  * Alpine/3.11ベースのGitHub masterブランチの最新コミットから作成したイメージ
+  * GitHub masterブランチの最新コミットから作成したAlpine/3.11ベースのイメージ
 
 これらのイメージは全てマルチアーキイメージです．以下のアーキテクチャーをサポート
 しています．

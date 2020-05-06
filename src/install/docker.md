@@ -26,7 +26,7 @@ docker version
 ```
 
 次に`docker-compose`をインストールします．残念ながら，公式リポジトリー
-[docker/compose]ではAMD64バイナリーしか配布されていません．そこで，私が作成した
+[docker/compose]ではamd64バイナリーしか配布されていません．そこで，私が作成した
 [masnagam/install-docker-compose]スクリプトを使用します．このスクリプトを使用す
 ると，Docker Hubにアップロード済みの[masnagam/docker-compose]イメージからバイナ
 リーを抽出できます．
@@ -40,8 +40,9 @@ curl -fsSL https://raw.githubusercontent.com/masnagam/install-docker-compose/mas
 docker-compose version
 ```
 
-上記で利用したDockerイメージはDebian/Busterベースですが，RaspbianもDebian/Buster
-をベースとして作成されているため，問題なく動作します．
+上記で利用したDockerイメージはDebian/Busterベースですが，今回使用している
+RaspbianのバージョンもDebian/Busterをベースとして作成されているため，問題なく動
+作します．
 
 上記で利用した`masnagam/docker-compose`イメージは，
 [GitHub Actions](https://github.com/masnagam/install-docker-compose/blob/master/.github/workflows/build.yml)

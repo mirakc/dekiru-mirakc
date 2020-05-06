@@ -47,7 +47,7 @@ channels:
 | （なし）              | excluded_services（配列） |
 
 チューナーコマンドとして`recpt1`を使用する場合，以下のようなMirakurun用のチャン
-ネル・スキャン・スクリプトを利用可能です．
+ネルスキャンスクリプトを利用可能です．
 
 * [mcconfig.pl](https://www.jifu-labo.net/2019/02/mirakurn_channels_config/)
 * [uru2/scan_ch_mirak.sh](https://gist.github.com/uru2/479b7da80063e39d1ca2cf467e40e290)
