@@ -27,14 +27,14 @@ docker version
 
 次に`docker-compose`をインストールします．残念ながら，公式リポジトリー
 [docker/compose]ではamd64バイナリーしか配布されていません．そこで，私が作成した
-[masnagam/install-docker-compose]スクリプトを使用します．このスクリプトを使用す
-ると，Docker Hubにアップロード済みの[masnagam/docker-compose]イメージからバイナ
-リーを抽出できます．
+[masnagam/sbc-scripts]の`get-docker-compose`スクリプトを使用します．このスクリプ
+トを使用すると，Docker Hubにアップロード済みの[masnagam/docker-compose]イメージ
+からバイナリーを抽出できます．
 
 ```shell
 # Dockerイメージからdocker-composeコマンドを抽出
-curl -fsSL https://raw.githubusercontent.com/masnagam/install-docker-compose/master/run | \
-  sh -s -- latest | sudo tar -x -C /usr/local/bin
+curl -fsSL https://raw.githubusercontent.com/masnagam/sbc-scripts/master/get-docker-compose | \
+  sh | sudo tar -x -C /usr/local/bin
 
 # バージョンが表示されればOK
 docker-compose version
@@ -45,8 +45,8 @@ RaspbianのバージョンもDebian/Busterをベースとして作成されて�
 作します．
 
 上記で利用した`masnagam/docker-compose`イメージは，
-[GitHub Actions](https://github.com/masnagam/install-docker-compose/blob/master/.github/workflows/build.yml)
-と公式リポジトリーに含まれている
+[GitHub Actions](https://github.com/masnagam/sbc-scripts/actions)と公式リポジト
+リーに含まれている
 [Dockerfile](https://github.com/docker/compose/blob/master/Dockerfile)を使ってビ
 ルドしたマルチアーキイメージです．現時点では，以下のアーキテクチャーのみサポート
 しています．
@@ -64,5 +64,5 @@ RaspbianのバージョンもDebian/Busterをベースとして作成されて�
 [Docker公式ドキュメント]: https://docs.docker.com/engine/install
 [get.docker.com]: https://get.docker.com/
 [docker/compose]: https://github.com/docker/compose
-[masnagam/install-docker-compose]: https://github.com/masnagam/install-docker-compose
-[masnagam/docker-compose]: https://hub.docker.com/repository/docker/masnagam/docker-compose
+[masnagam/sbc-scripts]: https://github.com/masnagam/sbc-scripts
+[masnagam/docker-compose]: https://hub.docker.com/r/masnagam/docker-compose
