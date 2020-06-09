@@ -32,6 +32,7 @@ RUN set -eux \
       musl \
       pcsc-lite-libs \
       socat \
+      tzdata \
  && apk add --no-cache --virtual .build-deps \
       gcc \
       g++\
@@ -92,7 +93,8 @@ RUN set -eux \
       ccid \
       musl \
       pcsc-lite-libs \
-      socat
+      socat \
+      tzdata
 
 COPY pcsc-server /usr/local/bin/
 
@@ -156,5 +158,4 @@ services:
       BCAS_DEVICE: /dev/bus/usb/001/002
       #BCAS_DEBUG: 1
       TZ: Asia/Tokyo
-
 ```
