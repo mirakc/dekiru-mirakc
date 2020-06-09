@@ -18,7 +18,7 @@ Docker Hubで配布している[masnagam/mirakc]イメージには，mirakcと`r
   * master-debianのエイリアス
 * master-debian
   * GitHub masterブランチの最新コミットから作成したDebian/Busterベースのイメージ
-* alpine
+* master-alpine
   * GitHub masterブランチの最新コミットから作成したAlpine/3.11ベースのイメージ
 
 これらのイメージは全てマルチアーキイメージです．以下のアーキテクチャーをサポート
