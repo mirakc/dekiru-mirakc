@@ -33,7 +33,7 @@ sudo docker logs --tail=1000 mirakc 2>&1 | grep -e WARN -e ERROR
 ...
     environment:
       # mirakcのログレベルをdebugに
-      RUST_LOG: info,mirakc=debug
+      RUST_LOG: 'info,mirakc=debug'
 ```
 
 フィルター等の外部プログラムが`stderr`に出力するログを確認したい場合は，環境変数
@@ -45,6 +45,24 @@ sudo docker logs --tail=1000 mirakc 2>&1 | grep -e WARN -e ERROR
 ...
     environment:
       MIRAKC_DEBUG_CHILD_PROCESS: ''
+      RUST_LOG: 'info,mirakc=debug'
+      MIRAKC_ARIB_NO_TIMESTAMP: ''
+      MIRAKC_ARIB_LOG: 'info'
+```
+
+環境変数`MIRAKC_ARIB_LOG_NO_TIMESTAMP`を定義すると，`mirakc-arib`のログメッセー
+ジからタイムスタンプを削除できます．
+
+デフォルト設定では，`mirakc-arib`は何もログを出力しません．必ず，環境変数
+`MIRAKC_ARIB_LOG`でログレベルを指定してください．`RUST_LOG`のように，コマンド毎
+にログレベルを指定することも可能です．
+
+```yaml
+# docker-compose.ymlからの抜粋
+...
+    environment:
+      # filter-serviceとfilter-programはdebug，それ以外はinfo
+      MIRAKC_ARIB_LOG: 'info,filter-service=debug,filter-program=debug'
 ```
 
 ## フィルターの動作確認
