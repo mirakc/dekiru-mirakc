@@ -42,8 +42,8 @@ channels:
 | Mirakuruのプロパティ名 | mirakcのプロパティ名       |
 |---------------------|--------------------------|
 | serviceId           | services（配列）          |
-| satelite            | （なし）                  |
-| space               | （なし）                  |
+| satelite            | extra-args （文字列）     |
+| space               | extra-args （文字列）     |
 | （なし）              | excluded_services（配列） |
 
 チューナーコマンドとして`recpt1`を使用する場合，以下のようなMirakurun用のチャン
