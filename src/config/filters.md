@@ -1,5 +1,8 @@
 # フィルター設定
 
+> 以下の`config.yml`の記述例は，`0.12.0`以降でのみ有効です．これより古いバージョ
+> ンでのフィルターの記述方法については，GitHubの履歴を確認してください．
+
 EPGデータの取得が完了すると，特定サービスのTSストリーミングが可能となります．
 
 ```console
@@ -31,8 +34,8 @@ $ curl http://localhost:40772/api/services/3273601024/stream >/dev/null
 
 ```yaml
 filters:
-  post-filter: >-
-    echo "{{channel_type}}/{{channel}} SID#{{sid}}"
+  decode-filter:
+    command: echo "{{channel_type}}/{{channel}} SID#{{sid}}"
 ```
 
 設定反映のためmirakcコンテナーを再起動し，動作確認します．
@@ -42,27 +45,22 @@ filters:
 $ sudo docker-compose restart
 
 # post-filter付きTSストリーミングを実行
-$ curl -s http://localhost:40772/api/services/3273601024/stream?post-filter=true
+$ curl -s http://localhost:40772/api/services/3273601024/stream?decode=1
 GR/27 SID#1024
 ```
 
 TSストリームをチャンネル情報に置き換えることに成功しました．
 
-なお，`filters.post-filter`は，Mirakurunの`tuners.yml`での`decoder`に相当する設
-定です．Mirakurunとの互換性のため，クエリーパラメーター`post-filter=true`を
-`decode=1`に置き換えても動作します．
-
-```console
-$ curl -s http://localhost:40772/api/services/3273601024/stream?decode=1
-GR/27 SID#1024
-```
+なお，`filters.decode-filter`は，Mirakurunの`tuners.yml`での`decoder`に相当する設
+定です．
 
 フィルターの動作確認も終了したので，実用的なフィルターを設定してみます．
 
 ```yaml
 filters:
   # Chinachu/Mirakurunの設定例より
-  post-filter: arib-b25-stream-test
+  decode-filter:
+    command: arib-b25-stream-test
 ```
 
 また，以下のように外部サーバーでTSストリームを処理し，その結果をクライアントに返
@@ -70,10 +68,10 @@ filters:
 
 ```yaml
 filters:
-  post-filter: >-
+  decode-filter: >-
     # 標準入力から入力されるTSストリームをリモートホストtsdのTCP 40773ポートに転
     # 送し，tsdから返されたTSストリームを標準出力に出力
-    socat - tcp-connect:tsd:40773
+    command: socat - tcp-connect:tsd:40773
 ```
 
 [socat]は，配布している`masnagam/mirakc`イメージにも含まれているツールです．詳し
@@ -105,7 +103,8 @@ fi
 ```yaml
 # 変更部分のみ記載
 filters:
-  post-filter: bs-not-supported {{channel_type}} {{channel}}
+  decode-filter:
+    command: bs-not-supported {{channel_type}} {{channel}}
 ```
 
 `docker-compose.yml`:
@@ -124,10 +123,10 @@ filters:
 以下のように表示されれば，`bs-not-supported`スクリプトは機能しています．
 
 ```console
-$ curl http://localhost:40772/api/channels/GR/27/stream?post-filter=true
+$ curl http://localhost:40772/api/channels/GR/27/stream?decode=1
 27
 
-$ curl http://localhost:40772/api/channels/BS/BS15_0/stream?post-filter=true
+$ curl http://localhost:40772/api/channels/BS/BS15_0/stream?decode=1
 BS not supported
 ```
 
