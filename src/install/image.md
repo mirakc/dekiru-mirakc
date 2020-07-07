@@ -21,6 +21,8 @@ Docker Hubで配布している[masnagam/mirakc]イメージには，mirakcと`r
 * master-alpine
   * GitHub masterブランチの最新コミットから作成したAlpine/3.12ベースのイメージ
 
+> `0.11.0`より古いAlpine系イメージは，Alpine/3.11をベースとしています．
+
 これらのイメージは全てマルチアーキイメージです．以下のアーキテクチャーをサポート
 しています．
 
