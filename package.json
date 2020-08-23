@@ -1,0 +1,23 @@
+{
+  "name": "@mirakc/dekiru-mirakc",
+  "version": "0.0.0",
+  "scripts": {
+    "build": "honkit build",
+    "serve": "honkit serve"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/masnagam/dekiru-mirakc.git"
+  },
+  "author": "masnagam",
+  "license": "(Apache-2.0 OR MIT)",
+  "bugs": {
+    "url": "https://github.com/masnagam/dekiru-mirakc/issues"
+  },
+  "homepage": "https://github.com/masnagam/dekiru-mirakc#readme",
+  "devDependencies": {
+    "gitbook-plugin-japanese-support": "0.0.1",
+    "honkit": "^3.6.1"
+  },
+  "private": true
+}

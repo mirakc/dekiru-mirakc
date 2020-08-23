@@ -1,0 +1,9 @@
+{
+  "root": "./src",
+  "title": "できるmirakc",
+  "author": "masnagam",
+  "language": "ja",
+  "plugins": [
+    "gitbook-plugin-japanese-support"
+  ]
+}

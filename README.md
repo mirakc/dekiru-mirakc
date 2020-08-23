@@ -2,10 +2,10 @@
 
 「できるmirakc」の原稿です．
 
-[mdbook](https://rust-lang.github.io/mdBook/)が使えます．
+[HonKit](https://github.com/honkit/honkit)を使っています．
 
 ```console
-docker-compose up -d
+npm run serve
 ```
 
-http://localhost:3000/ から見れます．
+http://localhost:4000/ から見れます．
