@@ -7,14 +7,14 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/masnagam/dekiru-mirakc.git"
+    "url": "git+https://github.com/mirakc/dekiru-mirakc.git"
   },
-  "author": "masnagam",
+  "author": "Contributors of mirakc",
   "license": "(Apache-2.0 OR MIT)",
   "bugs": {
-    "url": "https://github.com/masnagam/dekiru-mirakc/issues"
+    "url": "https://github.com/mirakc/dekiru-mirakc/issues"
   },
-  "homepage": "https://github.com/masnagam/dekiru-mirakc#readme",
+  "homepage": "https://github.com/mirakc/dekiru-mirakc#readme",
   "devDependencies": {
     "gitbook-plugin-japanese-support": "0.0.1",
     "honkit": "^3.6.1"

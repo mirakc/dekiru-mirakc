@@ -1,10 +1,10 @@
-# masnagam/mirakcイメージ
+# Dockerイメージ
 
-Docker Hubで配布している[masnagam/mirakc]イメージには，mirakcと`recpt1`などの主
+Docker Hubで配布している[mirakc/mirakc]イメージには，mirakcと`recpt1`などの主
 要なツールがすでに含まれています．多くの場合，各自でツールをソースからビルドした
 りインストールする必要はありません．
 
-[mirakc/docs/docker.md]に記載されているように，`masnagam/mirakc`イメージには複数
+[mirakc/docs/docker.md]に記載されているように，`mirakc/mirakc`イメージには複数
 のタグがあり，この中から自分の目的に合ったタグを選択します．以下に代表的なタグを
 列挙します．
 
@@ -31,10 +31,10 @@ Docker Hubで配布している[masnagam/mirakc]イメージには，mirakcと`r
 * arm32v7
 * arm64v8
 
-Raspberry PiなどのSBCで実行する場合は，先の例で使用した`masnagam/mirakc:alpine`
+Raspberry PiなどのSBCで実行する場合は，先の例で使用した`mirakc/mirakc:alpine`
 を選択することを推奨しています．詳しい理由については[mirakc/docs/notes.md]を見て
 ください．
 
-[masnagam/mirakc]: https://hub.docker.com/repository/docker/masnagam/mirakc
-[mirakc/docs/docker.md]: https://github.com/masnagam/mirakc/blob/master/docs/docker.md#pre-built-images-in-dockerhub
-[mirakc/docs/notes.md]: https://github.com/masnagam/mirakc/blob/master/docs/notes.md#mirakc-leaks-memory
+[mirakc/mirakc]: https://hub.docker.com/repository/docker/mirakc/mirakc
+[mirakc/docs/docker.md]: https://github.com/mirakc/mirakc/blob/master/docs/docker.md#pre-built-images-in-dockerhub
+[mirakc/docs/notes.md]: https://github.com/mirakc/mirakc/blob/master/docs/notes.md#mirakc-leaks-memory

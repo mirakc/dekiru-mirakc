@@ -32,7 +32,7 @@ version: '3.7'
 
 services:
   mirakc:
-    image: masnagam/mirakc:alpine
+    image: mirakc/mirakc:alpine
     container_name: mirakc
     init: true
     restart: unless-stopped

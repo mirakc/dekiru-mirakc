@@ -93,4 +93,4 @@ sudo docker exec -it mirakc sh -c \
 方法が分かっている場合は，その方法も一緒に登録しましょう．同様の問題に悩んでいる
 人の手助けになります．
 
-[GitHub Issues]: https://github.com/masnagam/mirakc/issues
+[GitHub Issues]: https://github.com/mirakc/mirakc/issues

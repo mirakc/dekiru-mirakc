@@ -1,6 +1,6 @@
 # カスタムイメージの作成
 
-多くの人は，ここまでの説明と`masnagam/mirakc`イメージを使って録画システムを構築
+多くの人は，ここまでの説明と`mirakc/mirakc`イメージを使って録画システムを構築
 できたと思います．しかし，配布しているDockerイメージに含まれていないツール，例え
 ば`recpt1`と`recdvb`以外のチューナーコマンドを使っている人は，このDockerイメージ
 だけでは録画システムを構築できません．自力でカスタムイメージを作成する必要があり
@@ -12,7 +12,7 @@
 まず，以下のような`Dockerfile`を作成します．
 
 ```Dockerfile
-FROM masnagam/mirakc:alpine-arm32v7
+FROM mirakc/mirakc:alpine-arm32v7
 
 # 短時間でテストできるように，チェック間隔を１０秒に設定しています
 HEALTHCHECK --interval=10s --timeout=3s \
@@ -31,7 +31,7 @@ PC上でSBC用のDockerイメージをクロスビルドすることで解決で
 
 > 今回の例では不要ですが，異なるアーキテクチャ用のDockerイメージ上で何からのコマ
 > ンドを実行する場合，QEMUユーザーモードエミュレーションのための準備が必要です．
-> 具体的には，[こちら](https://github.com/masnagam/mirakc/blob/master/.github/workflows/docker.yml#L36)
+> 具体的には，[こちら](https://github.com/mirakc/mirakc/blob/master/.github/workflows/docker.yml#L36)
 > を参照してください．
 
 次にカスタムイメージのビルド．
@@ -60,4 +60,4 @@ sudo docker stop custom-mirakc
 Dockerイメージのビルド時に，追加するソフトウェアをクロスビルドする場合などは，以
 下を参考にしてください．
 
-* [mirakc/docker/templates](https://github.com/masnagam/mirakc/tree/master/docker/templates)
+* [mirakc/docker/templates](https://github.com/mirakc/mirakc/tree/master/docker/templates)

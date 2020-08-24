@@ -13,5 +13,5 @@ YAMLファイルにすべての設定を記述します．
 また，ログに関する設定は，`config.yml`ではなく，いくつかの環境変数を用いて設定し
 ます．詳細については，[mirakc/docs/logging.md]を参照してください．
 
-[mirakc/docs/config.md]: https://github.com/masnagam/mirakc/blob/master/docs/config.md
-[mirakc/docs/logging.md]: https://github.com/masnagam/mirakc/blob/master/docs/logging.md
+[mirakc/docs/config.md]: https://github.com/mirakc/mirakc/blob/master/docs/config.md
+[mirakc/docs/logging.md]: https://github.com/mirakc/mirakc/blob/master/docs/logging.md

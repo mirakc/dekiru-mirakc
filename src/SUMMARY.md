@@ -7,7 +7,7 @@
   - [Raspberry Piのセットアップ](./install/setup_rpi.md)
   - [Dockerのインストール](./install/docker.md)
   - [mirakcのインストール](./install/mirakc.md)
-  - [masnagam/mirakcイメージ](./install/image.md)
+  - [Dockerイメージ](./install/image.md)
 - [mirakcの設定](./config/README.md)
   - [チャンネル設定](./config/channels.md)
   - [チューナー設定](./config/tuners.md)

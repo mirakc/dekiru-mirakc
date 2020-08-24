@@ -74,7 +74,7 @@ filters:
     command: socat - tcp-connect:tsd:40773
 ```
 
-[socat]は，配布している`masnagam/mirakc`イメージにも含まれているツールです．詳し
+[socat]は，配布している`mirakc/mirakc`イメージにも含まれているツールです．詳し
 い説明はリンク先を見るかGoogle先生に教えてもらってください．
 
 `filters`プロパティーはチューナーごとに設定するのではなく，すべてのチューナーに

@@ -27,4 +27,4 @@ CPUパワーが貧弱なSBCでDocker使って大丈夫なのかと危惧する�
 
 このような事情もあり，mirakcではDockerを使ったインストールを推奨しています．
 
-[dockerfile-gen]: https://github.com/masnagam/mirakc/blob/master/docker/dockerfile-gen
+[dockerfile-gen]: https://github.com/mirakc/mirakc/blob/master/docker/dockerfile-gen
