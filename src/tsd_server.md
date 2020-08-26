@@ -96,7 +96,7 @@ RUN set -eux \
       socat \
       tzdata
 
-COPY pcsc-server /usr/local/bin/
+COPY bcas-server /usr/local/bin/
 
 EXPOSE 40774
 ENTRYPOINT ["bcas-server"]
