@@ -1,0 +1,484 @@
+
+<!DOCTYPE HTML>
+<html lang="ja" >
+    <head>
+        <meta charset="UTF-8">
+        <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
+        <title>チューナー設定 · できるmirakc</title>
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <meta name="description" content="">
+        <meta name="generator" content="HonKit 3.6.6">
+        <meta name="author" content="masnagam">
+        
+        
+    
+    <link rel="stylesheet" href="../gitbook/style.css">
+
+    
+            
+                
+                <link rel="stylesheet" href="../gitbook/gitbook-plugin-highlight/website.css">
+                
+            
+                
+                <link rel="stylesheet" href="../gitbook/gitbook-plugin-search/search.css">
+                
+            
+                
+                <link rel="stylesheet" href="../gitbook/gitbook-plugin-fontsettings/website.css">
+                
+            
+        
+
+    
+
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+
+        
+    
+    
+    <meta name="HandheldFriendly" content="true"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <link rel="apple-touch-icon-precomposed" sizes="152x152" href="../gitbook/images/apple-touch-icon-precomposed-152.png">
+    <link rel="shortcut icon" href="../gitbook/images/favicon.ico" type="image/x-icon">
+
+    
+    <link rel="next" href="epg.html" />
+    
+    
+    <link rel="prev" href="channels.html" />
+    
+
+    </head>
+    <body>
+        
+<div class="book">
+    <div class="book-summary">
+        
+            
+<div id="book-search-input" role="search">
+    <input type="text" placeholder="検索ワードを入力" />
+</div>
+
+            
+                <nav role="navigation">
+                
+
+
+<ul class="summary">
+    
+    
+
+    
+
+    
+        
+        
+    
+        <li class="chapter " data-level="1.1" data-path="../">
+            
+                <a href="../">
+            
+                    
+                    Introduction
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.2" data-path="../what.html">
+            
+                <a href="../what.html">
+            
+                    
+                    mirakcって何ですか？
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.3" data-path="../install/">
+            
+                <a href="../install/">
+            
+                    
+                    Dockerを使ったインストール
+            
+                </a>
+            
+
+            
+            <ul class="articles">
+                
+    
+        <li class="chapter " data-level="1.3.1" data-path="../install/setup_rpi.html">
+            
+                <a href="../install/setup_rpi.html">
+            
+                    
+                    Raspberry Piのセットアップ
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.3.2" data-path="../install/docker.html">
+            
+                <a href="../install/docker.html">
+            
+                    
+                    Dockerのインストール
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.3.3" data-path="../install/mirakc.html">
+            
+                <a href="../install/mirakc.html">
+            
+                    
+                    mirakcのインストール
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.3.4" data-path="../install/image.html">
+            
+                <a href="../install/image.html">
+            
+                    
+                    Dockerイメージ
+            
+                </a>
+            
+
+            
+        </li>
+    
+
+            </ul>
+            
+        </li>
+    
+        <li class="chapter " data-level="1.4" data-path="./">
+            
+                <a href="./">
+            
+                    
+                    mirakcの設定
+            
+                </a>
+            
+
+            
+            <ul class="articles">
+                
+    
+        <li class="chapter " data-level="1.4.1" data-path="channels.html">
+            
+                <a href="channels.html">
+            
+                    
+                    チャンネル設定
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter active" data-level="1.4.2" data-path="tuners.html">
+            
+                <a href="tuners.html">
+            
+                    
+                    チューナー設定
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.4.3" data-path="epg.html">
+            
+                <a href="epg.html">
+            
+                    
+                    EGPデータキャッシュ
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.4.4" data-path="filters.html">
+            
+                <a href="filters.html">
+            
+                    
+                    フィルター設定
+            
+                </a>
+            
+
+            
+        </li>
+    
+
+            </ul>
+            
+        </li>
+    
+        <li class="chapter " data-level="1.5" data-path="../frontend_applications.html">
+            
+                <a href="../frontend_applications.html">
+            
+                    
+                    フロントエンドアプリケーションとの連携
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.6" data-path="../custom_image.html">
+            
+                <a href="../custom_image.html">
+            
+                    
+                    カスタムイメージの作成
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.7" data-path="../troubleshooting.html">
+            
+                <a href="../troubleshooting.html">
+            
+                    
+                    トラブルシューティング
+            
+                </a>
+            
+
+            
+        </li>
+    
+
+    
+
+    <li class="divider"></li>
+
+    <li>
+        <a href="https://github.com/honkit/honkit" target="blank" class="gitbook-link">
+            HonKitで公開 
+        </a>
+    </li>
+</ul>
+
+
+                </nav>
+            
+        
+    </div>
+
+    <div class="book-body">
+        
+            <div class="body-inner">
+                
+                    
+
+<div class="book-header" role="navigation">
+    
+
+    <!-- Title -->
+    <h1>
+        <i class="fa fa-circle-o-notch fa-spin"></i>
+        <a href=".." >チューナー設定</a>
+    </h1>
+</div>
+
+
+
+
+                    <div class="page-wrapper" tabindex="-1" role="main">
+                        <div class="page-inner">
+                            
+<div id="book-search-results">
+    <div class="search-noresults">
+    
+                                <section class="normal markdown-section">
+                                
+                                <h1 id="&#x30C1;&#x30E5;&#x30FC;&#x30CA;&#x30FC;&#x8A2D;&#x5B9A;">&#x30C1;&#x30E5;&#x30FC;&#x30CA;&#x30FC;&#x8A2D;&#x5B9A;</h1>
+<p>&#x30C1;&#x30E3;&#x30F3;&#x30CD;&#x30EB;&#x8A2D;&#x5B9A;&#x3068;&#x540C;&#x69D8;&#x306B;&#xFF0C;&#x30C1;&#x30E5;&#x30FC;&#x30CA;&#x30FC;&#x8A2D;&#x5B9A;&#x3082;Mirakurun&#x3068;&#x4E00;&#x5B9A;&#x306E;&#x4E92;&#x63DB;&#x6027;&#x304C;&#x3042;&#x308A;&#x307E;&#x3059;&#xFF0E;</p>
+<p>Mirakurun&#x306E;<code>tuners.yml</code>&#x306E;&#x4F8B;:</p>
+<pre><code class="lang-yaml"><span class="hljs-attr">- name:</span> gr1
+<span class="hljs-attr">  types:</span> [GR]
+<span class="hljs-attr">  command:</span> recpt1 --device /dev/px4video2 &lt;channel&gt; - -
+<span class="hljs-attr">  decoder:</span> /usr/local/bin/decoder
+</code></pre>
+<p>mirakc&#x306E;<code>config.yml</code>&#x306E;&#x4F8B;:</p>
+<pre><code class="lang-yaml"><span class="hljs-attr">tuners:</span>
+<span class="hljs-attr">  - name:</span> gr1
+<span class="hljs-attr">    types:</span> [GR]
+<span class="hljs-attr">    command:</span> recpt1 --device /dev/px4video2 {{channel}} - -
+</code></pre>
+<p>&#x3053;&#x3053;&#x3067;&#xFF0C;<code>tuners[].command</code>&#x306B;&#x306F;&#x30C6;&#x30F3;&#x30D7;&#x30EC;&#x30FC;&#x30C8;&#x6587;&#x5B57;&#x5217;&#x304C;&#x6307;&#x5B9A;&#x3055;&#x308C;&#x3066;&#x304A;&#x308A;&#xFF0C;<code>{{</code>&#x3068;<code>}}</code>&#x3067;&#x56F2;&#x308F;&#x308C;&#x305F;&#x8B58;&#x5225;&#x5B50;&#xFF08;&#x4E0A;&#x8A18;&#x306E;&#x4F8B;&#x3067;&#x306F;<code>channel</code>&#xFF09;&#x306F;&#xFF0C;&#x30C6;&#x30F3;&#x30D7;&#x30EC;&#x30FC;&#x30C8;&#x30D1;&#x30E9;&#x30E1;&#x30FC;&#x30BF;&#x30FC;&#x3068;&#x547C;&#x3070;&#x308C;&#x308B;&#x7279;&#x5225;&#x306A;&#x5024;&#x3067;&#x3059;&#xFF0E;mirakc&#x306F;&#xFF0C;&#x30C6;&#x30F3;&#x30D7;&#x30EC;&#x30FC;&#x30C8;&#x8A00;&#x8A9E;&#x3068;&#x3057;&#x3066;<a href="https://mustache.github.io/" target="_blank">Mustache</a>&#x3092;&#x63A1;&#x7528;&#x3057;&#x3066;&#x304A;&#x308A;&#xFF0C;&#x30EA;&#x30B9;&#x30C8;&#x578B;&#x306E;&#x30C6;&#x30F3;&#x30D7;&#x30EC;&#x30FC;&#x30C8;&#x30D1;&#x30E9;&#x30E1;&#x30FC;&#x30BF;&#x30FC;&#x306E;&#x5C55;&#x958B;&#x3082;&#x30B5;&#x30DD;&#x30FC;&#x30C8;&#x3057;&#x3066;&#x3044;&#x307E;&#x3059;&#xFF0E;<code>tuners[].command</code>&#x4EE5;&#x5916;&#x306B;&#x3082;&#x3044;&#x304F;&#x3064;&#x304B;&#x306E;&#x8A2D;&#x5B9A;&#x9805;&#x76EE;&#x3067;&#x30C6;&#x30F3;&#x30D7;&#x30EC;&#x30FC;&#x30C8;&#x6587;&#x5B57;&#x5217;&#x304C;&#x6307;&#x5B9A;&#x53EF;&#x80FD;&#x3067;&#xFF0C;&#x8A2D;&#x5B9A;&#x9805;&#x76EE;&#x6BCE;&#x306B;&#x4F7F;&#x7528;&#x53EF;&#x80FD;&#x306A;&#x30C6;&#x30F3;&#x30D7;&#x30EC;&#x30FC;&#x30C8;&#x30D1;&#x30E9;&#x30E1;&#x30FC;&#x30BF;&#x30FC;&#x306F;&#x7570;&#x306A;&#x308A;&#x307E;&#x3059;&#xFF0E;</p>
+<p>mirakc&#x306E;&#x30C1;&#x30E5;&#x30FC;&#x30CA;&#x30FC;&#x8A2D;&#x5B9A;&#x306B;&#x306F;<code>decoder</code>&#x30D7;&#x30ED;&#x30D1;&#x30C6;&#x30A3;&#x306F;&#x5B58;&#x5728;&#x3057;&#x307E;&#x305B;&#x3093;&#xFF0E;&#x305D;&#x306E;&#x4EE3;&#x308F;&#x308A;&#x306B;&#xFF0C;&#x5F8C;&#x8FF0;&#x3059;&#x308B;&#x30D5;&#x30A3;&#x30EB;&#x30BF;&#x30FC;&#x8A2D;&#x5B9A;&#x3092;&#x4F7F;&#x7528;&#x3057;&#x307E;&#x3059;&#xFF0E;</p>
+<p>Docker&#x3092;&#x4F7F;&#x7528;&#x3057;&#x3066;&#x3044;&#x308B;&#x5834;&#x5408;&#xFF0C;&#x4EE5;&#x4E0B;&#x306E;&#x3088;&#x3046;&#x306B;<code>docker-compose.yml</code>&#x306B;&#x4F7F;&#x7528;&#x3059;&#x308B;&#x30C7;&#x30D0;&#x30A4;&#x30B9;&#x30D5;&#x30A1;&#x30A4;&#x30EB;&#x3092;&#x8A18;&#x8FF0;&#x3059;&#x308B;&#x5FC5;&#x8981;&#x304C;&#x3042;&#x308A;&#x307E;&#x3059;&#xFF0E;</p>
+<pre><code class="lang-yaml"><span class="hljs-attr">version:</span> <span class="hljs-string">&apos;3.7&apos;</span>
+
+<span class="hljs-attr">services:</span>
+<span class="hljs-attr">  mirakc:</span>
+<span class="hljs-attr">    image:</span> mirakc/mirakc:alpine
+<span class="hljs-attr">    container_name:</span> mirakc
+<span class="hljs-attr">    init:</span> <span class="hljs-literal">true</span>
+<span class="hljs-attr">    restart:</span> unless-stopped
+    <span class="hljs-comment"># `devices`&#x3092;&#x8FFD;&#x52A0;</span>
+<span class="hljs-attr">    devices:</span>
+      <span class="hljs-comment"># &#x30C1;&#x30E5;&#x30FC;&#x30CA;&#x30FC;&#x30B3;&#x30DE;&#x30F3;&#x30C9;&#x3067;&#x5229;&#x7528;&#x3059;&#x308B;&#x30C7;&#x30D0;&#x30A4;&#x30B9;&#x30D5;&#x30A1;&#x30A4;&#x30EB;&#x3092;&#x5217;&#x6319;</span>
+<span class="hljs-bullet">      -</span> /dev/px4video2
+<span class="hljs-attr">    ports:</span>
+<span class="hljs-bullet">      -</span> <span class="hljs-number">40772</span>:<span class="hljs-number">40772</span>
+<span class="hljs-attr">    volumes:</span>
+<span class="hljs-bullet">      -</span> ./config.yml:/etc/mirakc/config.yml:ro
+<span class="hljs-attr">    environment:</span>
+<span class="hljs-attr">      TZ:</span> Asia/Tokyo
+<span class="hljs-attr">      RUST_LOG:</span> info
+</code></pre>
+<p>&#x3053;&#x3053;&#x307E;&#x3067;&#x8A2D;&#x5B9A;&#x3059;&#x308B;&#x3068;&#xFF0C;EPG&#x30C7;&#x30FC;&#x30BF;&#x306E;&#x53D6;&#x5F97;&#x304C;&#x53EF;&#x80FD;&#x306B;&#x306A;&#x308A;&#x307E;&#x3059;&#xFF0E;&#x52D5;&#x304F;&#x304B;&#x8A66;&#x3057;&#x3066;&#x307F;&#x307E;&#x3057;&#x3087;&#x3046;&#xFF0E;</p>
+<pre><code class="lang-console"># mirakc&#x30B3;&#x30F3;&#x30C6;&#x30CA;&#x30FC;&#x306E;&#x8D77;&#x52D5;&#xFF08;Ctrl+C&#x3067;&#x505C;&#x6B62;&#xFF09;
+$ docker-compose up -d
+...
+... scan-services: performing...
+...
+... scan-services: Done successfully, 13s 714ms 157us 639ns elapsed
+...
+^CGracefully stopping... (press Ctrl+C again to force)
+Stopping mirakc ... done
+</code></pre>
+<p>&#x3053;&#x3053;&#x3067;&#xFF0C;&#x5404;&#x884C;&#x306E;&#x59CB;&#x3081;&#x306E;<code>...</code>&#x306F;&#x5B9F;&#x969B;&#x306B;&#x8868;&#x793A;&#x3055;&#x308C;&#x308B;&#x30C6;&#x30AD;&#x30B9;&#x30C8;&#x3067;&#x306F;&#x306A;&#x304F;&#xFF0C;&#x30ED;&#x30B0;&#x306E;&#x7701;&#x7565;&#x3092;&#x610F;&#x5473;&#x3057;&#x307E;&#x3059;&#xFF0E;</p>
+<p>&#x305F;&#x304F;&#x3055;&#x3093;&#x306E;&#x30ED;&#x30B0;&#x304C;&#x8868;&#x793A;&#x3055;&#x308C;&#x307E;&#x3059;&#x304C;&#xFF0C;&#x6B63;&#x3057;&#x304F;&#x52D5;&#x4F5C;&#x3057;&#x3066;&#x3044;&#x308C;&#x3070;&#xFF0C;&#x4E0A;&#x8A18;&#x306E;&#x3088;&#x3046;&#x306A;&#x30ED;&#x30B0;&#x3092;&#x898B;&#x3064;&#x3051;&#x308B;&#x3053;&#x3068;&#x304C;&#x3067;&#x304D;&#x307E;&#x3059;&#xFF0E;</p>
+<h2 id="&#x65E2;&#x306B;&#x7A3C;&#x50CD;&#x3057;&#x3066;&#x3044;&#x308B;mirakurunmirakc&#x3092;&#x30C1;&#x30E5;&#x30FC;&#x30CA;&#x30FC;&#x3068;&#x3057;&#x3066;&#x5229;&#x7528;&#x3059;&#x308B;">&#x65E2;&#x306B;&#x7A3C;&#x50CD;&#x3057;&#x3066;&#x3044;&#x308B;Mirakurun/mirakc&#x3092;&#x30C1;&#x30E5;&#x30FC;&#x30CA;&#x30FC;&#x3068;&#x3057;&#x3066;&#x5229;&#x7528;&#x3059;&#x308B;</h2>
+<p>&#x3061;&#x3087;&#x3063;&#x3068;&#x3057;&#x305F;&#x52D5;&#x4F5C;&#x78BA;&#x8A8D;&#x306E;&#x305F;&#x3081;&#x306B;&#xFF0C;&#x308F;&#x3056;&#x308F;&#x3056;&#x30C1;&#x30E5;&#x30FC;&#x30CA;&#x30FC;&#x306E;&#x30C7;&#x30D0;&#x30A4;&#x30B9;&#x30C9;&#x30E9;&#x30A4;&#x30D0;&#x30FC;&#x3092;&#x30A4;&#x30F3;&#x30B9;&#x30C8;&#x30FC;&#x30EB;&#x3059;&#x308B;&#x306E;&#x306F;&#x9762;&#x5012;&#x306A;&#x4F5C;&#x696D;&#x3067;&#x3059;&#xFF0E;&#x3053;&#x306E;&#x3088;&#x3046;&#x306A;&#x5834;&#x5408;&#x306B;&#x306F;&#xFF0C;&#x4EE5;&#x4E0B;&#x306E;&#x3088;&#x3046;&#x306A;&#x8A2D;&#x5B9A;&#x3092;&#x884C;&#x3044;&#xFF0C;&#x65E2;&#x306B;&#x7A3C;&#x50CD;&#x3057;&#x3066;&#x3044;&#x308B;Mirakurun&#x307E;&#x305F;&#x306F;mirakc&#x3092;&#x30C1;&#x30E5;&#x30FC;&#x30CA;&#x30FC;&#x3068;&#x3057;&#x3066;&#x5229;&#x7528;&#x3059;&#x308B;&#x3053;&#x3068;&#x3092;&#x304A;&#x52E7;&#x3081;&#x3057;&#x307E;&#x3059;&#xFF08;&#x540C;&#x69D8;&#x306E;&#x3053;&#x3068;&#x306F;Mirakurun&#x3067;&#x3082;&#x53EF;&#x80FD;&#x3067;&#x3059;&#xFF09;&#xFF0E;</p>
+<pre><code class="lang-yaml"><span class="hljs-attr">tuners:</span>
+<span class="hljs-attr">  - name:</span> upstream
+<span class="hljs-attr">    types:</span> [GR, BS]
+<span class="hljs-attr">    command:</span> &gt;-
+      curl -s http://upstream:<span class="hljs-number">40772</span>/api/channels/{{channel_type}}/{{channel}}/stream
+</code></pre>
+<p>&#x4E0A;&#x8A18;&#x306E;<code>http://upstream:40772</code>&#x306E;&#x90E8;&#x5206;&#x306F;&#x63A5;&#x7D9A;&#x5148;&#x306E;Mirakurun&#x307E;&#x305F;&#x306F;mirakc&#x30B5;&#x30FC;&#x30D0;&#x30FC;&#x306E;URL
+&#x306B;&#x7F6E;&#x304D;&#x63DB;&#x3048;&#x3066;&#x304F;&#x3060;&#x3055;&#x3044;&#xFF0E;</p>
+<p>Mirakurun&#x3068;&#x306F;&#x7570;&#x306A;&#x308A;&#xFF0C;mirakc&#x306E;<code>/api/channels/{{channel_type}}/{{channel}}/stream</code>
+API&#x306F;&#xFF0C;&#x30C1;&#x30E5;&#x30FC;&#x30CA;&#x30FC;&#x304B;&#x3089;&#x306E;&#x51FA;&#x529B;&#x3092;&#x305D;&#x306E;&#x307E;&#x307E;&#x9001;&#x51FA;&#x3057;&#x307E;&#x3059;&#xFF0E;NULL&#x30D1;&#x30B1;&#x30C3;&#x30C8;&#x3059;&#x3089;&#x30C9;&#x30ED;&#x30C3;&#x30D7;&#x3057;&#x307E;&#x305B;&#x3093;&#xFF0E;&#x305D;&#x306E;&#x305F;&#x3081;&#xFF0C;TS&#x30D1;&#x30B1;&#x30C3;&#x30C8;&#x3092;&#x51E6;&#x7406;&#x3059;&#x308B;&#x30C4;&#x30FC;&#x30EB;&#x306E;&#x30C6;&#x30B9;&#x30C8;&#x306A;&#x3069;&#x306B;&#x3082;&#x4F7F;&#x3048;&#x3066;&#x4FBF;&#x5229;&#x3067;&#x3059;&#xFF0E;</p>
+<pre><code class="lang-shell">curl -s http://mirakc:40772/api/channels/GR/27/stream | \
+  MIRAKC_ARIB_LOG=debug mirakc-arib scan-services
+</code></pre>
+
+                                
+                                </section>
+                            
+    </div>
+    <div class="search-results">
+        <div class="has-results">
+            
+            <h1 class="search-results-title"><span class='search-results-count'></span> results matching "<span class='search-query'></span>"</h1>
+            <ul class="search-results-list"></ul>
+            
+        </div>
+        <div class="no-results">
+            
+            <h1 class="search-results-title">No results matching "<span class='search-query'></span>"</h1>
+            
+        </div>
+    </div>
+</div>
+
+                        </div>
+                    </div>
+                
+            </div>
+
+            
+                
+                <a href="channels.html" class="navigation navigation-prev " aria-label="Previous page: チャンネル設定">
+                    <i class="fa fa-angle-left"></i>
+                </a>
+                
+                
+                <a href="epg.html" class="navigation navigation-next " aria-label="Next page: EGPデータキャッシュ">
+                    <i class="fa fa-angle-right"></i>
+                </a>
+                
+            
+        
+    </div>
+
+    <script>
+        var gitbook = gitbook || [];
+        gitbook.push(function() {
+            gitbook.page.hasChanged({"page":{"title":"チューナー設定","level":"1.4.2","depth":2,"next":{"title":"EGPデータキャッシュ","level":"1.4.3","depth":2,"path":"config/epg.md","ref":"./config/epg.md","articles":[]},"previous":{"title":"チャンネル設定","level":"1.4.1","depth":2,"path":"config/channels.md","ref":"./config/channels.md","articles":[]},"dir":"ltr"},"config":{"plugins":["gitbook-plugin-japanese-support"],"root":"./src","styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"pluginsConfig":{"gitbook-plugin-japanese-support":{},"highlight":{},"search":{},"lunr":{"maxIndexSize":1000000,"ignoreSpecialCharacters":false},"fontsettings":{"theme":"white","family":"sans","size":2},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false}},"theme":"default","author":"masnagam","pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56},"embedFonts":false},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"variables":{},"title":"できるmirakc","language":"ja","gitbook":"*"},"file":{"path":"config/tuners.md","mtime":"2020-10-05T13:16:56.224Z","type":"markdown"},"gitbook":{"version":"3.6.6","time":"2020-10-05T13:17:12.137Z"},"basePath":"..","book":{"language":""}});
+        });
+    </script>
+</div>
+
+        
+    <script src="../gitbook/gitbook.js"></script>
+    <script src="../gitbook/theme.js"></script>
+    
+        
+        <script src="../gitbook/gitbook-plugin-search/search-engine.js"></script>
+        
+    
+        
+        <script src="../gitbook/gitbook-plugin-search/search.js"></script>
+        
+    
+        
+        <script src="../gitbook/gitbook-plugin-lunr/lunr.min.js"></script>
+        
+    
+        
+        <script src="../gitbook/gitbook-plugin-lunr/search-lunr.js"></script>
+        
+    
+        
+        <script src="../gitbook/gitbook-plugin-fontsettings/fontsettings.js"></script>
+        
+    
+
+    </body>
+</html>
+

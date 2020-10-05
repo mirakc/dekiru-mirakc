@@ -1,0 +1,468 @@
+
+<!DOCTYPE HTML>
+<html lang="ja" >
+    <head>
+        <meta charset="UTF-8">
+        <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
+        <title>Dockerのインストール · できるmirakc</title>
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <meta name="description" content="">
+        <meta name="generator" content="HonKit 3.6.6">
+        <meta name="author" content="masnagam">
+        
+        
+    
+    <link rel="stylesheet" href="../gitbook/style.css">
+
+    
+            
+                
+                <link rel="stylesheet" href="../gitbook/gitbook-plugin-highlight/website.css">
+                
+            
+                
+                <link rel="stylesheet" href="../gitbook/gitbook-plugin-search/search.css">
+                
+            
+                
+                <link rel="stylesheet" href="../gitbook/gitbook-plugin-fontsettings/website.css">
+                
+            
+        
+
+    
+
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+
+        
+    
+    
+    <meta name="HandheldFriendly" content="true"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <link rel="apple-touch-icon-precomposed" sizes="152x152" href="../gitbook/images/apple-touch-icon-precomposed-152.png">
+    <link rel="shortcut icon" href="../gitbook/images/favicon.ico" type="image/x-icon">
+
+    
+    <link rel="next" href="mirakc.html" />
+    
+    
+    <link rel="prev" href="setup_rpi.html" />
+    
+
+    </head>
+    <body>
+        
+<div class="book">
+    <div class="book-summary">
+        
+            
+<div id="book-search-input" role="search">
+    <input type="text" placeholder="検索ワードを入力" />
+</div>
+
+            
+                <nav role="navigation">
+                
+
+
+<ul class="summary">
+    
+    
+
+    
+
+    
+        
+        
+    
+        <li class="chapter " data-level="1.1" data-path="../">
+            
+                <a href="../">
+            
+                    
+                    Introduction
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.2" data-path="../what.html">
+            
+                <a href="../what.html">
+            
+                    
+                    mirakcって何ですか？
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.3" data-path="./">
+            
+                <a href="./">
+            
+                    
+                    Dockerを使ったインストール
+            
+                </a>
+            
+
+            
+            <ul class="articles">
+                
+    
+        <li class="chapter " data-level="1.3.1" data-path="setup_rpi.html">
+            
+                <a href="setup_rpi.html">
+            
+                    
+                    Raspberry Piのセットアップ
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter active" data-level="1.3.2" data-path="docker.html">
+            
+                <a href="docker.html">
+            
+                    
+                    Dockerのインストール
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.3.3" data-path="mirakc.html">
+            
+                <a href="mirakc.html">
+            
+                    
+                    mirakcのインストール
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.3.4" data-path="image.html">
+            
+                <a href="image.html">
+            
+                    
+                    Dockerイメージ
+            
+                </a>
+            
+
+            
+        </li>
+    
+
+            </ul>
+            
+        </li>
+    
+        <li class="chapter " data-level="1.4" data-path="../config/">
+            
+                <a href="../config/">
+            
+                    
+                    mirakcの設定
+            
+                </a>
+            
+
+            
+            <ul class="articles">
+                
+    
+        <li class="chapter " data-level="1.4.1" data-path="../config/channels.html">
+            
+                <a href="../config/channels.html">
+            
+                    
+                    チャンネル設定
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.4.2" data-path="../config/tuners.html">
+            
+                <a href="../config/tuners.html">
+            
+                    
+                    チューナー設定
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.4.3" data-path="../config/epg.html">
+            
+                <a href="../config/epg.html">
+            
+                    
+                    EGPデータキャッシュ
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.4.4" data-path="../config/filters.html">
+            
+                <a href="../config/filters.html">
+            
+                    
+                    フィルター設定
+            
+                </a>
+            
+
+            
+        </li>
+    
+
+            </ul>
+            
+        </li>
+    
+        <li class="chapter " data-level="1.5" data-path="../frontend_applications.html">
+            
+                <a href="../frontend_applications.html">
+            
+                    
+                    フロントエンドアプリケーションとの連携
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.6" data-path="../custom_image.html">
+            
+                <a href="../custom_image.html">
+            
+                    
+                    カスタムイメージの作成
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.7" data-path="../troubleshooting.html">
+            
+                <a href="../troubleshooting.html">
+            
+                    
+                    トラブルシューティング
+            
+                </a>
+            
+
+            
+        </li>
+    
+
+    
+
+    <li class="divider"></li>
+
+    <li>
+        <a href="https://github.com/honkit/honkit" target="blank" class="gitbook-link">
+            HonKitで公開 
+        </a>
+    </li>
+</ul>
+
+
+                </nav>
+            
+        
+    </div>
+
+    <div class="book-body">
+        
+            <div class="body-inner">
+                
+                    
+
+<div class="book-header" role="navigation">
+    
+
+    <!-- Title -->
+    <h1>
+        <i class="fa fa-circle-o-notch fa-spin"></i>
+        <a href=".." >Dockerのインストール</a>
+    </h1>
+</div>
+
+
+
+
+                    <div class="page-wrapper" tabindex="-1" role="main">
+                        <div class="page-inner">
+                            
+<div id="book-search-results">
+    <div class="search-noresults">
+    
+                                <section class="normal markdown-section">
+                                
+                                <h1 id="docker&#x306E;&#x30A4;&#x30F3;&#x30B9;&#x30C8;&#x30FC;&#x30EB;">Docker&#x306E;&#x30A4;&#x30F3;&#x30B9;&#x30C8;&#x30FC;&#x30EB;</h1>
+<p>&#x4ECA;&#x56DE;&#x5229;&#x7528;&#x3057;&#x305F;Raspbian&#x306E;APT&#x30EA;&#x30DD;&#x30B8;&#x30C8;&#x30EA;&#x30FC;&#x306B;&#x306F;&#xFF0C;<code>docker.io</code>&#x304A;&#x3088;&#x3073;<code>docker-compose</code>&#x30D1;&#x30C3;&#x30B1;&#x30FC;&#x30B8;&#x304C;&#x65E2;&#x306B;&#x542B;&#x307E;&#x308C;&#x3066;&#x3044;&#x307E;&#x3059;&#xFF0E;&#x3057;&#x304B;&#x3057;&#xFF0C;</p>
+<ul>
+<li><code>docker</code>: 18.09.1</li>
+<li><code>docker-compose</code>: 1.21.0</li>
+</ul>
+<p>&#x3068;&#x4E00;&#x5E74;&#x4EE5;&#x4E0A;&#x524D;&#x306E;&#x30D0;&#x30FC;&#x30B8;&#x30E7;&#x30F3;&#x3067;&#x3059;&#xFF0E;&#x305D;&#x3053;&#x3067;&#x4ECA;&#x56DE;&#x306F;&#xFF0C;Raspbian APT&#x30EA;&#x30DD;&#x30B8;&#x30C8;&#x30EA;&#x30FC;&#x3092;&#x4F7F;&#x308F;&#x305A;&#x306B;&#xFF0C;&#x3053;&#x308C;&#x3089;&#x306E;&#x30C4;&#x30FC;&#x30EB;&#x3092;&#x30A4;&#x30F3;&#x30B9;&#x30C8;&#x30FC;&#x30EB;&#x3057;&#x307E;&#x3059;&#xFF0E;</p>
+<p>&#x307E;&#x305A;&#x306F;<code>docker</code>&#x3092;&#x30A4;&#x30F3;&#x30B9;&#x30C8;&#x30FC;&#x30EB;&#x3057;&#x307E;&#x3059;&#xFF0E;<a href="https://docs.docker.com/engine/install" target="_blank">Docker&#x516C;&#x5F0F;&#x30C9;&#x30AD;&#x30E5;&#x30E1;&#x30F3;&#x30C8;</a>&#x3067;&#x306F;<a href="https://get.docker.com/" target="_blank">get.docker.com</a>
+&#x30B9;&#x30AF;&#x30EA;&#x30D7;&#x30C8;&#x306E;&#x4F7F;&#x7528;&#x306F;&#x63A8;&#x5968;&#x3055;&#x308C;&#x3066;&#x3044;&#x307E;&#x305B;&#x3093;&#x304C;&#xFF0C;Raspbian&#x3067;&#x306E;&#x30A4;&#x30F3;&#x30B9;&#x30C8;&#x30FC;&#x30EB;&#x624B;&#x9806;&#x304C;&#x516C;&#x5F0F;&#x30C9;&#x30AD;&#x30E5;&#x30E1;&#x30F3;&#x30C8;&#x306B;&#x8A18;&#x8F09;&#x3055;&#x308C;&#x3066;&#x3044;&#x306A;&#x3044;&#x305F;&#x3081;&#xFF0C;Raspbian&#x3067;&#x3082;&#x52D5;&#x4F5C;&#x3059;&#x308B;<code>get.docker.com</code>&#x30B9;&#x30AF;&#x30EA;&#x30D7;&#x30C8;&#x3092;&#x4F7F;&#x7528;&#x3057;&#x307E;&#x3059;&#xFF0E;</p>
+<pre><code class="lang-shell"># Docker&#x306E;&#x30A4;&#x30F3;&#x30B9;&#x30C8;&#x30FC;&#x30EB;
+#
+# &#x52D5;&#x4F5C;&#x78BA;&#x8A8D;&#x306E;&#x305F;&#x3081;&#x4F7F;&#x7528;&#x3057;&#x305F;`get.docker.com`&#x30B9;&#x30AF;&#x30EA;&#x30D7;&#x30C8;&#x306E;&#x30B3;&#x30DF;&#x30C3;&#x30C8;&#x30CF;&#x30C3;&#x30B7;&#x30E5;&#x306F;
+# `442e66405c304fa92af8aadaa1d9b31bf4b0ad94`
+curl -sSL https://get.docker.com | sudo sh
+
+# &#x5FF5;&#x306E;&#x70BA;&#xFF0C;&#x52D5;&#x304F;&#x3053;&#x3068;&#x3092;&#x78BA;&#x8A8D;
+docker version
+</code></pre>
+<p>&#x6B21;&#x306B;<code>docker-compose</code>&#x3092;&#x30A4;&#x30F3;&#x30B9;&#x30C8;&#x30FC;&#x30EB;&#x3057;&#x307E;&#x3059;&#xFF0E;&#x6B8B;&#x5FF5;&#x306A;&#x304C;&#x3089;&#xFF0C;&#x516C;&#x5F0F;&#x30EA;&#x30DD;&#x30B8;&#x30C8;&#x30EA;&#x30FC;
+<a href="https://github.com/docker/compose" target="_blank">docker/compose</a>&#x3067;&#x306F;amd64&#x30D0;&#x30A4;&#x30CA;&#x30EA;&#x30FC;&#x3057;&#x304B;&#x914D;&#x5E03;&#x3055;&#x308C;&#x3066;&#x3044;&#x307E;&#x305B;&#x3093;&#xFF0E;&#x305D;&#x3053;&#x3067;&#xFF0C;&#x79C1;&#x304C;&#x4F5C;&#x6210;&#x3057;&#x305F;
+<a href="https://github.com/masnagam/sbc-scripts" target="_blank">masnagam/sbc-scripts</a>&#x306E;<code>get-docker-compose</code>&#x30B9;&#x30AF;&#x30EA;&#x30D7;&#x30C8;&#x3092;&#x4F7F;&#x7528;&#x3057;&#x307E;&#x3059;&#xFF0E;&#x3053;&#x306E;&#x30B9;&#x30AF;&#x30EA;&#x30D7;&#x30C8;&#x3092;&#x4F7F;&#x7528;&#x3059;&#x308B;&#x3068;&#xFF0C;Docker Hub&#x306B;&#x30A2;&#x30C3;&#x30D7;&#x30ED;&#x30FC;&#x30C9;&#x6E08;&#x307F;&#x306E;<a href="https://hub.docker.com/r/masnagam/docker-compose" target="_blank">masnagam/docker-compose</a>&#x30A4;&#x30E1;&#x30FC;&#x30B8;&#x304B;&#x3089;&#x30D0;&#x30A4;&#x30CA;&#x30EA;&#x30FC;&#x3092;&#x62BD;&#x51FA;&#x3067;&#x304D;&#x307E;&#x3059;&#xFF0E;</p>
+<pre><code class="lang-shell"># Docker&#x30A4;&#x30E1;&#x30FC;&#x30B8;&#x304B;&#x3089;docker-compose&#x30B3;&#x30DE;&#x30F3;&#x30C9;&#x3092;&#x62BD;&#x51FA;
+curl -fsSL https://raw.githubusercontent.com/masnagam/sbc-scripts/master/get-docker-compose | \
+  sh | sudo tar -x -C /usr/local/bin
+
+# &#x30D0;&#x30FC;&#x30B8;&#x30E7;&#x30F3;&#x304C;&#x8868;&#x793A;&#x3055;&#x308C;&#x308C;&#x3070;OK
+docker-compose version
+</code></pre>
+<p>&#x4E0A;&#x8A18;&#x3067;&#x5229;&#x7528;&#x3057;&#x305F;Docker&#x30A4;&#x30E1;&#x30FC;&#x30B8;&#x306F;Debian/Buster&#x30D9;&#x30FC;&#x30B9;&#x3067;&#x3059;&#x304C;&#xFF0C;&#x4ECA;&#x56DE;&#x4F7F;&#x7528;&#x3057;&#x3066;&#x3044;&#x308B;
+Raspbian&#x306E;&#x30D0;&#x30FC;&#x30B8;&#x30E7;&#x30F3;&#x3082;Debian/Buster&#x3092;&#x30D9;&#x30FC;&#x30B9;&#x3068;&#x3057;&#x3066;&#x4F5C;&#x6210;&#x3055;&#x308C;&#x3066;&#x3044;&#x308B;&#x305F;&#x3081;&#xFF0C;&#x554F;&#x984C;&#x306A;&#x304F;&#x52D5;&#x4F5C;&#x3057;&#x307E;&#x3059;&#xFF0E;</p>
+<p>&#x4E0A;&#x8A18;&#x3067;&#x5229;&#x7528;&#x3057;&#x305F;<code>masnagam/docker-compose</code>&#x30A4;&#x30E1;&#x30FC;&#x30B8;&#x306F;&#xFF0C;
+<a href="https://github.com/masnagam/sbc-scripts/actions" target="_blank">GitHub Actions</a>&#x3068;&#x516C;&#x5F0F;&#x30EA;&#x30DD;&#x30B8;&#x30C8;&#x30EA;&#x30FC;&#x306B;&#x542B;&#x307E;&#x308C;&#x3066;&#x3044;&#x308B;
+<a href="https://github.com/docker/compose/blob/master/Dockerfile" target="_blank">Dockerfile</a>&#x3092;&#x4F7F;&#x3063;&#x3066;&#x30D3;&#x30EB;&#x30C9;&#x3057;&#x305F;&#x30DE;&#x30EB;&#x30C1;&#x30A2;&#x30FC;&#x30AD;&#x30A4;&#x30E1;&#x30FC;&#x30B8;&#x3067;&#x3059;&#xFF0E;&#x73FE;&#x6642;&#x70B9;&#x3067;&#x306F;&#xFF0C;&#x4EE5;&#x4E0B;&#x306E;&#x30A2;&#x30FC;&#x30AD;&#x30C6;&#x30AF;&#x30C1;&#x30E3;&#x30FC;&#x306E;&#x307F;&#x30B5;&#x30DD;&#x30FC;&#x30C8;&#x3057;&#x3066;&#x3044;&#x307E;&#x3059;&#xFF0E;</p>
+<ul>
+<li>amd64<ul>
+<li>&#x4E00;&#x822C;&#x7684;&#x306A;&#x30C7;&#x30B9;&#x30AF;&#x30C8;&#x30C3;&#x30D7;PC&#x306B;&#x642D;&#x8F09;&#x3055;&#x308C;&#x3066;&#x3044;&#x308B;Intel&#x7CFB;&#x3084;Ryzen&#x7CFB;</li>
+</ul>
+</li>
+<li>arm32v7<ul>
+<li>Raspberry Pi 2&#x4EE5;&#x964D;&#x306E;Raspbian&#x3084;ZeroPi&#x306A;&#x3069;</li>
+</ul>
+</li>
+<li>arm64v8<ul>
+<li>ROCK64&#x5411;&#x3051;Armbian&#x306A;&#x3069;</li>
+<li>Raspberry Pi 2B v1.2&#x4EE5;&#x964D;&#x306E;64bits OS</li>
+</ul>
+</li>
+</ul>
+<p>&#x6B8B;&#x5FF5;&#x306A;&#x304C;&#x3089;&#xFF0C;&#x53E4;&#x3044;Raspberry Pi&#x3084;Raspberry Pi Zero&#x7CFB;&#xFF08;arm32v5&#xFF09;&#x3067;&#x306F;&#x5229;&#x7528;&#x3067;&#x304D;&#x307E;&#x305B;&#x3093;&#xFF0E;</p>
+
+                                
+                                </section>
+                            
+    </div>
+    <div class="search-results">
+        <div class="has-results">
+            
+            <h1 class="search-results-title"><span class='search-results-count'></span> results matching "<span class='search-query'></span>"</h1>
+            <ul class="search-results-list"></ul>
+            
+        </div>
+        <div class="no-results">
+            
+            <h1 class="search-results-title">No results matching "<span class='search-query'></span>"</h1>
+            
+        </div>
+    </div>
+</div>
+
+                        </div>
+                    </div>
+                
+            </div>
+
+            
+                
+                <a href="setup_rpi.html" class="navigation navigation-prev " aria-label="Previous page: Raspberry Piのセットアップ">
+                    <i class="fa fa-angle-left"></i>
+                </a>
+                
+                
+                <a href="mirakc.html" class="navigation navigation-next " aria-label="Next page: mirakcのインストール">
+                    <i class="fa fa-angle-right"></i>
+                </a>
+                
+            
+        
+    </div>
+
+    <script>
+        var gitbook = gitbook || [];
+        gitbook.push(function() {
+            gitbook.page.hasChanged({"page":{"title":"Dockerのインストール","level":"1.3.2","depth":2,"next":{"title":"mirakcのインストール","level":"1.3.3","depth":2,"path":"install/mirakc.md","ref":"./install/mirakc.md","articles":[]},"previous":{"title":"Raspberry Piのセットアップ","level":"1.3.1","depth":2,"path":"install/setup_rpi.md","ref":"./install/setup_rpi.md","articles":[]},"dir":"ltr"},"config":{"plugins":["gitbook-plugin-japanese-support"],"root":"./src","styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"pluginsConfig":{"gitbook-plugin-japanese-support":{},"highlight":{},"search":{},"lunr":{"maxIndexSize":1000000,"ignoreSpecialCharacters":false},"fontsettings":{"theme":"white","family":"sans","size":2},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false}},"theme":"default","author":"masnagam","pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56},"embedFonts":false},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"variables":{},"title":"できるmirakc","language":"ja","gitbook":"*"},"file":{"path":"install/docker.md","mtime":"2020-10-05T13:16:56.228Z","type":"markdown"},"gitbook":{"version":"3.6.6","time":"2020-10-05T13:17:12.137Z"},"basePath":"..","book":{"language":""}});
+        });
+    </script>
+</div>
+
+        
+    <script src="../gitbook/gitbook.js"></script>
+    <script src="../gitbook/theme.js"></script>
+    
+        
+        <script src="../gitbook/gitbook-plugin-search/search-engine.js"></script>
+        
+    
+        
+        <script src="../gitbook/gitbook-plugin-search/search.js"></script>
+        
+    
+        
+        <script src="../gitbook/gitbook-plugin-lunr/lunr.min.js"></script>
+        
+    
+        
+        <script src="../gitbook/gitbook-plugin-lunr/search-lunr.js"></script>
+        
+    
+        
+        <script src="../gitbook/gitbook-plugin-fontsettings/fontsettings.js"></script>
+        
+    
+
+    </body>
+</html>
+
