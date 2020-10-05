@@ -39,7 +39,7 @@ Starting mirakc ... done
 
 # バージョン文字列の取得
 $ curl -s http://localhost:40772/api/version
-"0.9.0"
+"0.15.0"
 
 # mirakcコンテナーのシャットダウン
 $ sudo docker-compose down
@@ -48,6 +48,6 @@ Removing mirakc ... done
 Removing network pi_default
 ```
 
-mirakcの起動に成功していれば，`"0.9.0"`のようなバージョン文字列が表示されます．
+mirakcの起動に成功していれば，`"0.15.0"`のようなバージョン文字列が表示されます．
 
 どうでしょうか？思っていたより簡単ですよね．
