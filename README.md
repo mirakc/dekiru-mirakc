@@ -11,7 +11,7 @@ Mediumで公開している「[できるmirakc](https://medium.com/chinachu/c98v
 npm run serve
 ```
 
-誤時や情報の追記依頼などは，[Issues](https://github.com/mirakc/dekiru-mirakc/issues)に．
+誤字や情報の追記依頼などは，[Issues](https://github.com/mirakc/dekiru-mirakc/issues)に．
 もちろん，PRも受け付けています．
 
 ## License
