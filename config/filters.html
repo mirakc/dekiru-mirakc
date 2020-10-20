@@ -367,7 +367,7 @@ $ curl http://localhost:40772/api/services/3273601024/stream &gt;/dev/null
 <p><code>config.yml</code>:</p>
 <pre><code class="lang-yaml"><span class="hljs-attr">filters:</span>
 <span class="hljs-attr">  decode-filter:</span>
-<span class="hljs-attr">    command:</span> echo <span class="hljs-string">&quot;<span class="hljs-template-variable">{{channel_type}}</span>/<span class="hljs-template-variable">{{channel}}</span> SID#<span class="hljs-template-variable">{{sid}}</span>&quot;</span>
+<span class="hljs-attr">    command:</span> echo <span class="hljs-string">&quot;<span class="hljs-template-variable">{{{channel_type}}</span>}/<span class="hljs-template-variable">{{{channel}}</span>} SID#<span class="hljs-template-variable">{{{sid}}</span>}&quot;</span>
 </code></pre>
 <p>&#x8A2D;&#x5B9A;&#x53CD;&#x6620;&#x306E;&#x305F;&#x3081;mirakc&#x30B3;&#x30F3;&#x30C6;&#x30CA;&#x30FC;&#x3092;&#x518D;&#x8D77;&#x52D5;&#x3057;&#xFF0C;&#x52D5;&#x4F5C;&#x78BA;&#x8A8D;&#x3057;&#x307E;&#x3059;&#xFF0E;</p>
 <pre><code class="lang-console"># mirakc&#x30B3;&#x30F3;&#x30C6;&#x30CA;&#x30FC;&#x3092;&#x518D;&#x8D77;&#x52D5;
@@ -410,7 +410,7 @@ fi
 <pre><code class="lang-yaml"><span class="hljs-comment"># &#x5909;&#x66F4;&#x90E8;&#x5206;&#x306E;&#x307F;&#x8A18;&#x8F09;</span>
 <span class="hljs-attr">filters:</span>
 <span class="hljs-attr">  decode-filter:</span>
-<span class="hljs-attr">    command:</span> bs-not-supported {{channel_type}} {{channel}}
+<span class="hljs-attr">    command:</span> bs-not-supported {{{channel_type}}} {{{channel}}}
 </code></pre>
 <p><code>docker-compose.yml</code>:</p>
 <pre><code class="lang-yaml"><span class="hljs-comment"># &#x5909;&#x66F4;&#x90E8;&#x5206;&#x306E;&#x307F;&#x8A18;&#x8F09;</span>
@@ -472,7 +472,7 @@ BS not supported
     <script>
         var gitbook = gitbook || [];
         gitbook.push(function() {
-            gitbook.page.hasChanged({"page":{"title":"フィルター設定","level":"1.4.4","depth":2,"next":{"title":"フロントエンドアプリケーションとの連携","level":"1.5","depth":1,"path":"frontend_applications.md","ref":"./frontend_applications.md","articles":[]},"previous":{"title":"EGPデータキャッシュ","level":"1.4.3","depth":2,"path":"config/epg.md","ref":"./config/epg.md","articles":[]},"dir":"ltr"},"config":{"plugins":["gitbook-plugin-japanese-support"],"root":"./src","styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"pluginsConfig":{"gitbook-plugin-japanese-support":{},"highlight":{},"search":{},"lunr":{"maxIndexSize":1000000,"ignoreSpecialCharacters":false},"fontsettings":{"theme":"white","family":"sans","size":2},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false}},"theme":"default","author":"masnagam","pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56},"embedFonts":false},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"variables":{},"title":"できるmirakc","language":"ja","gitbook":"*"},"file":{"path":"config/filters.md","mtime":"2020-10-20T12:01:31.315Z","type":"markdown"},"gitbook":{"version":"3.6.6","time":"2020-10-20T12:01:39.713Z"},"basePath":"..","book":{"language":""}});
+            gitbook.page.hasChanged({"page":{"title":"フィルター設定","level":"1.4.4","depth":2,"next":{"title":"フロントエンドアプリケーションとの連携","level":"1.5","depth":1,"path":"frontend_applications.md","ref":"./frontend_applications.md","articles":[]},"previous":{"title":"EGPデータキャッシュ","level":"1.4.3","depth":2,"path":"config/epg.md","ref":"./config/epg.md","articles":[]},"dir":"ltr"},"config":{"plugins":["gitbook-plugin-japanese-support"],"root":"./src","styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"pluginsConfig":{"gitbook-plugin-japanese-support":{},"highlight":{},"search":{},"lunr":{"maxIndexSize":1000000,"ignoreSpecialCharacters":false},"fontsettings":{"theme":"white","family":"sans","size":2},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false}},"theme":"default","author":"masnagam","pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56},"embedFonts":false},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"variables":{},"title":"できるmirakc","language":"ja","gitbook":"*"},"file":{"path":"config/filters.md","mtime":"2020-10-20T12:36:21.768Z","type":"markdown"},"gitbook":{"version":"3.6.6","time":"2020-10-20T12:36:29.519Z"},"basePath":"..","book":{"language":""}});
         });
     </script>
 </div>
