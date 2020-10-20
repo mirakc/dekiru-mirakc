@@ -17,15 +17,19 @@ mirakcの`config.yml`の例:
 tuners:
   - name: gr1
     types: [GR]
-    command: recpt1 --device /dev/px4video2 {{channel}} - -
+    command: recpt1 --device /dev/px4video2 {{{channel}}}} - -
 ```
 
-ここで，`tuners[].command`にはテンプレート文字列が指定されており，`{{`と`}}`で囲
-われた識別子（上記の例では`channel`）は，テンプレートパラメーターと呼ばれる特別
-な値です．mirakcは，テンプレート言語として[Mustache]を採用しており，リスト型のテ
-ンプレートパラメーターの展開もサポートしています．`tuners[].command`以外にもいく
-つかの設定項目でテンプレート文字列が指定可能で，設定項目毎に使用可能なテンプレー
-トパラメーターは異なります．
+ここで，`tuners[].command`にはテンプレート文字列が指定されており，`{{{`と`}}}`
+（Triple Mustache）または`{{`と`}}`（Double Mustache）で囲われた識別子（上記の例
+では`channel`）は，テンプレートパラメーターと呼ばれる特別な値です．mirakcは，テ
+ンプレート言語として[Mustache]を採用しており，リスト型のテンプレートパラメーター
+の展開もサポートしています．`tuners[].command`以外にもいくつかの設定項目でテンプ
+レート文字列が指定可能で，設定項目毎に使用可能なテンプレートパラメーターは異なり
+ます．
+
+> Double MustacheとTriple Mustacheでは動作が異なる点に注意してください．
+> 詳細は[こちら](https://mustache.github.io/mustache.5.html)に書かれています．
 
 mirakcのチューナー設定には`decoder`プロパティは存在しません．その代わりに，後述
 するフィルター設定を使用します．
@@ -87,13 +91,13 @@ tuners:
   - name: upstream
     types: [GR, BS]
     command: >-
-      curl -s http://upstream:40772/api/channels/{{channel_type}}/{{channel}}/stream
+      curl -s http://upstream:40772/api/channels/{{{channel_type}}}/{{{channel}}}/stream
 ```
 
 上記の`http://upstream:40772`の部分は接続先のMirakurunまたはmirakcサーバーのURL
 に置き換えてください．
 
-Mirakurunとは異なり，mirakcの`/api/channels/{{channel_type}}/{{channel}}/stream`
+Mirakurunとは異なり，mirakcの`/api/channels/{{{channel_type}}}/{{{channel}}}/stream`
 APIは，チューナーからの出力をそのまま送出します．NULLパケットすらドロップしま
 せん．そのため，TSパケットを処理するツールのテストなどにも使えて便利です．
 

@@ -35,7 +35,7 @@ $ curl http://localhost:40772/api/services/3273601024/stream >/dev/null
 ```yaml
 filters:
   decode-filter:
-    command: echo "{{channel_type}}/{{channel}} SID#{{sid}}"
+    command: echo "{{{channel_type}}}/{{{channel}}} SID#{{{sid}}}"
 ```
 
 設定反映のためmirakcコンテナーを再起動し，動作確認します．
@@ -104,7 +104,7 @@ fi
 # 変更部分のみ記載
 filters:
   decode-filter:
-    command: bs-not-supported {{channel_type}} {{channel}}
+    command: bs-not-supported {{{channel_type}}} {{{channel}}}
 ```
 
 `docker-compose.yml`:
