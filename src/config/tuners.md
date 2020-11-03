@@ -17,7 +17,7 @@ mirakcの`config.yml`の例:
 tuners:
   - name: gr1
     types: [GR]
-    command: recpt1 --device /dev/px4video2 {{{channel}}}} - -
+    command: recpt1 --device /dev/px4video2 {{{channel}}} - -
 ```
 
 ここで，`tuners[].command`にはテンプレート文字列が指定されており，`{{{`と`}}}`
