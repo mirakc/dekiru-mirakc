@@ -7,7 +7,7 @@
         <title>Dockerのインストール · できるmirakc</title>
         <meta http-equiv="X-UA-Compatible" content="IE=edge" />
         <meta name="description" content="">
-        <meta name="generator" content="HonKit 3.6.11">
+        <meta name="generator" content="HonKit 3.6.12">
         <meta name="author" content="masnagam">
         
         
@@ -341,55 +341,55 @@
     
                                 <section class="normal markdown-section">
                                 
-                                <h1 id="docker&#x306E;&#x30A4;&#x30F3;&#x30B9;&#x30C8;&#x30FC;&#x30EB;">Docker&#x306E;&#x30A4;&#x30F3;&#x30B9;&#x30C8;&#x30FC;&#x30EB;</h1>
-<p>&#x4ECA;&#x56DE;&#x5229;&#x7528;&#x3057;&#x305F;Raspbian&#x306E;APT&#x30EA;&#x30DD;&#x30B8;&#x30C8;&#x30EA;&#x30FC;&#x306B;&#x306F;&#xFF0C;<code>docker.io</code>&#x304A;&#x3088;&#x3073;<code>docker-compose</code>&#x30D1;&#x30C3;&#x30B1;&#x30FC;&#x30B8;&#x304C;&#x65E2;&#x306B;&#x542B;&#x307E;&#x308C;&#x3066;&#x3044;&#x307E;&#x3059;&#xFF0E;&#x3057;&#x304B;&#x3057;&#xFF0C;</p>
+                                <h1 id="dockerのインストール">Dockerのインストール</h1>
+<p>今回利用したRaspbianのAPTリポジトリーには，<code>docker.io</code>および<code>docker-compose</code>パッケージが既に含まれています．しかし，</p>
 <ul>
 <li><code>docker</code>: 18.09.1</li>
 <li><code>docker-compose</code>: 1.21.0</li>
 </ul>
-<p>&#x3068;&#x4E00;&#x5E74;&#x4EE5;&#x4E0A;&#x524D;&#x306E;&#x30D0;&#x30FC;&#x30B8;&#x30E7;&#x30F3;&#x3067;&#x3059;&#xFF0E;&#x305D;&#x3053;&#x3067;&#x4ECA;&#x56DE;&#x306F;&#xFF0C;Raspbian APT&#x30EA;&#x30DD;&#x30B8;&#x30C8;&#x30EA;&#x30FC;&#x3092;&#x4F7F;&#x308F;&#x305A;&#x306B;&#xFF0C;&#x3053;&#x308C;&#x3089;&#x306E;&#x30C4;&#x30FC;&#x30EB;&#x3092;&#x30A4;&#x30F3;&#x30B9;&#x30C8;&#x30FC;&#x30EB;&#x3057;&#x307E;&#x3059;&#xFF0E;</p>
-<p>&#x307E;&#x305A;&#x306F;<code>docker</code>&#x3092;&#x30A4;&#x30F3;&#x30B9;&#x30C8;&#x30FC;&#x30EB;&#x3057;&#x307E;&#x3059;&#xFF0E;<a href="https://docs.docker.com/engine/install" target="_blank">Docker&#x516C;&#x5F0F;&#x30C9;&#x30AD;&#x30E5;&#x30E1;&#x30F3;&#x30C8;</a>&#x3067;&#x306F;<a href="https://get.docker.com/" target="_blank">get.docker.com</a>
-&#x30B9;&#x30AF;&#x30EA;&#x30D7;&#x30C8;&#x306E;&#x4F7F;&#x7528;&#x306F;&#x63A8;&#x5968;&#x3055;&#x308C;&#x3066;&#x3044;&#x307E;&#x305B;&#x3093;&#x304C;&#xFF0C;Raspbian&#x3067;&#x306E;&#x30A4;&#x30F3;&#x30B9;&#x30C8;&#x30FC;&#x30EB;&#x624B;&#x9806;&#x304C;&#x516C;&#x5F0F;&#x30C9;&#x30AD;&#x30E5;&#x30E1;&#x30F3;&#x30C8;&#x306B;&#x8A18;&#x8F09;&#x3055;&#x308C;&#x3066;&#x3044;&#x306A;&#x3044;&#x305F;&#x3081;&#xFF0C;Raspbian&#x3067;&#x3082;&#x52D5;&#x4F5C;&#x3059;&#x308B;<code>get.docker.com</code>&#x30B9;&#x30AF;&#x30EA;&#x30D7;&#x30C8;&#x3092;&#x4F7F;&#x7528;&#x3057;&#x307E;&#x3059;&#xFF0E;</p>
-<pre><code class="lang-shell"># Docker&#x306E;&#x30A4;&#x30F3;&#x30B9;&#x30C8;&#x30FC;&#x30EB;
+<p>と一年以上前のバージョンです．そこで今回は，Raspbian APTリポジトリーを使わずに，これらのツールをインストールします．</p>
+<p>まずは<code>docker</code>をインストールします．<a href="https://docs.docker.com/engine/install" target="_blank">Docker公式ドキュメント</a>では<a href="https://get.docker.com/" target="_blank">get.docker.com</a>
+スクリプトの使用は推奨されていませんが，Raspbianでのインストール手順が公式ドキュメントに記載されていないため，Raspbianでも動作する<code>get.docker.com</code>スクリプトを使用します．</p>
+<pre><code class="lang-shell"># Dockerのインストール
 #
-# &#x52D5;&#x4F5C;&#x78BA;&#x8A8D;&#x306E;&#x305F;&#x3081;&#x4F7F;&#x7528;&#x3057;&#x305F;`get.docker.com`&#x30B9;&#x30AF;&#x30EA;&#x30D7;&#x30C8;&#x306E;&#x30B3;&#x30DF;&#x30C3;&#x30C8;&#x30CF;&#x30C3;&#x30B7;&#x30E5;&#x306F;
+# 動作確認のため使用した`get.docker.com`スクリプトのコミットハッシュは
 # `442e66405c304fa92af8aadaa1d9b31bf4b0ad94`
 curl -sSL https://get.docker.com | sudo sh
 
-# &#x5FF5;&#x306E;&#x70BA;&#xFF0C;&#x52D5;&#x304F;&#x3053;&#x3068;&#x3092;&#x78BA;&#x8A8D;
+# 念の為，動くことを確認
 docker version
 </code></pre>
-<p>&#x6B21;&#x306B;<code>docker-compose</code>&#x3092;&#x30A4;&#x30F3;&#x30B9;&#x30C8;&#x30FC;&#x30EB;&#x3057;&#x307E;&#x3059;&#xFF0E;&#x6B8B;&#x5FF5;&#x306A;&#x304C;&#x3089;&#xFF0C;&#x516C;&#x5F0F;&#x30EA;&#x30DD;&#x30B8;&#x30C8;&#x30EA;&#x30FC;
-<a href="https://github.com/docker/compose" target="_blank">docker/compose</a>&#x3067;&#x306F;amd64&#x30D0;&#x30A4;&#x30CA;&#x30EA;&#x30FC;&#x3057;&#x304B;&#x914D;&#x5E03;&#x3055;&#x308C;&#x3066;&#x3044;&#x307E;&#x305B;&#x3093;&#xFF0E;&#x305D;&#x3053;&#x3067;&#xFF0C;&#x79C1;&#x304C;&#x4F5C;&#x6210;&#x3057;&#x305F;
-<a href="https://github.com/masnagam/sbc-scripts" target="_blank">masnagam/sbc-scripts</a>&#x306E;<code>get-docker-compose</code>&#x30B9;&#x30AF;&#x30EA;&#x30D7;&#x30C8;&#x3092;&#x4F7F;&#x7528;&#x3057;&#x307E;&#x3059;&#xFF0E;&#x3053;&#x306E;&#x30B9;&#x30AF;&#x30EA;&#x30D7;&#x30C8;&#x3092;&#x4F7F;&#x7528;&#x3059;&#x308B;&#x3068;&#xFF0C;Docker Hub&#x306B;&#x30A2;&#x30C3;&#x30D7;&#x30ED;&#x30FC;&#x30C9;&#x6E08;&#x307F;&#x306E;<a href="https://hub.docker.com/r/masnagam/docker-compose" target="_blank">masnagam/docker-compose</a>&#x30A4;&#x30E1;&#x30FC;&#x30B8;&#x304B;&#x3089;&#x30D0;&#x30A4;&#x30CA;&#x30EA;&#x30FC;&#x3092;&#x62BD;&#x51FA;&#x3067;&#x304D;&#x307E;&#x3059;&#xFF0E;</p>
-<pre><code class="lang-shell"># Docker&#x30A4;&#x30E1;&#x30FC;&#x30B8;&#x304B;&#x3089;docker-compose&#x30B3;&#x30DE;&#x30F3;&#x30C9;&#x3092;&#x62BD;&#x51FA;
+<p>次に<code>docker-compose</code>をインストールします．残念ながら，公式リポジトリー
+<a href="https://github.com/docker/compose" target="_blank">docker/compose</a>ではamd64バイナリーしか配布されていません．そこで，私が作成した
+<a href="https://github.com/masnagam/sbc-scripts" target="_blank">masnagam/sbc-scripts</a>の<code>get-docker-compose</code>スクリプトを使用します．このスクリプトを使用すると，Docker Hubにアップロード済みの<a href="https://hub.docker.com/r/masnagam/docker-compose" target="_blank">masnagam/docker-compose</a>イメージからバイナリーを抽出できます．</p>
+<pre><code class="lang-shell"># Dockerイメージからdocker-composeコマンドを抽出
 curl -fsSL https://raw.githubusercontent.com/masnagam/sbc-scripts/master/get-docker-compose | \
   sh | sudo tar -x -C /usr/local/bin
 
-# &#x30D0;&#x30FC;&#x30B8;&#x30E7;&#x30F3;&#x304C;&#x8868;&#x793A;&#x3055;&#x308C;&#x308C;&#x3070;OK
+# バージョンが表示されればOK
 docker-compose version
 </code></pre>
-<p>&#x4E0A;&#x8A18;&#x3067;&#x5229;&#x7528;&#x3057;&#x305F;Docker&#x30A4;&#x30E1;&#x30FC;&#x30B8;&#x306F;Debian/Buster&#x30D9;&#x30FC;&#x30B9;&#x3067;&#x3059;&#x304C;&#xFF0C;&#x4ECA;&#x56DE;&#x4F7F;&#x7528;&#x3057;&#x3066;&#x3044;&#x308B;
-Raspbian&#x306E;&#x30D0;&#x30FC;&#x30B8;&#x30E7;&#x30F3;&#x3082;Debian/Buster&#x3092;&#x30D9;&#x30FC;&#x30B9;&#x3068;&#x3057;&#x3066;&#x4F5C;&#x6210;&#x3055;&#x308C;&#x3066;&#x3044;&#x308B;&#x305F;&#x3081;&#xFF0C;&#x554F;&#x984C;&#x306A;&#x304F;&#x52D5;&#x4F5C;&#x3057;&#x307E;&#x3059;&#xFF0E;</p>
-<p>&#x4E0A;&#x8A18;&#x3067;&#x5229;&#x7528;&#x3057;&#x305F;<code>masnagam/docker-compose</code>&#x30A4;&#x30E1;&#x30FC;&#x30B8;&#x306F;&#xFF0C;
-<a href="https://github.com/masnagam/sbc-scripts/actions" target="_blank">GitHub Actions</a>&#x3068;&#x516C;&#x5F0F;&#x30EA;&#x30DD;&#x30B8;&#x30C8;&#x30EA;&#x30FC;&#x306B;&#x542B;&#x307E;&#x308C;&#x3066;&#x3044;&#x308B;
-<a href="https://github.com/docker/compose/blob/master/Dockerfile" target="_blank">Dockerfile</a>&#x3092;&#x4F7F;&#x3063;&#x3066;&#x30D3;&#x30EB;&#x30C9;&#x3057;&#x305F;&#x30DE;&#x30EB;&#x30C1;&#x30A2;&#x30FC;&#x30AD;&#x30A4;&#x30E1;&#x30FC;&#x30B8;&#x3067;&#x3059;&#xFF0E;&#x73FE;&#x6642;&#x70B9;&#x3067;&#x306F;&#xFF0C;&#x4EE5;&#x4E0B;&#x306E;&#x30A2;&#x30FC;&#x30AD;&#x30C6;&#x30AF;&#x30C1;&#x30E3;&#x30FC;&#x306E;&#x307F;&#x30B5;&#x30DD;&#x30FC;&#x30C8;&#x3057;&#x3066;&#x3044;&#x307E;&#x3059;&#xFF0E;</p>
+<p>上記で利用したDockerイメージはDebian/Busterベースですが，今回使用している
+RaspbianのバージョンもDebian/Busterをベースとして作成されているため，問題なく動作します．</p>
+<p>上記で利用した<code>masnagam/docker-compose</code>イメージは，
+<a href="https://github.com/masnagam/sbc-scripts/actions" target="_blank">GitHub Actions</a>と公式リポジトリーに含まれている
+<a href="https://github.com/docker/compose/blob/master/Dockerfile" target="_blank">Dockerfile</a>を使ってビルドしたマルチアーキイメージです．現時点では，以下のアーキテクチャーのみサポートしています．</p>
 <ul>
 <li>amd64<ul>
-<li>&#x4E00;&#x822C;&#x7684;&#x306A;&#x30C7;&#x30B9;&#x30AF;&#x30C8;&#x30C3;&#x30D7;PC&#x306B;&#x642D;&#x8F09;&#x3055;&#x308C;&#x3066;&#x3044;&#x308B;Intel&#x7CFB;&#x3084;Ryzen&#x7CFB;</li>
+<li>一般的なデスクトップPCに搭載されているIntel系やRyzen系</li>
 </ul>
 </li>
 <li>arm32v7<ul>
-<li>Raspberry Pi 2&#x4EE5;&#x964D;&#x306E;Raspbian&#x3084;ZeroPi&#x306A;&#x3069;</li>
+<li>Raspberry Pi 2以降のRaspbianやZeroPiなど</li>
 </ul>
 </li>
 <li>arm64v8<ul>
-<li>ROCK64&#x5411;&#x3051;Armbian&#x306A;&#x3069;</li>
-<li>Raspberry Pi 2B v1.2&#x4EE5;&#x964D;&#x306E;64bits OS</li>
+<li>ROCK64向けArmbianなど</li>
+<li>Raspberry Pi 2B v1.2以降の64bits OS</li>
 </ul>
 </li>
 </ul>
-<p>&#x6B8B;&#x5FF5;&#x306A;&#x304C;&#x3089;&#xFF0C;&#x53E4;&#x3044;Raspberry Pi&#x3084;Raspberry Pi Zero&#x7CFB;&#xFF08;arm32v5&#xFF09;&#x3067;&#x306F;&#x5229;&#x7528;&#x3067;&#x304D;&#x307E;&#x305B;&#x3093;&#xFF0E;</p>
+<p>残念ながら，古いRaspberry PiやRaspberry Pi Zero系（arm32v5）では利用できません．</p>
 
                                 
                                 </section>
@@ -433,7 +433,7 @@ Raspbian&#x306E;&#x30D0;&#x30FC;&#x30B8;&#x30E7;&#x30F3;&#x3082;Debian/Buster&#x
     <script>
         var gitbook = gitbook || [];
         gitbook.push(function() {
-            gitbook.page.hasChanged({"page":{"title":"Dockerのインストール","level":"1.3.2","depth":2,"next":{"title":"mirakcのインストール","level":"1.3.3","depth":2,"path":"install/mirakc.md","ref":"./install/mirakc.md","articles":[]},"previous":{"title":"Raspberry Piのセットアップ","level":"1.3.1","depth":2,"path":"install/setup_rpi.md","ref":"./install/setup_rpi.md","articles":[]},"dir":"ltr"},"config":{"plugins":["gitbook-plugin-japanese-support"],"root":"./src","styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"pluginsConfig":{"gitbook-plugin-japanese-support":{},"highlight":{},"search":{},"lunr":{"maxIndexSize":1000000,"ignoreSpecialCharacters":false},"fontsettings":{"theme":"white","family":"sans","size":2},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false}},"theme":"default","author":"masnagam","pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56},"embedFonts":false},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"variables":{},"title":"できるmirakc","language":"ja","gitbook":"*"},"file":{"path":"install/docker.md","mtime":"2020-11-11T06:51:03.291Z","type":"markdown"},"gitbook":{"version":"3.6.11","time":"2020-11-11T06:51:14.122Z"},"basePath":"..","book":{"language":""}});
+            gitbook.page.hasChanged({"page":{"title":"Dockerのインストール","level":"1.3.2","depth":2,"next":{"title":"mirakcのインストール","level":"1.3.3","depth":2,"path":"install/mirakc.md","ref":"./install/mirakc.md","articles":[]},"previous":{"title":"Raspberry Piのセットアップ","level":"1.3.1","depth":2,"path":"install/setup_rpi.md","ref":"./install/setup_rpi.md","articles":[]},"dir":"ltr"},"config":{"plugins":["gitbook-plugin-japanese-support"],"root":"./src","styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"pluginsConfig":{"gitbook-plugin-japanese-support":{},"highlight":{},"search":{},"lunr":{"maxIndexSize":1000000,"ignoreSpecialCharacters":false},"fontsettings":{"theme":"white","family":"sans","size":2},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false}},"theme":"default","author":"masnagam","pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56},"embedFonts":false},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"variables":{},"title":"できるmirakc","language":"ja","gitbook":"*"},"file":{"path":"install/docker.md","mtime":"2020-11-16T07:35:00.662Z","type":"markdown"},"gitbook":{"version":"3.6.12","time":"2020-11-16T07:35:14.634Z"},"basePath":"..","book":{"language":""}});
         });
     </script>
 </div>

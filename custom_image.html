@@ -7,7 +7,7 @@
         <title>カスタムイメージの作成 · できるmirakc</title>
         <meta http-equiv="X-UA-Compatible" content="IE=edge" />
         <meta name="description" content="">
-        <meta name="generator" content="HonKit 3.6.11">
+        <meta name="generator" content="HonKit 3.6.12">
         <meta name="author" content="masnagam">
         
         
@@ -341,43 +341,43 @@
     
                                 <section class="normal markdown-section">
                                 
-                                <h1 id="&#x30AB;&#x30B9;&#x30BF;&#x30E0;&#x30A4;&#x30E1;&#x30FC;&#x30B8;&#x306E;&#x4F5C;&#x6210;">&#x30AB;&#x30B9;&#x30BF;&#x30E0;&#x30A4;&#x30E1;&#x30FC;&#x30B8;&#x306E;&#x4F5C;&#x6210;</h1>
-<p>&#x591A;&#x304F;&#x306E;&#x4EBA;&#x306F;&#xFF0C;&#x3053;&#x3053;&#x307E;&#x3067;&#x306E;&#x8AAC;&#x660E;&#x3068;<code>mirakc/mirakc</code>&#x30A4;&#x30E1;&#x30FC;&#x30B8;&#x3092;&#x4F7F;&#x3063;&#x3066;&#x9332;&#x753B;&#x30B7;&#x30B9;&#x30C6;&#x30E0;&#x3092;&#x69CB;&#x7BC9;&#x3067;&#x304D;&#x305F;&#x3068;&#x601D;&#x3044;&#x307E;&#x3059;&#xFF0E;&#x3057;&#x304B;&#x3057;&#xFF0C;&#x914D;&#x5E03;&#x3057;&#x3066;&#x3044;&#x308B;Docker&#x30A4;&#x30E1;&#x30FC;&#x30B8;&#x306B;&#x542B;&#x307E;&#x308C;&#x3066;&#x3044;&#x306A;&#x3044;&#x30C4;&#x30FC;&#x30EB;&#xFF0C;&#x4F8B;&#x3048;&#x3070;<code>recpt1</code>&#x3068;<code>recdvb</code>&#x4EE5;&#x5916;&#x306E;&#x30C1;&#x30E5;&#x30FC;&#x30CA;&#x30FC;&#x30B3;&#x30DE;&#x30F3;&#x30C9;&#x3092;&#x4F7F;&#x3063;&#x3066;&#x3044;&#x308B;&#x4EBA;&#x306F;&#xFF0C;&#x3053;&#x306E;Docker&#x30A4;&#x30E1;&#x30FC;&#x30B8;&#x3060;&#x3051;&#x3067;&#x306F;&#x9332;&#x753B;&#x30B7;&#x30B9;&#x30C6;&#x30E0;&#x3092;&#x69CB;&#x7BC9;&#x3067;&#x304D;&#x307E;&#x305B;&#x3093;&#xFF0E;&#x81EA;&#x529B;&#x3067;&#x30AB;&#x30B9;&#x30BF;&#x30E0;&#x30A4;&#x30E1;&#x30FC;&#x30B8;&#x3092;&#x4F5C;&#x6210;&#x3059;&#x308B;&#x5FC5;&#x8981;&#x304C;&#x3042;&#x308A;&#x307E;&#x3059;&#xFF0E;</p>
-<p>&#x30AB;&#x30B9;&#x30BF;&#x30E0;&#x30A4;&#x30E1;&#x30FC;&#x30B8;&#x306E;&#x4F5C;&#x6210;&#x306F;&#x305D;&#x308C;&#x307B;&#x3069;&#x96E3;&#x3057;&#x3044;&#x4F5C;&#x696D;&#x3067;&#x306F;&#x3042;&#x308A;&#x307E;&#x305B;&#x3093;&#xFF0E;&#x8A66;&#x3057;&#x306B;<code>HEALTHCHECK</code>&#x3092;&#x8FFD;&#x52A0;&#x3057;&#x3066;&#x307F;&#x307E;&#x3059;&#xFF0E;</p>
-<p>&#x307E;&#x305A;&#xFF0C;&#x4EE5;&#x4E0B;&#x306E;&#x3088;&#x3046;&#x306A;<code>Dockerfile</code>&#x3092;&#x4F5C;&#x6210;&#x3057;&#x307E;&#x3059;&#xFF0E;</p>
+                                <h1 id="カスタムイメージの作成">カスタムイメージの作成</h1>
+<p>多くの人は，ここまでの説明と<code>mirakc/mirakc</code>イメージを使って録画システムを構築できたと思います．しかし，配布しているDockerイメージに含まれていないツール，例えば<code>recpt1</code>と<code>recdvb</code>以外のチューナーコマンドを使っている人は，このDockerイメージだけでは録画システムを構築できません．自力でカスタムイメージを作成する必要があります．</p>
+<p>カスタムイメージの作成はそれほど難しい作業ではありません．試しに<code>HEALTHCHECK</code>を追加してみます．</p>
+<p>まず，以下のような<code>Dockerfile</code>を作成します．</p>
 <pre><code class="lang-Dockerfile"><span class="hljs-keyword">FROM</span> mirakc/mirakc:alpine-arm32v7
 
-<span class="hljs-comment"># &#x77ED;&#x6642;&#x9593;&#x3067;&#x30C6;&#x30B9;&#x30C8;&#x3067;&#x304D;&#x308B;&#x3088;&#x3046;&#x306B;&#xFF0C;&#x30C1;&#x30A7;&#x30C3;&#x30AF;&#x9593;&#x9694;&#x3092;&#xFF11;&#xFF10;&#x79D2;&#x306B;&#x8A2D;&#x5B9A;&#x3057;&#x3066;&#x3044;&#x307E;&#x3059;</span>
+<span class="hljs-comment"># 短時間でテストできるように，チェック間隔を１０秒に設定しています</span>
 <span class="hljs-keyword">HEALTHCHECK</span><span class="bash"> --interval=10s --timeout=3s \
   CMD curl -fsSL http://localhost:40772/api/status || <span class="hljs-built_in">exit</span> 1
 </span></code></pre>
-<p>&#x3053;&#x3053;&#x3067;&#x30DD;&#x30A4;&#x30F3;&#x30C8;&#x3068;&#x306A;&#x308B;&#x306E;&#x304C;&#xFF0C;<code>FROM</code>&#x306B;&#x6307;&#x5B9A;&#x3057;&#x305F;Docker&#x30A4;&#x30E1;&#x30FC;&#x30B8;&#x306E;&#x30BF;&#x30B0;<code>alpine-arm32v7</code>&#x3067;&#x3059;&#xFF0E;&#x6700;&#x7D42;&#x7684;&#x306B;mirakc&#x30B3;&#x30F3;&#x30C6;&#x30CA;&#x30FC;&#x3092;&#x52D5;&#x4F5C;&#x3055;&#x305B;&#x308B;SBC&#x4E0A;&#x3067;&#x30AB;&#x30B9;&#x30BF;&#x30E0;&#x30A4;&#x30E1;&#x30FC;&#x30B8;&#x3092;&#x30D3;&#x30EB;&#x30C9;&#x3059;&#x308B;&#x5834;&#x5408;&#x306F;&#xFF0C;&#x30DE;&#x30EB;&#x30C1;&#x30A2;&#x30FC;&#x30AD;&#x30A4;&#x30E1;&#x30FC;&#x30B8;&#x3067;&#x3042;&#x308B;<code>alpine</code>&#x30BF;&#x30B0;&#x3092;&#x4F7F;&#x7528;&#x3057;&#x3066;&#x3082;&#x554F;&#x984C;&#x3042;&#x308A;&#x307E;&#x305B;&#x3093;&#xFF0E;&#x3057;&#x304B;&#x3057;&#xFF0C;&#x4E00;&#x822C;&#x7684;&#x306B;SBC&#x4E0A;&#x3067;&#x306E;&#x30D3;&#x30EB;&#x30C9;&#x306F;&#x5927;&#x5909;&#x6642;&#x9593;&#x304C;&#x304B;&#x304B;&#x308A;&#x307E;&#x3059;&#xFF0E;&#x3053;&#x306E;&#x30D3;&#x30EB;&#x30C9;&#x6642;&#x9593;&#x306E;&#x554F;&#x984C;&#x306F;&#xFF0C;&#x3088;&#x308A;&#x9AD8;&#x901F;&#x306A;
-PC&#x4E0A;&#x3067;SBC&#x7528;&#x306E;Docker&#x30A4;&#x30E1;&#x30FC;&#x30B8;&#x3092;&#x30AF;&#x30ED;&#x30B9;&#x30D3;&#x30EB;&#x30C9;&#x3059;&#x308B;&#x3053;&#x3068;&#x3067;&#x89E3;&#x6C7A;&#x3067;&#x304D;&#x307E;&#x3059;&#xFF0E;&#x305F;&#x3060;&#xFF0C;&#x30AF;&#x30ED;&#x30B9;&#x30D3;&#x30EB;&#x30C9;&#x3067;&#x30DE;&#x30EB;&#x30C1;&#x30A2;&#x30FC;&#x30AD;&#x30A4;&#x30E1;&#x30FC;&#x30B8;&#x3092;&#x4F7F;&#x7528;&#x3059;&#x308B;&#x3068;&#xFF0C;&#x6700;&#x7D42;&#x7684;&#x306B;&#x30B3;&#x30F3;&#x30C6;&#x30CA;&#x30FC;&#x3092;&#x5B9F;&#x884C;&#x3059;&#x308B;SBC
-&#xFF08;Raspberry Pi 3&#x3060;&#x3068;arm32v7&#xFF09;&#x7528;&#x306E;Docker&#x30A4;&#x30E1;&#x30FC;&#x30B8;&#x3067;&#x306F;&#x306A;&#x304F;&#xFF0C;&#x30AF;&#x30ED;&#x30B9;&#x30D3;&#x30EB;&#x30C9;&#x3092;&#x5B9F;&#x884C;&#x3059;&#x308B;&#x30DE;&#x30B7;&#x30F3;&#xFF08;&#x591A;&#x304F;&#x306E;&#x5834;&#x5408;&#xFF0C;amd64&#xFF09;&#x7528;&#x306E;Docker&#x30A4;&#x30E1;&#x30FC;&#x30B8;&#x3092;&#x53D6;&#x5F97;&#x3057;&#x3066;&#x3057;&#x307E;&#x3044;&#x307E;&#x3059;&#xFF0E;&#x305D;&#x306E;&#x305F;&#x3081;&#xFF0C;&#x4E0A;&#x8A18;&#x3067;&#x306F;<code>alpine-arm32v7</code>&#x3092;&#x6307;&#x5B9A;&#x3057;&#x3066;&#x3044;&#x307E;&#x3059;&#xFF0E;</p>
+<p>ここでポイントとなるのが，<code>FROM</code>に指定したDockerイメージのタグ<code>alpine-arm32v7</code>です．最終的にmirakcコンテナーを動作させるSBC上でカスタムイメージをビルドする場合は，マルチアーキイメージである<code>alpine</code>タグを使用しても問題ありません．しかし，一般的にSBC上でのビルドは大変時間がかかります．このビルド時間の問題は，より高速な
+PC上でSBC用のDockerイメージをクロスビルドすることで解決できます．ただ，クロスビルドでマルチアーキイメージを使用すると，最終的にコンテナーを実行するSBC
+（Raspberry Pi 3だとarm32v7）用のDockerイメージではなく，クロスビルドを実行するマシン（多くの場合，amd64）用のDockerイメージを取得してしまいます．そのため，上記では<code>alpine-arm32v7</code>を指定しています．</p>
 <blockquote>
-<p>&#x4ECA;&#x56DE;&#x306E;&#x4F8B;&#x3067;&#x306F;&#x4E0D;&#x8981;&#x3067;&#x3059;&#x304C;&#xFF0C;&#x7570;&#x306A;&#x308B;&#x30A2;&#x30FC;&#x30AD;&#x30C6;&#x30AF;&#x30C1;&#x30E3;&#x7528;&#x306E;Docker&#x30A4;&#x30E1;&#x30FC;&#x30B8;&#x4E0A;&#x3067;&#x4F55;&#x304B;&#x3089;&#x306E;&#x30B3;&#x30DE;
-&#x30F3;&#x30C9;&#x3092;&#x5B9F;&#x884C;&#x3059;&#x308B;&#x5834;&#x5408;&#xFF0C;QEMU&#x30E6;&#x30FC;&#x30B6;&#x30FC;&#x30E2;&#x30FC;&#x30C9;&#x30A8;&#x30DF;&#x30E5;&#x30EC;&#x30FC;&#x30B7;&#x30E7;&#x30F3;&#x306E;&#x305F;&#x3081;&#x306E;&#x6E96;&#x5099;&#x304C;&#x5FC5;&#x8981;&#x3067;&#x3059;&#xFF0E;
-&#x5177;&#x4F53;&#x7684;&#x306B;&#x306F;&#xFF0C;<a href="https://github.com/mirakc/mirakc/blob/master/.github/workflows/docker.yml#L36" target="_blank">&#x3053;&#x3061;&#x3089;</a>
-&#x3092;&#x53C2;&#x7167;&#x3057;&#x3066;&#x304F;&#x3060;&#x3055;&#x3044;&#xFF0E;</p>
+<p>今回の例では不要ですが，異なるアーキテクチャ用のDockerイメージ上で何からのコマ
+ンドを実行する場合，QEMUユーザーモードエミュレーションのための準備が必要です．
+具体的には，<a href="https://github.com/mirakc/mirakc/blob/master/.github/workflows/docker.yml#L36" target="_blank">こちら</a>
+を参照してください．</p>
 </blockquote>
-<p>&#x6B21;&#x306B;&#x30AB;&#x30B9;&#x30BF;&#x30E0;&#x30A4;&#x30E1;&#x30FC;&#x30B8;&#x306E;&#x30D3;&#x30EB;&#x30C9;&#xFF0E;</p>
+<p>次にカスタムイメージのビルド．</p>
 <pre><code class="lang-shell">sudo docker build -t custom/mirakc .
 </code></pre>
-<p>&#x3042;&#x3068;&#x306F;&#x8D77;&#x52D5;&#x3057;&#x3066;&#x52D5;&#x4F5C;&#x78BA;&#x8A8D;&#xFF0E;</p>
+<p>あとは起動して動作確認．</p>
 <pre><code class="lang-shell">sudo docker run -d --rm --name custom-mirakc \
   -v $(pwd)/config.yml:/etc/mirakc/config.yml custom/mirakc
 
-# &#xFF11;&#xFF10;&#x79D2;&#x3054;&#x3068;&#x306B;&#x30ED;&#x30B0;&#x304C;&#x8868;&#x793A;&#x3055;&#x308C;&#x308B;
+# １０秒ごとにログが表示される
 sudo docker events
 
 sudo docker stop custom-mirakc
 </code></pre>
-<p>&#x3088;&#x308A;&#x5B9F;&#x7528;&#x7684;&#x306A;&#x4F8B;&#x3068;&#x3057;&#x3066;&#x306F;&#xFF0C;&#x4EE5;&#x4E0B;&#x306E;Dockerfile&#x3092;&#x53C2;&#x8003;&#x306B;&#x3057;&#x3066;&#x304F;&#x3060;&#x3055;&#x3044;&#xFF0E;</p>
+<p>より実用的な例としては，以下のDockerfileを参考にしてください．</p>
 <ul>
 <li><a href="https://github.com/collelog/tv-recorder-dockerfile/tree/master/mirakc" target="_blank">tv-recorder-dockerfile/mirakc</a></li>
 <li><a href="https://github.com/68fpjc/docker-bon-mirakurun/blob/master/dockerfiles/mirakc" target="_blank">docker-bon-mirakurun/dockerfiles/mirakc</a></li>
 </ul>
-<p>Docker&#x30A4;&#x30E1;&#x30FC;&#x30B8;&#x306E;&#x30D3;&#x30EB;&#x30C9;&#x6642;&#x306B;&#xFF0C;&#x8FFD;&#x52A0;&#x3059;&#x308B;&#x30BD;&#x30D5;&#x30C8;&#x30A6;&#x30A7;&#x30A2;&#x3092;&#x30AF;&#x30ED;&#x30B9;&#x30D3;&#x30EB;&#x30C9;&#x3059;&#x308B;&#x5834;&#x5408;&#x306A;&#x3069;&#x306F;&#xFF0C;&#x4EE5;&#x4E0B;&#x3092;&#x53C2;&#x8003;&#x306B;&#x3057;&#x3066;&#x304F;&#x3060;&#x3055;&#x3044;&#xFF0E;</p>
+<p>Dockerイメージのビルド時に，追加するソフトウェアをクロスビルドする場合などは，以下を参考にしてください．</p>
 <ul>
 <li><a href="https://github.com/mirakc/mirakc/tree/master/docker/templates" target="_blank">mirakc/docker/templates</a></li>
 </ul>
@@ -424,7 +424,7 @@ sudo docker stop custom-mirakc
     <script>
         var gitbook = gitbook || [];
         gitbook.push(function() {
-            gitbook.page.hasChanged({"page":{"title":"カスタムイメージの作成","level":"1.6","depth":1,"next":{"title":"トラブルシューティング","level":"1.7","depth":1,"path":"troubleshooting.md","ref":"./troubleshooting.md","articles":[]},"previous":{"title":"フロントエンドアプリケーションとの連携","level":"1.5","depth":1,"path":"frontend_applications.md","ref":"./frontend_applications.md","articles":[]},"dir":"ltr"},"config":{"plugins":["gitbook-plugin-japanese-support"],"root":"./src","styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"pluginsConfig":{"gitbook-plugin-japanese-support":{},"highlight":{},"search":{},"lunr":{"maxIndexSize":1000000,"ignoreSpecialCharacters":false},"fontsettings":{"theme":"white","family":"sans","size":2},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false}},"theme":"default","author":"masnagam","pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56},"embedFonts":false},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"variables":{},"title":"できるmirakc","language":"ja","gitbook":"*"},"file":{"path":"custom_image.md","mtime":"2020-11-11T06:51:03.291Z","type":"markdown"},"gitbook":{"version":"3.6.11","time":"2020-11-11T06:51:14.122Z"},"basePath":".","book":{"language":""}});
+            gitbook.page.hasChanged({"page":{"title":"カスタムイメージの作成","level":"1.6","depth":1,"next":{"title":"トラブルシューティング","level":"1.7","depth":1,"path":"troubleshooting.md","ref":"./troubleshooting.md","articles":[]},"previous":{"title":"フロントエンドアプリケーションとの連携","level":"1.5","depth":1,"path":"frontend_applications.md","ref":"./frontend_applications.md","articles":[]},"dir":"ltr"},"config":{"plugins":["gitbook-plugin-japanese-support"],"root":"./src","styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"pluginsConfig":{"gitbook-plugin-japanese-support":{},"highlight":{},"search":{},"lunr":{"maxIndexSize":1000000,"ignoreSpecialCharacters":false},"fontsettings":{"theme":"white","family":"sans","size":2},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false}},"theme":"default","author":"masnagam","pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56},"embedFonts":false},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"variables":{},"title":"できるmirakc","language":"ja","gitbook":"*"},"file":{"path":"custom_image.md","mtime":"2020-11-16T07:35:00.658Z","type":"markdown"},"gitbook":{"version":"3.6.12","time":"2020-11-16T07:35:14.634Z"},"basePath":".","book":{"language":""}});
         });
     </script>
 </div>

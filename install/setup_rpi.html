@@ -7,7 +7,7 @@
         <title>Raspberry Piのセットアップ · できるmirakc</title>
         <meta http-equiv="X-UA-Compatible" content="IE=edge" />
         <meta name="description" content="">
-        <meta name="generator" content="HonKit 3.6.11">
+        <meta name="generator" content="HonKit 3.6.12">
         <meta name="author" content="masnagam">
         
         
@@ -341,71 +341,71 @@
     
                                 <section class="normal markdown-section">
                                 
-                                <h1 id="raspberry-pi&#x306E;&#x30BB;&#x30C3;&#x30C8;&#x30A2;&#x30C3;&#x30D7;">Raspberry Pi&#x306E;&#x30BB;&#x30C3;&#x30C8;&#x30A2;&#x30C3;&#x30D7;</h1>
-<p>Raspberry Pi&#x306E;&#x30BB;&#x30C3;&#x30C8;&#x30A2;&#x30C3;&#x30D7;&#x624B;&#x9806;&#x306B;&#x3064;&#x3044;&#x3066;&#x306F;&#xFF0C;&#x300C;Raspberry Pi 4&#x3067;&#x69CB;&#x7BC9;&#x3059;&#x308B;&#x9332;&#x753B;&#x30DE;&#x30B7;&#x30F3;&#x300D;&#x306B;&#x8A18;&#x8F09;&#x3055;&#x308C;&#x3066;&#x3044;&#x308B;&#x305F;&#x3081;&#x8A73;&#x7D30;&#x306A;&#x8AAC;&#x660E;&#x3092;&#x884C;&#x3044;&#x307E;&#x305B;&#x3093;&#xFF0E;</p>
-<p>&#x4EE5;&#x964D;&#x306E;&#x8AAC;&#x660E;&#x306F;&#xFF0C;</p>
+                                <h1 id="raspberry-piのセットアップ">Raspberry Piのセットアップ</h1>
+<p>Raspberry Piのセットアップ手順については，「Raspberry Pi 4で構築する録画マシン」に記載されているため詳細な説明を行いません．</p>
+<p>以降の説明は，</p>
 <ul>
 <li>Raspberry Pi 3B</li>
 <li>2020-02-13-raspbian-buster-lite.img</li>
 <li>PX-Q3U4 + <a href="https://github.com/nns779/px4_drv" target="_blank">nns779/px4_drv</a></li>
 </ul>
-<p>&#x3067;&#x52D5;&#x4F5C;&#x78BA;&#x8A8D;&#x3092;&#x3057;&#x307E;&#x3057;&#x305F;&#x304C;&#xFF0C;&#x4EE5;&#x4E0B;&#x306E;&#x3088;&#x3046;&#x306A;&#x74B0;&#x5883;&#x3067;&#x3082;&#x52D5;&#x4F5C;&#x3057;&#x307E;&#x3059;&#xFF0E;</p>
+<p>で動作確認をしましたが，以下のような環境でも動作します．</p>
 <ul>
-<li>Raspberry Pi 2B&#x4EE5;&#x4E0A; + Raspbian (arm32v7)</li>
+<li>Raspberry Pi 2B以上 + Raspbian (arm32v7)</li>
 <li>ZeroPi + <a href="https://en.wikipedia.org/wiki/Armbian" target="_blank">Armbian</a> (arm32v7)</li>
 <li>ROCK64 + Armbian (arm64v8)</li>
 </ul>
-<h2 id="&#x30C7;&#x30D0;&#x30A4;&#x30B9;&#x306E;&#x6E96;&#x5099;">&#x30C7;&#x30D0;&#x30A4;&#x30B9;&#x306E;&#x6E96;&#x5099;</h2>
-<p>&#x30C7;&#x30D0;&#x30A4;&#x30B9;&#x306B;&#x30ED;&#x30B0;&#x30A4;&#x30F3;&#x3057;&#x306A;&#x3044;&#x3053;&#x3068;&#x306B;&#x306F;&#x4F55;&#x3082;&#x59CB;&#x307E;&#x308A;&#x307E;&#x305B;&#x3093;&#xFF0E;Raspbian&#x3092;&#x66F8;&#x304D;&#x8FBC;&#x3093;&#x3060;&#x30DE;&#x30A4;&#x30AF;&#x30ED;SD
-&#x30AB;&#x30FC;&#x30C9;&#x306B;&#x4EE5;&#x4E0B;&#x306E;&#x4FEE;&#x6B63;&#x3092;&#x9069;&#x7528;&#x3057;&#x307E;&#x3059;&#xFF0E;</p>
-<pre><code class="lang-shell"># SSH&#x306E;&#x6709;&#x52B9;&#x5316;
+<h2 id="デバイスの準備">デバイスの準備</h2>
+<p>デバイスにログインしないことには何も始まりません．Raspbianを書き込んだマイクロSD
+カードに以下の修正を適用します．</p>
+<pre><code class="lang-shell"># SSHの有効化
 touch /Volumes/boot/ssh
 
-# WiFi&#x306E;&#x7121;&#x52B9;&#x5316;&#xFF08;&#x4F7F;&#x308F;&#x306A;&#x3044;&#x5834;&#x5408;&#xFF09;
+# WiFiの無効化（使わない場合）
 echo &quot;dtoverlay=pi3-disable-wifi&quot; &gt;&gt;/Volumes/boot/config.txt
 
-# Bluetooth&#x306E;&#x7121;&#x52B9;&#x5316;&#xFF08;&#x4F7F;&#x308F;&#x306A;&#x3044;&#x5834;&#x5408;&#xFF09;
+# Bluetoothの無効化（使わない場合）
 echo &quot;dtoverlay=pi3-disable-bt&quot; &gt;&gt;/Volumes/boot/config.txt
 </code></pre>
-<p>&#x5FC5;&#x8981;&#x306B;&#x5FDC;&#x3058;&#x3066;&#x4EE5;&#x4E0B;&#x306E;&#x30AB;&#x30FC;&#x30CD;&#x30EB;&#x30D1;&#x30E9;&#x30E1;&#x30FC;&#x30BF;&#x30FC;&#x3092;&#x8A2D;&#x5B9A;&#x3057;&#x3066;&#x304F;&#x3060;&#x3055;&#x3044;&#xFF0E;</p>
+<p>必要に応じて以下のカーネルパラメーターを設定してください．</p>
 <pre><code class="lang-text"># cmdline.txt
 ... coherent_pool=4M ...
 </code></pre>
-<p>&#x30DE;&#x30A4;&#x30AF;&#x30ED;SD&#x30AB;&#x30FC;&#x30C9;&#x3092;Raspberry Pi&#x306B;&#x633F;&#x5165;&#x3057;&#xFF0C;&#x96FB;&#x6E90;&#x3092;&#x30AA;&#x30F3;&#xFF0E;&#x6709;&#x52B9;&#x5316;&#x3057;&#x3066;&#x3042;&#x308B;<code>ssh</code>&#x3092;&#x4F7F;&#x3063;&#x3066;&#x30ED;&#x30B0;&#x30A4;&#x30F3;&#x3057;&#x307E;&#x3059;&#xFF0E;</p>
-<pre><code class="lang-shell"># &#x5FC5;&#x8981;&#x306B;&#x5FDC;&#x3058;&#x3066;&#x30DB;&#x30B9;&#x30C8;&#x3092;&#x8FFD;&#x52A0;
+<p>マイクロSDカードをRaspberry Piに挿入し，電源をオン．有効化してある<code>ssh</code>を使ってログインします．</p>
+<pre><code class="lang-shell"># 必要に応じてホストを追加
 cat &lt;&lt;EOF &gt;&gt;~/.ssh/config
 Host pi
   HostName raspberrypi.local
   User pi
 EOF
 
-# &#x30D1;&#x30B9;&#x30EF;&#x30FC;&#x30C9;&#x5165;&#x529B;&#x304C;&#x9762;&#x5012;&#x306A;&#x306E;&#x3067;&#x516C;&#x958B;&#x9375;&#x3092;&#x30B3;&#x30D4;&#x30FC;
+# パスワード入力が面倒なので公開鍵をコピー
 ssh-copy-id pi
 
-# &#x30ED;&#x30B0;&#x30A4;&#x30F3;
+# ログイン
 ssh pi
 </code></pre>
-<p><code>raspberrypi.local</code>&#x306B;&#x63A5;&#x7D9A;&#x3067;&#x304D;&#x306A;&#x3044;&#x5834;&#x5408;&#xFF0C;&#x4F55;&#x3089;&#x304B;&#x306E;&#x7406;&#x7531;&#x3067;mDNS&#x304C;&#x6A5F;&#x80FD;&#x3057;&#x3066;&#x3044;&#x306A;&#x3044;&#x3053;&#x3068;&#x3092;&#x610F;&#x5473;&#x3057;&#x307E;&#x3059;&#xFF0E;</p>
-<p>&#x30ED;&#x30B0;&#x30A4;&#x30F3;&#x3057;&#x305F;&#x3089;&#xFF0C;&#x5B89;&#x5168;&#x306E;&#x305F;&#x3081;&#x306B;&#x4EE5;&#x4E0B;&#x3092;&#x5B9F;&#x884C;&#x3057;&#x3066;&#x304A;&#x304D;&#x307E;&#x3059;&#xFF0E;</p>
-<pre><code class="lang-shell"># &#x30D1;&#x30B9;&#x30EF;&#x30FC;&#x30C9;&#x5909;&#x66F4;
+<p><code>raspberrypi.local</code>に接続できない場合，何らかの理由でmDNSが機能していないことを意味します．</p>
+<p>ログインしたら，安全のために以下を実行しておきます．</p>
+<pre><code class="lang-shell"># パスワード変更
 passwd
 
-# root&#x3092;&#x30ED;&#x30C3;&#x30AF;
+# rootをロック
 sudo passwd -l root
 </code></pre>
-<p>SD&#x30AB;&#x30FC;&#x30C9;&#x306E;&#x5BFF;&#x547D;&#x304C;&#x6C17;&#x306B;&#x306A;&#x308B;&#x4EBA;&#x306F;&#xFF0C;&#x4EE5;&#x4E0B;&#x306E;&#x8A2D;&#x5B9A;&#x306B;&#x8FFD;&#x52A0;&#x3057;&#x3066;tmpfs&#x306E;&#x8A2D;&#x5B9A;&#x3082;&#x884C;&#x3063;&#x3066;&#x304A;&#x304D;&#x307E;&#x3057;&#x3087;&#x3046;&#xFF0E;</p>
-<pre><code class="lang-shell"># swap&#x306E;&#x7121;&#x52B9;&#x5316;
+<p>SDカードの寿命が気になる人は，以下の設定に追加してtmpfsの設定も行っておきましょう．</p>
+<pre><code class="lang-shell"># swapの無効化
 sudo systemctl stop dphys-swapfile
 sudo systemctl disable dphys-swapfile
 sudo rm -f /var/swap
 free -h
 
-# ntp&#x306E;&#x6709;&#x52B9;&#x5316;
+# ntpの有効化
 echo &apos;NTP=ntp.nict.jp&apos; | sudo tee -a /etc/systemd/timesyncd.conf &gt;/dev/null
 sudo systemctl restart systemd-timesyncd
 systemctl status systemd-timesyncd | grep nict
 </code></pre>
-<p>&#x30BD;&#x30D5;&#x30C8;&#x30A6;&#x30A7;&#x30A2;&#x3092;&#x66F4;&#x65B0;&#x3057;&#xFF0C;&#x518D;&#x8D77;&#x52D5;&#x3057;&#x307E;&#x3059;&#xFF0E;</p>
+<p>ソフトウェアを更新し，再起動します．</p>
 <pre><code class="lang-shell">sudo apt-get update
 sudo apt-get dist-upgrade
 sudo reboot
@@ -453,7 +453,7 @@ sudo reboot
     <script>
         var gitbook = gitbook || [];
         gitbook.push(function() {
-            gitbook.page.hasChanged({"page":{"title":"Raspberry Piのセットアップ","level":"1.3.1","depth":2,"next":{"title":"Dockerのインストール","level":"1.3.2","depth":2,"path":"install/docker.md","ref":"./install/docker.md","articles":[]},"previous":{"title":"Dockerを使ったインストール","level":"1.3","depth":1,"path":"install/README.md","ref":"./install/README.md","articles":[{"title":"Raspberry Piのセットアップ","level":"1.3.1","depth":2,"path":"install/setup_rpi.md","ref":"./install/setup_rpi.md","articles":[]},{"title":"Dockerのインストール","level":"1.3.2","depth":2,"path":"install/docker.md","ref":"./install/docker.md","articles":[]},{"title":"mirakcのインストール","level":"1.3.3","depth":2,"path":"install/mirakc.md","ref":"./install/mirakc.md","articles":[]},{"title":"Dockerイメージ","level":"1.3.4","depth":2,"path":"install/image.md","ref":"./install/image.md","articles":[]}]},"dir":"ltr"},"config":{"plugins":["gitbook-plugin-japanese-support"],"root":"./src","styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"pluginsConfig":{"gitbook-plugin-japanese-support":{},"highlight":{},"search":{},"lunr":{"maxIndexSize":1000000,"ignoreSpecialCharacters":false},"fontsettings":{"theme":"white","family":"sans","size":2},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false}},"theme":"default","author":"masnagam","pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56},"embedFonts":false},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"variables":{},"title":"できるmirakc","language":"ja","gitbook":"*"},"file":{"path":"install/setup_rpi.md","mtime":"2020-11-11T06:51:03.291Z","type":"markdown"},"gitbook":{"version":"3.6.11","time":"2020-11-11T06:51:14.122Z"},"basePath":"..","book":{"language":""}});
+            gitbook.page.hasChanged({"page":{"title":"Raspberry Piのセットアップ","level":"1.3.1","depth":2,"next":{"title":"Dockerのインストール","level":"1.3.2","depth":2,"path":"install/docker.md","ref":"./install/docker.md","articles":[]},"previous":{"title":"Dockerを使ったインストール","level":"1.3","depth":1,"path":"install/README.md","ref":"./install/README.md","articles":[{"title":"Raspberry Piのセットアップ","level":"1.3.1","depth":2,"path":"install/setup_rpi.md","ref":"./install/setup_rpi.md","articles":[]},{"title":"Dockerのインストール","level":"1.3.2","depth":2,"path":"install/docker.md","ref":"./install/docker.md","articles":[]},{"title":"mirakcのインストール","level":"1.3.3","depth":2,"path":"install/mirakc.md","ref":"./install/mirakc.md","articles":[]},{"title":"Dockerイメージ","level":"1.3.4","depth":2,"path":"install/image.md","ref":"./install/image.md","articles":[]}]},"dir":"ltr"},"config":{"plugins":["gitbook-plugin-japanese-support"],"root":"./src","styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"pluginsConfig":{"gitbook-plugin-japanese-support":{},"highlight":{},"search":{},"lunr":{"maxIndexSize":1000000,"ignoreSpecialCharacters":false},"fontsettings":{"theme":"white","family":"sans","size":2},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false}},"theme":"default","author":"masnagam","pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56},"embedFonts":false},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"variables":{},"title":"できるmirakc","language":"ja","gitbook":"*"},"file":{"path":"install/setup_rpi.md","mtime":"2020-11-16T07:35:00.662Z","type":"markdown"},"gitbook":{"version":"3.6.12","time":"2020-11-16T07:35:14.634Z"},"basePath":"..","book":{"language":""}});
         });
     </script>
 </div>

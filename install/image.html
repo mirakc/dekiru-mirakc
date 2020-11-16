@@ -7,7 +7,7 @@
         <title>Dockerイメージ · できるmirakc</title>
         <meta http-equiv="X-UA-Compatible" content="IE=edge" />
         <meta name="description" content="">
-        <meta name="generator" content="HonKit 3.6.11">
+        <meta name="generator" content="HonKit 3.6.12">
         <meta name="author" content="masnagam">
         
         
@@ -341,47 +341,47 @@
     
                                 <section class="normal markdown-section">
                                 
-                                <h1 id="docker&#x30A4;&#x30E1;&#x30FC;&#x30B8;">Docker&#x30A4;&#x30E1;&#x30FC;&#x30B8;</h1>
-<p>Docker Hub&#x3067;&#x914D;&#x5E03;&#x3057;&#x3066;&#x3044;&#x308B;<a href="https://hub.docker.com/repository/docker/mirakc/mirakc" target="_blank">mirakc/mirakc</a>&#x30A4;&#x30E1;&#x30FC;&#x30B8;&#x306B;&#x306F;&#xFF0C;mirakc&#x3068;<code>recpt1</code>&#x306A;&#x3069;&#x306E;&#x4E3B;&#x8981;&#x306A;&#x30C4;&#x30FC;&#x30EB;&#x304C;&#x3059;&#x3067;&#x306B;&#x542B;&#x307E;&#x308C;&#x3066;&#x3044;&#x307E;&#x3059;&#xFF0E;&#x591A;&#x304F;&#x306E;&#x5834;&#x5408;&#xFF0C;&#x5404;&#x81EA;&#x3067;&#x30C4;&#x30FC;&#x30EB;&#x3092;&#x30BD;&#x30FC;&#x30B9;&#x304B;&#x3089;&#x30D3;&#x30EB;&#x30C9;&#x3057;&#x305F;&#x308A;&#x30A4;&#x30F3;&#x30B9;&#x30C8;&#x30FC;&#x30EB;&#x3059;&#x308B;&#x5FC5;&#x8981;&#x306F;&#x3042;&#x308A;&#x307E;&#x305B;&#x3093;&#xFF0E;</p>
-<p><a href="https://github.com/mirakc/mirakc/blob/master/docs/docker.md#pre-built-images-in-dockerhub" target="_blank">mirakc/docs/docker.md</a>&#x306B;&#x8A18;&#x8F09;&#x3055;&#x308C;&#x3066;&#x3044;&#x308B;&#x3088;&#x3046;&#x306B;&#xFF0C;<code>mirakc/mirakc</code>&#x30A4;&#x30E1;&#x30FC;&#x30B8;&#x306B;&#x306F;&#x8907;&#x6570;&#x306E;&#x30BF;&#x30B0;&#x304C;&#x3042;&#x308A;&#xFF0C;&#x3053;&#x306E;&#x4E2D;&#x304B;&#x3089;&#x81EA;&#x5206;&#x306E;&#x76EE;&#x7684;&#x306B;&#x5408;&#x3063;&#x305F;&#x30BF;&#x30B0;&#x3092;&#x9078;&#x629E;&#x3057;&#x307E;&#x3059;&#xFF0E;&#x4EE5;&#x4E0B;&#x306B;&#x4EE3;&#x8868;&#x7684;&#x306A;&#x30BF;&#x30B0;&#x3092;&#x5217;&#x6319;&#x3057;&#x307E;&#x3059;&#xFF0E;</p>
+                                <h1 id="dockerイメージ">Dockerイメージ</h1>
+<p>Docker Hubで配布している<a href="https://hub.docker.com/repository/docker/mirakc/mirakc" target="_blank">mirakc/mirakc</a>イメージには，mirakcと<code>recpt1</code>などの主要なツールがすでに含まれています．多くの場合，各自でツールをソースからビルドしたりインストールする必要はありません．</p>
+<p><a href="https://github.com/mirakc/mirakc/blob/master/docs/docker.md#pre-built-images-in-dockerhub" target="_blank">mirakc/docs/docker.md</a>に記載されているように，<code>mirakc/mirakc</code>イメージには複数のタグがあり，この中から自分の目的に合ったタグを選択します．以下に代表的なタグを列挙します．</p>
 <ul>
 <li>latest<ul>
-<li>debian&#x306E;&#x30A8;&#x30A4;&#x30EA;&#x30A2;&#x30B9;</li>
+<li>debianのエイリアス</li>
 </ul>
 </li>
 <li>debian<ul>
-<li>&#x6700;&#x65B0;&#x30EA;&#x30EA;&#x30FC;&#x30B9;&#x306E;Debian/Buster&#x30D9;&#x30FC;&#x30B9;&#x306E;&#x30A4;&#x30E1;&#x30FC;&#x30B8;</li>
+<li>最新リリースのDebian/Busterベースのイメージ</li>
 </ul>
 </li>
 <li>alpine<ul>
-<li>&#x6700;&#x65B0;&#x30EA;&#x30EA;&#x30FC;&#x30B9;&#x306E;Alpine/3.12&#x30D9;&#x30FC;&#x30B9;&#x306E;&#x30A4;&#x30E1;&#x30FC;&#x30B8;</li>
+<li>最新リリースのAlpine/3.12ベースのイメージ</li>
 </ul>
 </li>
 <li>master<ul>
-<li>master-debian&#x306E;&#x30A8;&#x30A4;&#x30EA;&#x30A2;&#x30B9;</li>
+<li>master-debianのエイリアス</li>
 </ul>
 </li>
 <li>master-debian<ul>
-<li>GitHub master&#x30D6;&#x30E9;&#x30F3;&#x30C1;&#x306E;&#x6700;&#x65B0;&#x30B3;&#x30DF;&#x30C3;&#x30C8;&#x304B;&#x3089;&#x4F5C;&#x6210;&#x3057;&#x305F;Debian/Buster&#x30D9;&#x30FC;&#x30B9;&#x306E;&#x30A4;&#x30E1;&#x30FC;&#x30B8;</li>
+<li>GitHub masterブランチの最新コミットから作成したDebian/Busterベースのイメージ</li>
 </ul>
 </li>
 <li>master-alpine<ul>
-<li>GitHub master&#x30D6;&#x30E9;&#x30F3;&#x30C1;&#x306E;&#x6700;&#x65B0;&#x30B3;&#x30DF;&#x30C3;&#x30C8;&#x304B;&#x3089;&#x4F5C;&#x6210;&#x3057;&#x305F;Alpine/3.12&#x30D9;&#x30FC;&#x30B9;&#x306E;&#x30A4;&#x30E1;&#x30FC;&#x30B8;</li>
+<li>GitHub masterブランチの最新コミットから作成したAlpine/3.12ベースのイメージ</li>
 </ul>
 </li>
 </ul>
 <blockquote>
-<p><code>0.11.0</code>&#x3088;&#x308A;&#x53E4;&#x3044;Alpine&#x7CFB;&#x30A4;&#x30E1;&#x30FC;&#x30B8;&#x306F;&#xFF0C;Alpine/3.11&#x3092;&#x30D9;&#x30FC;&#x30B9;&#x3068;&#x3057;&#x3066;&#x3044;&#x307E;&#x3059;&#xFF0E;</p>
+<p><code>0.11.0</code>より古いAlpine系イメージは，Alpine/3.11をベースとしています．</p>
 </blockquote>
-<p>&#x3053;&#x308C;&#x3089;&#x306E;&#x30A4;&#x30E1;&#x30FC;&#x30B8;&#x306F;&#x5168;&#x3066;&#x30DE;&#x30EB;&#x30C1;&#x30A2;&#x30FC;&#x30AD;&#x30A4;&#x30E1;&#x30FC;&#x30B8;&#x3067;&#x3059;&#xFF0E;&#x4EE5;&#x4E0B;&#x306E;&#x30A2;&#x30FC;&#x30AD;&#x30C6;&#x30AF;&#x30C1;&#x30E3;&#x30FC;&#x3092;&#x30B5;&#x30DD;&#x30FC;&#x30C8;&#x3057;&#x3066;&#x3044;&#x307E;&#x3059;&#xFF0E;</p>
+<p>これらのイメージは全てマルチアーキイメージです．以下のアーキテクチャーをサポートしています．</p>
 <ul>
 <li>amd64</li>
 <li>arm32v6</li>
 <li>arm32v7</li>
 <li>arm64v8</li>
 </ul>
-<p>Raspberry Pi&#x306A;&#x3069;&#x306E;SBC&#x3067;&#x5B9F;&#x884C;&#x3059;&#x308B;&#x5834;&#x5408;&#x306F;&#xFF0C;&#x5148;&#x306E;&#x4F8B;&#x3067;&#x4F7F;&#x7528;&#x3057;&#x305F;<code>mirakc/mirakc:alpine</code>
-&#x3092;&#x9078;&#x629E;&#x3059;&#x308B;&#x3053;&#x3068;&#x3092;&#x63A8;&#x5968;&#x3057;&#x3066;&#x3044;&#x307E;&#x3059;&#xFF0E;&#x8A73;&#x3057;&#x3044;&#x7406;&#x7531;&#x306B;&#x3064;&#x3044;&#x3066;&#x306F;<a href="https://github.com/mirakc/mirakc/blob/master/docs/notes.md#mirakc-leaks-memory" target="_blank">mirakc/docs/notes.md</a>&#x3092;&#x898B;&#x3066;&#x304F;&#x3060;&#x3055;&#x3044;&#xFF0E;</p>
+<p>Raspberry PiなどのSBCで実行する場合は，先の例で使用した<code>mirakc/mirakc:alpine</code>
+を選択することを推奨しています．詳しい理由については<a href="https://github.com/mirakc/mirakc/blob/master/docs/notes.md#mirakc-leaks-memory" target="_blank">mirakc/docs/notes.md</a>を見てください．</p>
 
                                 
                                 </section>
@@ -425,7 +425,7 @@
     <script>
         var gitbook = gitbook || [];
         gitbook.push(function() {
-            gitbook.page.hasChanged({"page":{"title":"Dockerイメージ","level":"1.3.4","depth":2,"next":{"title":"mirakcの設定","level":"1.4","depth":1,"path":"config/README.md","ref":"./config/README.md","articles":[{"title":"チャンネル設定","level":"1.4.1","depth":2,"path":"config/channels.md","ref":"./config/channels.md","articles":[]},{"title":"チューナー設定","level":"1.4.2","depth":2,"path":"config/tuners.md","ref":"./config/tuners.md","articles":[]},{"title":"EGPデータキャッシュ","level":"1.4.3","depth":2,"path":"config/epg.md","ref":"./config/epg.md","articles":[]},{"title":"フィルター設定","level":"1.4.4","depth":2,"path":"config/filters.md","ref":"./config/filters.md","articles":[]}]},"previous":{"title":"mirakcのインストール","level":"1.3.3","depth":2,"path":"install/mirakc.md","ref":"./install/mirakc.md","articles":[]},"dir":"ltr"},"config":{"plugins":["gitbook-plugin-japanese-support"],"root":"./src","styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"pluginsConfig":{"gitbook-plugin-japanese-support":{},"highlight":{},"search":{},"lunr":{"maxIndexSize":1000000,"ignoreSpecialCharacters":false},"fontsettings":{"theme":"white","family":"sans","size":2},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false}},"theme":"default","author":"masnagam","pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56},"embedFonts":false},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"variables":{},"title":"できるmirakc","language":"ja","gitbook":"*"},"file":{"path":"install/image.md","mtime":"2020-11-11T06:51:03.291Z","type":"markdown"},"gitbook":{"version":"3.6.11","time":"2020-11-11T06:51:14.122Z"},"basePath":"..","book":{"language":""}});
+            gitbook.page.hasChanged({"page":{"title":"Dockerイメージ","level":"1.3.4","depth":2,"next":{"title":"mirakcの設定","level":"1.4","depth":1,"path":"config/README.md","ref":"./config/README.md","articles":[{"title":"チャンネル設定","level":"1.4.1","depth":2,"path":"config/channels.md","ref":"./config/channels.md","articles":[]},{"title":"チューナー設定","level":"1.4.2","depth":2,"path":"config/tuners.md","ref":"./config/tuners.md","articles":[]},{"title":"EGPデータキャッシュ","level":"1.4.3","depth":2,"path":"config/epg.md","ref":"./config/epg.md","articles":[]},{"title":"フィルター設定","level":"1.4.4","depth":2,"path":"config/filters.md","ref":"./config/filters.md","articles":[]}]},"previous":{"title":"mirakcのインストール","level":"1.3.3","depth":2,"path":"install/mirakc.md","ref":"./install/mirakc.md","articles":[]},"dir":"ltr"},"config":{"plugins":["gitbook-plugin-japanese-support"],"root":"./src","styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"pluginsConfig":{"gitbook-plugin-japanese-support":{},"highlight":{},"search":{},"lunr":{"maxIndexSize":1000000,"ignoreSpecialCharacters":false},"fontsettings":{"theme":"white","family":"sans","size":2},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false}},"theme":"default","author":"masnagam","pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56},"embedFonts":false},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"variables":{},"title":"できるmirakc","language":"ja","gitbook":"*"},"file":{"path":"install/image.md","mtime":"2020-11-16T07:35:00.662Z","type":"markdown"},"gitbook":{"version":"3.6.12","time":"2020-11-16T07:35:14.634Z"},"basePath":"..","book":{"language":""}});
         });
     </script>
 </div>
