@@ -7,7 +7,7 @@
         <title>トラブルシューティング · できるmirakc</title>
         <meta http-equiv="X-UA-Compatible" content="IE=edge" />
         <meta name="description" content="">
-        <meta name="generator" content="HonKit 3.6.13">
+        <meta name="generator" content="HonKit 3.6.14">
         <meta name="author" content="masnagam">
         
         
@@ -354,29 +354,29 @@
 </code></pre>
 <p>ログレベルを変更することで，より多くの情報を得られるようになります．</p>
 <pre><code class="lang-yaml"><span class="hljs-comment"># docker-compose.ymlからの抜粋</span>
-...
-<span class="hljs-attr">    environment:</span>
+<span class="hljs-string">...</span>
+    <span class="hljs-attr">environment:</span>
       <span class="hljs-comment"># mirakcのログレベルをdebugに</span>
-<span class="hljs-attr">      RUST_LOG:</span> <span class="hljs-string">&apos;info,mirakc=debug&apos;</span>
+      <span class="hljs-attr">RUST_LOG:</span> <span class="hljs-string">&apos;info,mirakc=debug&apos;</span>
 </code></pre>
 <p>フィルター等の外部プログラムが<code>stderr</code>に出力するログを確認したい場合は，環境変数
 <code>MIRAKC_DEBUG_CHILD_PROCESS</code>を以下のように定義してください．</p>
 <pre><code class="lang-yaml"><span class="hljs-comment"># docker-compose.ymlからの抜粋</span>
-...
-<span class="hljs-attr">    environment:</span>
-<span class="hljs-attr">      MIRAKC_DEBUG_CHILD_PROCESS:</span> <span class="hljs-string">&apos;&apos;</span>
-<span class="hljs-attr">      RUST_LOG:</span> <span class="hljs-string">&apos;info,mirakc=debug&apos;</span>
-<span class="hljs-attr">      MIRAKC_ARIB_NO_TIMESTAMP:</span> <span class="hljs-string">&apos;&apos;</span>
-<span class="hljs-attr">      MIRAKC_ARIB_LOG:</span> <span class="hljs-string">&apos;info&apos;</span>
+<span class="hljs-string">...</span>
+    <span class="hljs-attr">environment:</span>
+      <span class="hljs-attr">MIRAKC_DEBUG_CHILD_PROCESS:</span> <span class="hljs-string">&apos;&apos;</span>
+      <span class="hljs-attr">RUST_LOG:</span> <span class="hljs-string">&apos;info,mirakc=debug&apos;</span>
+      <span class="hljs-attr">MIRAKC_ARIB_NO_TIMESTAMP:</span> <span class="hljs-string">&apos;&apos;</span>
+      <span class="hljs-attr">MIRAKC_ARIB_LOG:</span> <span class="hljs-string">&apos;info&apos;</span>
 </code></pre>
 <p>環境変数<code>MIRAKC_ARIB_LOG_NO_TIMESTAMP</code>を定義すると，<code>mirakc-arib</code>のログメッセージからタイムスタンプを削除できます．</p>
 <p>デフォルト設定では，<code>mirakc-arib</code>は何もログを出力しません．必ず，環境変数
 <code>MIRAKC_ARIB_LOG</code>でログレベルを指定してください．<code>RUST_LOG</code>のように，コマンド毎にログレベルを指定することも可能です．</p>
 <pre><code class="lang-yaml"><span class="hljs-comment"># docker-compose.ymlからの抜粋</span>
-...
-<span class="hljs-attr">    environment:</span>
+<span class="hljs-string">...</span>
+    <span class="hljs-attr">environment:</span>
       <span class="hljs-comment"># filter-serviceとfilter-programはdebug，それ以外はinfo</span>
-<span class="hljs-attr">      MIRAKC_ARIB_LOG:</span> <span class="hljs-string">&apos;info,filter-service=debug,filter-program=debug&apos;</span>
+      <span class="hljs-attr">MIRAKC_ARIB_LOG:</span> <span class="hljs-string">&apos;info,filter-service=debug,filter-program=debug&apos;</span>
 </code></pre>
 <h2 id="フィルターの動作確認">フィルターの動作確認</h2>
 <p>フィルターで問題が発生している場合，フィルターに指定した外部プログラムを単独実行することで，問題の切り分けが可能です．</p>
@@ -429,7 +429,7 @@
     <script>
         var gitbook = gitbook || [];
         gitbook.push(function() {
-            gitbook.page.hasChanged({"page":{"title":"トラブルシューティング","level":"1.7","depth":1,"previous":{"title":"カスタムイメージの作成","level":"1.6","depth":1,"path":"custom_image.md","ref":"./custom_image.md","articles":[]},"dir":"ltr"},"config":{"plugins":["gitbook-plugin-japanese-support"],"root":"./src","styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"pluginsConfig":{"gitbook-plugin-japanese-support":{},"highlight":{},"search":{},"lunr":{"maxIndexSize":1000000,"ignoreSpecialCharacters":false},"fontsettings":{"theme":"white","family":"sans","size":2},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false}},"theme":"default","author":"masnagam","pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56},"embedFonts":false},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"variables":{},"title":"できるmirakc","language":"ja","gitbook":"*"},"file":{"path":"troubleshooting.md","mtime":"2020-11-18T06:53:03.299Z","type":"markdown"},"gitbook":{"version":"3.6.13","time":"2020-11-18T06:53:18.097Z"},"basePath":".","book":{"language":""}});
+            gitbook.page.hasChanged({"page":{"title":"トラブルシューティング","level":"1.7","depth":1,"previous":{"title":"カスタムイメージの作成","level":"1.6","depth":1,"path":"custom_image.md","ref":"./custom_image.md","articles":[]},"dir":"ltr"},"config":{"plugins":["gitbook-plugin-japanese-support"],"root":"./src","styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"pluginsConfig":{"gitbook-plugin-japanese-support":{},"highlight":{},"search":{},"lunr":{"maxIndexSize":1000000,"ignoreSpecialCharacters":false},"fontsettings":{"theme":"white","family":"sans","size":2},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false}},"theme":"default","author":"masnagam","pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56},"embedFonts":false},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"variables":{},"title":"できるmirakc","language":"ja","gitbook":"*"},"file":{"path":"troubleshooting.md","mtime":"2020-11-30T07:37:48.158Z","type":"markdown"},"gitbook":{"version":"3.6.14","time":"2020-11-30T07:37:55.649Z"},"basePath":".","book":{"language":""}});
         });
     </script>
 </div>

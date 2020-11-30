@@ -7,7 +7,7 @@
         <title>EGPデータキャッシュ · できるmirakc</title>
         <meta http-equiv="X-UA-Compatible" content="IE=edge" />
         <meta name="description" content="">
-        <meta name="generator" content="HonKit 3.6.13">
+        <meta name="generator" content="HonKit 3.6.14">
         <meta name="author" content="masnagam">
         
         
@@ -351,40 +351,40 @@
 <p><code>config.yml</code>:</p>
 <pre><code class="lang-yaml"><span class="hljs-comment"># EPGデータの保存先のフォルダーを指定</span>
 <span class="hljs-attr">epg:</span>
-<span class="hljs-attr">  cache-dir:</span> /var/lib/mirakc/epg
+  <span class="hljs-attr">cache-dir:</span> <span class="hljs-string">/var/lib/mirakc/epg</span>
 </code></pre>
 <p><code>docker-compose.yml</code>:</p>
 <pre><code class="lang-yaml"><span class="hljs-attr">version:</span> <span class="hljs-string">&apos;3.7&apos;</span>
 
 <span class="hljs-attr">services:</span>
-<span class="hljs-attr">  mirakc:</span>
-<span class="hljs-attr">    image:</span> mirakc/mirakc:alpine
-<span class="hljs-attr">    container_name:</span> mirakc
-<span class="hljs-attr">    init:</span> <span class="hljs-literal">true</span>
-<span class="hljs-attr">    restart:</span> unless-stopped
-<span class="hljs-attr">    devices:</span>
-<span class="hljs-bullet">      -</span> /dev/px4video2
-<span class="hljs-attr">    ports:</span>
-<span class="hljs-bullet">      -</span> <span class="hljs-number">40772</span>:<span class="hljs-number">40772</span>
-<span class="hljs-attr">    volumes:</span>
+  <span class="hljs-attr">mirakc:</span>
+    <span class="hljs-attr">image:</span> <span class="hljs-string">mirakc/mirakc:alpine</span>
+    <span class="hljs-attr">container_name:</span> <span class="hljs-string">mirakc</span>
+    <span class="hljs-attr">init:</span> <span class="hljs-literal">true</span>
+    <span class="hljs-attr">restart:</span> <span class="hljs-string">unless-stopped</span>
+    <span class="hljs-attr">devices:</span>
+      <span class="hljs-bullet">-</span> <span class="hljs-string">/dev/px4video2</span>
+    <span class="hljs-attr">ports:</span>
+      <span class="hljs-bullet">-</span> <span class="hljs-number">40772</span><span class="hljs-string">:40772</span>
+    <span class="hljs-attr">volumes:</span>
       <span class="hljs-comment"># epg.cache-dirで指定したパスにボリュームをマウント</span>
-<span class="hljs-attr">      - mirakc-epg:</span>/var/lib/mirakc/epg
-<span class="hljs-bullet">      -</span> ./config.yml:/etc/mirakc/config.yml:ro
-<span class="hljs-attr">    environment:</span>
-<span class="hljs-attr">      TZ:</span> Asia/Tokyo
-<span class="hljs-attr">      RUST_LOG:</span> info
+      <span class="hljs-bullet">-</span> <span class="hljs-string">mirakc-epg:/var/lib/mirakc/epg</span>
+      <span class="hljs-bullet">-</span> <span class="hljs-string">./config.yml:/etc/mirakc/config.yml:ro</span>
+    <span class="hljs-attr">environment:</span>
+      <span class="hljs-attr">TZ:</span> <span class="hljs-string">Asia/Tokyo</span>
+      <span class="hljs-attr">RUST_LOG:</span> <span class="hljs-string">info</span>
 
 <span class="hljs-attr">volumes:</span>
   <span class="hljs-comment"># EPGデータキャッシュ用ボリューム</span>
-<span class="hljs-attr">  mirakc-epg:</span>
-<span class="hljs-attr">    name:</span> mirakc_epg
-<span class="hljs-attr">    driver:</span> local
+  <span class="hljs-attr">mirakc-epg:</span>
+    <span class="hljs-attr">name:</span> <span class="hljs-string">mirakc_epg</span>
+    <span class="hljs-attr">driver:</span> <span class="hljs-string">local</span>
 </code></pre>
 <p>データボリュームの代わりにDockerホスト上のフォルダーをマウントすることも可能ですが，特別な理由がない限りデータボリュームを使用することをお勧めします．</p>
 <p>例えば，現在の設定では，mirakcコンテナーではコマンドをすべて<code>root</code>権限で実行するため，ボリューム内に作成されるファイルの所有者は<code>root</code>になります．Dockerホスト上のフォルダーをマウントする場合には，この辺にも注意が必要です．</p>
 <p>設定が機能しているか，確認してみます．</p>
-<pre><code class="lang-console"># mirakcコンテナーの起動（５分程度待ってからCtrl+Cで停止）
-$ sudo docker-compose up
+<pre><code class="lang-console"><span class="hljs-meta">#</span><span class="bash"> mirakcコンテナーの起動（５分程度待ってからCtrl+Cで停止）</span>
+<span class="hljs-meta">$</span><span class="bash"> sudo docker-compose up</span>
 ...
 ... ERROR ... Failed to load services: ...
 ... ERROR ... Failed to load clocks: ...
@@ -394,29 +394,29 @@ $ sudo docker-compose up
 </code></pre>
 <p>先程のワーニングが出ていなければ正しく機能しています．</p>
 <p>設定したデータボリュームはmirakcコンテナーをシャットダウンしても残り続けます．</p>
-<pre><code class="lang-console"># mirakcコンテナーのシャットダウン
-$ sudo docker-compose down
+<pre><code class="lang-console"><span class="hljs-meta">#</span><span class="bash"> mirakcコンテナーのシャットダウン</span>
+<span class="hljs-meta">$</span><span class="bash"> sudo docker-compose down</span>
 Removing mirakc ... done
 Removing network pi_default
-
-# データボリュームが存在することを確認
-$ sudo docker volume ls
+<span class="hljs-meta">
+#</span><span class="bash"> データボリュームが存在することを確認</span>
+<span class="hljs-meta">$</span><span class="bash"> sudo docker volume ls</span>
 DRIVER              VOLUME NAME
 local               mirakc_epg
 </code></pre>
 <p>では次に，キャッシュが機能しているか確認するため，再度mirakcコンテナーを起動します．</p>
-<pre><code class="lang-console"># mirakcコンテナーの起動（Ctrl+Cで停止）
-$ sudo docker-compose up
+<pre><code class="lang-console"><span class="hljs-meta">#</span><span class="bash"> mirakcコンテナーの起動（Ctrl+Cで停止）</span>
+<span class="hljs-meta">$</span><span class="bash"> sudo docker-compose up</span>
 </code></pre>
 <p>今度はEPGデータ読み込みエラーが表示されなくなっているはずです．キャッシュは正しく機能しています．</p>
 <p>EPGデータが正しく取得できているのか確認してみましょう．</p>
-<pre><code class="lang-console"># jqをインストール
-$ sudo apt-get install -y jq
-
-# mirakcコンテナーをバックグラウンドで起動
-$ sudo docker-compose up -d
-
-$ curl -s http://localhost:40772/api/services | jq .[0]
+<pre><code class="lang-console"><span class="hljs-meta">#</span><span class="bash"> jqをインストール</span>
+<span class="hljs-meta">$</span><span class="bash"> sudo apt-get install -y jq</span>
+<span class="hljs-meta">
+#</span><span class="bash"> mirakcコンテナーをバックグラウンドで起動</span>
+<span class="hljs-meta">$</span><span class="bash"> sudo docker-compose up -d</span>
+<span class="hljs-meta">
+$</span><span class="bash"> curl -s http://localhost:40772/api/services | jq .[0]</span>
 {
   &quot;id&quot;: 3273601024,
   &quot;serviceId&quot;: 1024,
@@ -431,20 +431,20 @@ $ curl -s http://localhost:40772/api/services | jq .[0]
   },
   &quot;hasLogoData&quot;: false
 }
-
-# アクセスログを確認
-$ sudo docker logs --tail=1 mirakc
+<span class="hljs-meta">
+#</span><span class="bash"> アクセスログを確認</span>
+<span class="hljs-meta">$</span><span class="bash"> sudo docker logs --tail=1 mirakc</span>
 ... 172.19.0.1:59498 &quot;GET /api/services HTTP/1.1&quot; 200 564 ...
-
-# mirakcコンテナーをシャットダウン
-$ sudo docker-compose down
+<span class="hljs-meta">
+#</span><span class="bash"> mirakcコンテナーをシャットダウン</span>
+<span class="hljs-meta">$</span><span class="bash"> sudo docker-compose down</span>
 </code></pre>
 <p>なお，以下のコマンドを実行すると，シャットダウン時にデータボリュームを削除します．</p>
-<pre><code class="lang-console">$ sudo docker-compose down -v
+<pre><code class="lang-console"><span class="hljs-meta">$</span><span class="bash"> sudo docker-compose down -v</span>
 ...
 Removing volume mirakc_epg
-
-$ sudo docker volume ls
+<span class="hljs-meta">
+$</span><span class="bash"> sudo docker volume ls</span>
 DRIVER              VOLUME NAME
 </code></pre>
 <p>データボリュームを削除すると，当然EGPデータキャッシュもなくなります．そのため，次回起動時にEGPデータの取得が完了するまで，番組表取得や番組録画はできなくなります．</p>
@@ -491,7 +491,7 @@ DRIVER              VOLUME NAME
     <script>
         var gitbook = gitbook || [];
         gitbook.push(function() {
-            gitbook.page.hasChanged({"page":{"title":"EGPデータキャッシュ","level":"1.4.3","depth":2,"next":{"title":"フィルター設定","level":"1.4.4","depth":2,"path":"config/filters.md","ref":"./config/filters.md","articles":[]},"previous":{"title":"チューナー設定","level":"1.4.2","depth":2,"path":"config/tuners.md","ref":"./config/tuners.md","articles":[]},"dir":"ltr"},"config":{"plugins":["gitbook-plugin-japanese-support"],"root":"./src","styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"pluginsConfig":{"gitbook-plugin-japanese-support":{},"highlight":{},"search":{},"lunr":{"maxIndexSize":1000000,"ignoreSpecialCharacters":false},"fontsettings":{"theme":"white","family":"sans","size":2},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false}},"theme":"default","author":"masnagam","pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56},"embedFonts":false},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"variables":{},"title":"できるmirakc","language":"ja","gitbook":"*"},"file":{"path":"config/epg.md","mtime":"2020-11-18T06:53:03.299Z","type":"markdown"},"gitbook":{"version":"3.6.13","time":"2020-11-18T06:53:18.097Z"},"basePath":"..","book":{"language":""}});
+            gitbook.page.hasChanged({"page":{"title":"EGPデータキャッシュ","level":"1.4.3","depth":2,"next":{"title":"フィルター設定","level":"1.4.4","depth":2,"path":"config/filters.md","ref":"./config/filters.md","articles":[]},"previous":{"title":"チューナー設定","level":"1.4.2","depth":2,"path":"config/tuners.md","ref":"./config/tuners.md","articles":[]},"dir":"ltr"},"config":{"plugins":["gitbook-plugin-japanese-support"],"root":"./src","styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"pluginsConfig":{"gitbook-plugin-japanese-support":{},"highlight":{},"search":{},"lunr":{"maxIndexSize":1000000,"ignoreSpecialCharacters":false},"fontsettings":{"theme":"white","family":"sans","size":2},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false}},"theme":"default","author":"masnagam","pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56},"embedFonts":false},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"variables":{},"title":"できるmirakc","language":"ja","gitbook":"*"},"file":{"path":"config/epg.md","mtime":"2020-11-30T07:37:48.158Z","type":"markdown"},"gitbook":{"version":"3.6.14","time":"2020-11-30T07:37:55.649Z"},"basePath":"..","book":{"language":""}});
         });
     </script>
 </div>

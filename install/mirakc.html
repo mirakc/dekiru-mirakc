@@ -7,7 +7,7 @@
         <title>mirakcのインストール · できるmirakc</title>
         <meta http-equiv="X-UA-Compatible" content="IE=edge" />
         <meta name="description" content="">
-        <meta name="generator" content="HonKit 3.6.13">
+        <meta name="generator" content="HonKit 3.6.14">
         <meta name="author" content="masnagam">
         
         
@@ -347,35 +347,35 @@
 <pre><code class="lang-yaml"><span class="hljs-attr">version:</span> <span class="hljs-string">&apos;3.7&apos;</span>
 
 <span class="hljs-attr">services:</span>
-<span class="hljs-attr">  mirakc:</span>
-<span class="hljs-attr">    image:</span> mirakc/mirakc:alpine
-<span class="hljs-attr">    container_name:</span> mirakc
-<span class="hljs-attr">    init:</span> <span class="hljs-literal">true</span>
-<span class="hljs-attr">    restart:</span> unless-stopped
-<span class="hljs-attr">    ports:</span>
-<span class="hljs-bullet">      -</span> <span class="hljs-number">40772</span>:<span class="hljs-number">40772</span>
-<span class="hljs-attr">    volumes:</span>
-<span class="hljs-bullet">      -</span> ./config.yml:/etc/mirakc/config.yml:ro
-<span class="hljs-attr">    environment:</span>
-<span class="hljs-attr">      TZ:</span> Asia/Tokyo
-<span class="hljs-attr">      RUST_LOG:</span> info
+  <span class="hljs-attr">mirakc:</span>
+    <span class="hljs-attr">image:</span> <span class="hljs-string">mirakc/mirakc:alpine</span>
+    <span class="hljs-attr">container_name:</span> <span class="hljs-string">mirakc</span>
+    <span class="hljs-attr">init:</span> <span class="hljs-literal">true</span>
+    <span class="hljs-attr">restart:</span> <span class="hljs-string">unless-stopped</span>
+    <span class="hljs-attr">ports:</span>
+      <span class="hljs-bullet">-</span> <span class="hljs-number">40772</span><span class="hljs-string">:40772</span>
+    <span class="hljs-attr">volumes:</span>
+      <span class="hljs-bullet">-</span> <span class="hljs-string">./config.yml:/etc/mirakc/config.yml:ro</span>
+    <span class="hljs-attr">environment:</span>
+      <span class="hljs-attr">TZ:</span> <span class="hljs-string">Asia/Tokyo</span>
+      <span class="hljs-attr">RUST_LOG:</span> <span class="hljs-string">info</span>
 </code></pre>
 <p>次に，同じフォルダー内に<code>config.yml</code>を作成します．</p>
 <pre><code class="lang-yaml"><span class="hljs-attr">server:</span>
-<span class="hljs-attr">  addrs:</span>
-<span class="hljs-attr">    - http:</span> <span class="hljs-number">0.0</span><span class="hljs-number">.0</span><span class="hljs-number">.0</span>:<span class="hljs-number">40772</span>
+  <span class="hljs-attr">addrs:</span>
+    <span class="hljs-bullet">-</span> <span class="hljs-attr">http:</span> <span class="hljs-number">0.0</span><span class="hljs-number">.0</span><span class="hljs-number">.0</span><span class="hljs-string">:40772</span>
 </code></pre>
 <p>最後に，mirakcを起動します．</p>
-<pre><code class="lang-console"># mirakcコンテナーをバックグラウンドで起動
-$ sudo docker-compose up -d
+<pre><code class="lang-console"><span class="hljs-meta">#</span><span class="bash"> mirakcコンテナーをバックグラウンドで起動</span>
+<span class="hljs-meta">$</span><span class="bash"> sudo docker-compose up -d</span>
 Starting mirakc ... done
-
-# バージョン文字列の取得
-$ curl -s http://localhost:40772/api/version
+<span class="hljs-meta">
+#</span><span class="bash"> バージョン文字列の取得</span>
+<span class="hljs-meta">$</span><span class="bash"> curl -s http://localhost:40772/api/version</span>
 &quot;0.15.0&quot;
-
-# mirakcコンテナーのシャットダウン
-$ sudo docker-compose down
+<span class="hljs-meta">
+#</span><span class="bash"> mirakcコンテナーのシャットダウン</span>
+<span class="hljs-meta">$</span><span class="bash"> sudo docker-compose down</span>
 Stopping mirakc ... done
 Removing mirakc ... done
 Removing network pi_default
@@ -425,7 +425,7 @@ Removing network pi_default
     <script>
         var gitbook = gitbook || [];
         gitbook.push(function() {
-            gitbook.page.hasChanged({"page":{"title":"mirakcのインストール","level":"1.3.3","depth":2,"next":{"title":"Dockerイメージ","level":"1.3.4","depth":2,"path":"install/image.md","ref":"./install/image.md","articles":[]},"previous":{"title":"Dockerのインストール","level":"1.3.2","depth":2,"path":"install/docker.md","ref":"./install/docker.md","articles":[]},"dir":"ltr"},"config":{"plugins":["gitbook-plugin-japanese-support"],"root":"./src","styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"pluginsConfig":{"gitbook-plugin-japanese-support":{},"highlight":{},"search":{},"lunr":{"maxIndexSize":1000000,"ignoreSpecialCharacters":false},"fontsettings":{"theme":"white","family":"sans","size":2},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false}},"theme":"default","author":"masnagam","pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56},"embedFonts":false},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"variables":{},"title":"できるmirakc","language":"ja","gitbook":"*"},"file":{"path":"install/mirakc.md","mtime":"2020-11-18T06:53:03.299Z","type":"markdown"},"gitbook":{"version":"3.6.13","time":"2020-11-18T06:53:18.097Z"},"basePath":"..","book":{"language":""}});
+            gitbook.page.hasChanged({"page":{"title":"mirakcのインストール","level":"1.3.3","depth":2,"next":{"title":"Dockerイメージ","level":"1.3.4","depth":2,"path":"install/image.md","ref":"./install/image.md","articles":[]},"previous":{"title":"Dockerのインストール","level":"1.3.2","depth":2,"path":"install/docker.md","ref":"./install/docker.md","articles":[]},"dir":"ltr"},"config":{"plugins":["gitbook-plugin-japanese-support"],"root":"./src","styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"pluginsConfig":{"gitbook-plugin-japanese-support":{},"highlight":{},"search":{},"lunr":{"maxIndexSize":1000000,"ignoreSpecialCharacters":false},"fontsettings":{"theme":"white","family":"sans","size":2},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false}},"theme":"default","author":"masnagam","pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56},"embedFonts":false},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"variables":{},"title":"できるmirakc","language":"ja","gitbook":"*"},"file":{"path":"install/mirakc.md","mtime":"2020-11-30T07:37:48.158Z","type":"markdown"},"gitbook":{"version":"3.6.14","time":"2020-11-30T07:37:55.649Z"},"basePath":"..","book":{"language":""}});
         });
     </script>
 </div>
