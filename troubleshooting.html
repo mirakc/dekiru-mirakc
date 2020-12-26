@@ -385,6 +385,31 @@
      MIRAKC_ARIB_LOG=debug mirakc-arib filter-service --sid=1024 &gt;/dev/null&apos;
 </code></pre>
 <p>本記事では説明しませんでしたが，ジョブ設定（<code>jobs</code>）に指定されている外部プログラムも上記と同様の方法で動作を確認できます．</p>
+<h2 id="epgstationの番組表が更新されない">EPGStationの番組表が更新されない</h2>
+<p>稀にこのような状況が発生します．考えられる原因が複数存在するため，１つづつ確認してください．</p>
+<h3 id="空きチューナーが存在しない">空きチューナーが存在しない</h3>
+<p>EPG関連のジョブの優先度は低く設定されているため，ストリーミングにより全てのチューナーが使用されていると，番組表更新のためのジョブが実行できません．その結果，いつまで経っても番組表が更新されないという状況が発生します．</p>
+<p>以下のコマンドでチューナーの使用状況が確認できます．</p>
+<pre><code class="lang-shell">curl -s http://mirakc:40772/api/tuners | jq .[].isFree
+</code></pre>
+<p>全てのチューナーが使用されている場合，<code>false</code>のみが表示されます．</p>
+<p>この状況では，少なくとも１つのチューナーを開放しないと，番組表は更新されません．</p>
+<h3 id="epg関連ジョブが終了しない">EPG関連ジョブが終了しない</h3>
+<p>EPG関連ジョブは多くても１つだけ実行されるようになっています．そのため，あるEPG関連ジョブが終了しなくなると，他のEPG関連ジョブを実行することができず，番組表が更新されない状態に陥ります．</p>
+<p>この状態に陥った場合，以下のようなログが繰り返し出力されます．</p>
+<pre><code>... WARN mirakc::job: update-schedules: Already running, skip
+</code></pre><p><code>update-schedules</code>ジョブは，進捗しない状態が30秒続くと停止するようになっています．この値は，<code>config.jobs.update-schedules.command</code>のコマンドラインオプションとして指定可能です．詳しくは<code>mirakc-arib -h collect-eits</code>を参照してください．</p>
+<p>ジョブ停止時間を過ぎても停止しない場合，特定セクションのデータが到着しないような状況に陥っています．この場合は，<code>update-schedules</code>ジョブを停止するしかありません．
+<code>ps</code>コマンドでジョブのPIDを調べて<code>kill</code>してください．ジョブは登録してある時間になったら再び実行されるので，これを<code>kill</code>しても問題ありません．</p>
+<p>いちいちPIDを調べて<code>kill</code>するのが面倒だという人は，<code>timeout</code>をジョブのコマンドに付けておきましょう．以下の例では，<code>update-schedules</code>ジョブの最大実行時間を10分に設定しています（<a href="https://github.com/Chinachu/Mirakurun/blob/master/doc/Configuration.md" target="_blank">Mirakurun互換の動作</a>）．</p>
+<pre><code class="lang-yaml"><span class="hljs-attr">jobs:</span>
+  <span class="hljs-attr">update-schedules:</span>
+    <span class="hljs-attr">command:</span> <span class="hljs-string">&gt;-
+      timeout 600 mirakc-arib collect-eits
+      {{#sids}} --sids={{{.}}}{{/sids}}{{#xsids}} --xsids={{{.}}}{{/xsids}}
+</span>    <span class="hljs-attr">schedule:</span> <span class="hljs-string">&apos;0 7,37 * * * * *&apos;</span>
+</code></pre>
+<p><code>timeout</code>によりジョブが中断された場合，番組表の一部が未取得・未更新の状態になります．前述のように，ジョブは再実行されるため，時間が経てば全ての番組情報が取得されます．</p>
 <h2 id="github-issuesの検索">GitHub Issuesの検索</h2>
 <p>同様の問題が他の人の環境でも発生している場合，<a href="https://github.com/mirakc/mirakc/issues" target="_blank">GitHub Issues</a>に既に報告済みかもしれません．思いつくキーワードを指定して，報告済みの問題を検索することで，解決方法が見つかるかもしれません．</p>
 <p>問題が既に解決済みである場合もあります．<code>is:closed</code>での検索してみてください．</p>
@@ -428,7 +453,7 @@
     <script>
         var gitbook = gitbook || [];
         gitbook.push(function() {
-            gitbook.page.hasChanged({"page":{"title":"トラブルシューティング","level":"1.7","depth":1,"previous":{"title":"カスタムイメージの作成","level":"1.6","depth":1,"path":"custom_image.md","ref":"./custom_image.md","articles":[]},"dir":"ltr"},"config":{"plugins":["gitbook-plugin-japanese-support"],"root":"./src","styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"pluginsConfig":{"gitbook-plugin-japanese-support":{},"highlight":{},"search":{},"lunr":{"maxIndexSize":1000000,"ignoreSpecialCharacters":false},"fontsettings":{"theme":"white","family":"sans","size":2},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false}},"theme":"default","author":"masnagam","pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56},"embedFonts":false},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"variables":{},"title":"できるmirakc","language":"ja","gitbook":"*"},"file":{"path":"troubleshooting.md","mtime":"2020-12-16T06:40:46.231Z","type":"markdown"},"gitbook":{"version":"3.6.16","time":"2020-12-16T06:40:53.587Z"},"basePath":".","book":{"language":""}});
+            gitbook.page.hasChanged({"page":{"title":"トラブルシューティング","level":"1.7","depth":1,"previous":{"title":"カスタムイメージの作成","level":"1.6","depth":1,"path":"custom_image.md","ref":"./custom_image.md","articles":[]},"dir":"ltr"},"config":{"plugins":["gitbook-plugin-japanese-support"],"root":"./src","styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"pluginsConfig":{"gitbook-plugin-japanese-support":{},"highlight":{},"search":{},"lunr":{"maxIndexSize":1000000,"ignoreSpecialCharacters":false},"fontsettings":{"theme":"white","family":"sans","size":2},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false}},"theme":"default","author":"masnagam","pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56},"embedFonts":false},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"variables":{},"title":"できるmirakc","language":"ja","gitbook":"*"},"file":{"path":"troubleshooting.md","mtime":"2020-12-26T09:53:02.585Z","type":"markdown"},"gitbook":{"version":"3.6.16","time":"2020-12-26T09:53:16.059Z"},"basePath":".","book":{"language":""}});
         });
     </script>
 </div>
