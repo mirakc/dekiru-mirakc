@@ -366,8 +366,9 @@ Starting mirakc ... done
 <p><code>config.yml</code>:</p>
 <pre><code class="lang-yaml"><span class="hljs-attr">filters:</span>
   <span class="hljs-attr">decode-filter:</span>
-    <span class="hljs-attr">command:</span> <span class="hljs-string">echo</span> <span class="hljs-string">&quot;<span class="hljs-template-variable">{{{channel_type}}</span>}/<span class="hljs-template-variable">{{{channel}}</span>} SID#<span class="hljs-template-variable">{{{sid}}</span>}&quot;</span>
-</code></pre>
+    <span class="hljs-attr">command:</span> <span class="hljs-string">&gt;-
+      echo &quot;{{{channel_type}}}/{{{channel}}} SID#{{{sid}}}&quot;
+</span></code></pre>
 <p>設定反映のためmirakcコンテナーを再起動し，動作確認します．</p>
 <pre><code class="lang-console"><span class="hljs-meta">#</span><span class="bash"> mirakcコンテナーを再起動</span>
 <span class="hljs-meta">$</span><span class="bash"> sudo docker-compose restart</span>
@@ -382,14 +383,16 @@ GR/27 SID#1024
 <pre><code class="lang-yaml"><span class="hljs-attr">filters:</span>
   <span class="hljs-comment"># Chinachu/Mirakurunの設定例より</span>
   <span class="hljs-attr">decode-filter:</span>
-    <span class="hljs-attr">command:</span> <span class="hljs-string">arib-b25-stream-test</span>
-</code></pre>
+    <span class="hljs-attr">command:</span> <span class="hljs-string">&gt;-
+      arib-b25-stream-test
+</span></code></pre>
 <p>また，以下のように外部サーバーでTSストリームを処理し，その結果をクライアントに返すことも可能です．</p>
 <pre><code class="lang-yaml"><span class="hljs-attr">filters:</span>
-  <span class="hljs-attr">decode-filter:</span> <span class="hljs-string">&gt;-
-    # 標準入力から入力されるTSストリームをリモートホストtsdのTCP 40773ポートに転
-    # 送し，tsdから返されたTSストリームを標準出力に出力
-    command: socat - tcp-connect:tsd:40773
+  <span class="hljs-attr">decode-filter:</span>
+    <span class="hljs-comment"># 標準入力から入力されるTSストリームをリモートホストtsdのTCP 40773ポートに転</span>
+    <span class="hljs-comment"># 送し，tsdから返されたTSストリームを標準出力に出力</span>
+    <span class="hljs-attr">command:</span> <span class="hljs-string">&gt;-
+      socat - tcp-connect:tsd:40773
 </span></code></pre>
 <p><a href="http://www.dest-unreach.org/socat/doc/socat.html" target="_blank">socat</a>は，配布している<code>mirakc/mirakc</code>イメージにも含まれているツールです．詳しい説明はリンク先を見るかGoogle先生に教えてもらってください．</p>
 <p><code>filters</code>プロパティーはチューナーごとに設定するのではなく，すべてのチューナーに対して共通で利用される設定です．そのため，特定のチューナーに対して特別な処理を行いたい場合は，渡されたテンプレートパラメーターを利用して処理を分岐するようなスクリプトを作成し，これをフィルターとして設定する必要があります．</p>
@@ -409,8 +412,9 @@ fi
 <pre><code class="lang-yaml"><span class="hljs-comment"># 変更部分のみ記載</span>
 <span class="hljs-attr">filters:</span>
   <span class="hljs-attr">decode-filter:</span>
-    <span class="hljs-attr">command:</span> <span class="hljs-string">bs-not-supported</span> {{{<span class="hljs-string">channel_type</span>}}} {{{<span class="hljs-string">channel</span>}}}
-</code></pre>
+    <span class="hljs-attr">command:</span> <span class="hljs-string">&gt;-
+      bs-not-supported {{{channel_type}}} {{{channel}}}
+</span></code></pre>
 <p><code>docker-compose.yml</code>:</p>
 <pre><code class="lang-yaml"><span class="hljs-comment"># 変更部分のみ記載</span>
 <span class="hljs-string">...</span>
@@ -471,7 +475,7 @@ BS not supported
     <script>
         var gitbook = gitbook || [];
         gitbook.push(function() {
-            gitbook.page.hasChanged({"page":{"title":"フィルター設定","level":"1.4.4","depth":2,"next":{"title":"フロントエンドアプリケーションとの連携","level":"1.5","depth":1,"path":"frontend_applications.md","ref":"./frontend_applications.md","articles":[]},"previous":{"title":"EGPデータキャッシュ","level":"1.4.3","depth":2,"path":"config/epg.md","ref":"./config/epg.md","articles":[]},"dir":"ltr"},"config":{"plugins":["gitbook-plugin-japanese-support"],"root":"./src","styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"pluginsConfig":{"gitbook-plugin-japanese-support":{},"highlight":{},"search":{},"lunr":{"maxIndexSize":1000000,"ignoreSpecialCharacters":false},"fontsettings":{"theme":"white","family":"sans","size":2},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false}},"theme":"default","author":"masnagam","pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56},"embedFonts":false},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"variables":{},"title":"できるmirakc","language":"ja","gitbook":"*"},"file":{"path":"config/filters.md","mtime":"2020-12-27T02:46:43.763Z","type":"markdown"},"gitbook":{"version":"3.6.16","time":"2020-12-27T02:46:56.332Z"},"basePath":"..","book":{"language":""}});
+            gitbook.page.hasChanged({"page":{"title":"フィルター設定","level":"1.4.4","depth":2,"next":{"title":"フロントエンドアプリケーションとの連携","level":"1.5","depth":1,"path":"frontend_applications.md","ref":"./frontend_applications.md","articles":[]},"previous":{"title":"EGPデータキャッシュ","level":"1.4.3","depth":2,"path":"config/epg.md","ref":"./config/epg.md","articles":[]},"dir":"ltr"},"config":{"plugins":["gitbook-plugin-japanese-support"],"root":"./src","styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"pluginsConfig":{"gitbook-plugin-japanese-support":{},"highlight":{},"search":{},"lunr":{"maxIndexSize":1000000,"ignoreSpecialCharacters":false},"fontsettings":{"theme":"white","family":"sans","size":2},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false}},"theme":"default","author":"masnagam","pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56},"embedFonts":false},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"variables":{},"title":"できるmirakc","language":"ja","gitbook":"*"},"file":{"path":"config/filters.md","mtime":"2020-12-27T03:04:18.494Z","type":"markdown"},"gitbook":{"version":"3.6.16","time":"2020-12-27T03:04:27.578Z"},"basePath":"..","book":{"language":""}});
         });
     </script>
 </div>
