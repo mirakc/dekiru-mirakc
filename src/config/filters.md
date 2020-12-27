@@ -35,7 +35,8 @@ $ curl http://localhost:40772/api/services/3273601024/stream >/dev/null
 ```yaml
 filters:
   decode-filter:
-    command: echo "{{{channel_type}}}/{{{channel}}} SID#{{{sid}}}"
+    command: >-
+      echo "{{{channel_type}}}/{{{channel}}} SID#{{{sid}}}"
 ```
 
 設定反映のためmirakcコンテナーを再起動し，動作確認します．
@@ -60,7 +61,8 @@ TSストリームをチャンネル情報に置き換えることに成功しま
 filters:
   # Chinachu/Mirakurunの設定例より
   decode-filter:
-    command: arib-b25-stream-test
+    command: >-
+      arib-b25-stream-test
 ```
 
 また，以下のように外部サーバーでTSストリームを処理し，その結果をクライアントに返
@@ -68,10 +70,11 @@ filters:
 
 ```yaml
 filters:
-  decode-filter: >-
+  decode-filter:
     # 標準入力から入力されるTSストリームをリモートホストtsdのTCP 40773ポートに転
     # 送し，tsdから返されたTSストリームを標準出力に出力
-    command: socat - tcp-connect:tsd:40773
+    command: >-
+      socat - tcp-connect:tsd:40773
 ```
 
 [socat]は，配布している`mirakc/mirakc`イメージにも含まれているツールです．詳し
@@ -104,7 +107,8 @@ fi
 # 変更部分のみ記載
 filters:
   decode-filter:
-    command: bs-not-supported {{{channel_type}}} {{{channel}}}
+    command: >-
+      bs-not-supported {{{channel_type}}} {{{channel}}}
 ```
 
 `docker-compose.yml`:
