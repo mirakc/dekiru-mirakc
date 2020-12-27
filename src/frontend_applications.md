@@ -16,7 +16,7 @@ EPGStationのセットアップ方法は，すでに色々なところに書か�
 
 それでは設定を変更します．変更箇所は以下の１箇所のみです．
 
-```jsonc
+```json
 {
   // 変更不要な設定は省略
   "mirakurunPath": "http://raspberrypi.local:40772/"
