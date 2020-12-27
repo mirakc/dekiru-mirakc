@@ -342,23 +342,15 @@
                                 
                                 <h1 id="カスタムイメージの作成">カスタムイメージの作成</h1>
 <p>多くの人は，ここまでの説明と<code>mirakc/mirakc</code>イメージを使って録画システムを構築できたと思います．しかし，配布しているDockerイメージに含まれていないツール，例えば<code>recpt1</code>と<code>recdvb</code>以外のチューナーコマンドを使っている人は，このDockerイメージだけでは録画システムを構築できません．自力でカスタムイメージを作成する必要があります．</p>
+<h2 id="カスタムイメージのネイティブビルド">カスタムイメージのネイティブビルド</h2>
 <p>カスタムイメージの作成はそれほど難しい作業ではありません．試しに<code>HEALTHCHECK</code>を追加してみます．</p>
 <p>まず，以下のような<code>Dockerfile</code>を作成します．</p>
-<pre><code class="lang-Dockerfile"><span class="hljs-keyword">FROM</span> mirakc/mirakc:alpine-arm32v7
+<pre><code class="lang-Dockerfile"><span class="hljs-keyword">FROM</span> mirakc/mirakc:alpine
 
 <span class="hljs-comment"># 短時間でテストできるように，チェック間隔を１０秒に設定しています</span>
 <span class="hljs-keyword">HEALTHCHECK</span><span class="bash"> --interval=10s --timeout=3s \
   CMD curl -fsSL http://localhost:40772/api/status || <span class="hljs-built_in">exit</span> 1</span>
 </code></pre>
-<p>ここでポイントとなるのが，<code>FROM</code>に指定したDockerイメージのタグ<code>alpine-arm32v7</code>です．最終的にmirakcコンテナーを動作させるSBC上でカスタムイメージをビルドする場合は，マルチアーキイメージである<code>alpine</code>タグを使用しても問題ありません．しかし，一般的にSBC上でのビルドは大変時間がかかります．このビルド時間の問題は，より高速な
-PC上でSBC用のDockerイメージをクロスビルドすることで解決できます．ただ，クロスビルドでマルチアーキイメージを使用すると，最終的にコンテナーを実行するSBC
-（Raspberry Pi 3だとarm32v7）用のDockerイメージではなく，クロスビルドを実行するマシン（多くの場合，amd64）用のDockerイメージを取得してしまいます．そのため，上記では<code>alpine-arm32v7</code>を指定しています．</p>
-<blockquote>
-<p>今回の例では不要ですが，異なるアーキテクチャ用のDockerイメージ上で何からのコマ
-ンドを実行する場合，QEMUユーザーモードエミュレーションのための準備が必要です．
-具体的には，<a href="https://github.com/mirakc/mirakc/blob/master/.github/workflows/docker.yml#L36" target="_blank">こちら</a>
-を参照してください．</p>
-</blockquote>
 <p>次にカスタムイメージのビルド．</p>
 <pre><code class="lang-shell">sudo docker build -t custom/mirakc .
 </code></pre>
@@ -376,10 +368,34 @@ sudo docker stop custom-mirakc
 <li><a href="https://github.com/collelog/tv-recorder-dockerfile/tree/master/mirakc" target="_blank">tv-recorder-dockerfile/mirakc</a></li>
 <li><a href="https://github.com/68fpjc/docker-bon-mirakurun/blob/master/dockerfiles/mirakc" target="_blank">docker-bon-mirakurun/dockerfiles/mirakc</a></li>
 </ul>
-<p>Dockerイメージのビルド時に，追加するソフトウェアをクロスビルドする場合などは，以下を参考にしてください．</p>
+<h2 id="カスタムイメージのクロスビルド">カスタムイメージのクロスビルド</h2>
+<p>ほとんどの場合，カスタムイメージを特定の実行環境上でビルド（ネイティブビルド）すると思います．しかし，カスタムイメージをクロスビルドすべき幾つかの状況が存在します．</p>
 <ul>
-<li><a href="https://github.com/mirakc/mirakc/tree/master/docker/templates" target="_blank">mirakc/docker/templates</a></li>
+<li>Multi-Archイメージを作成したい</li>
+<li>コンパイルが必要がツールをカスタムイメージに追加したいが，SBCでは時間がかかる</li>
 </ul>
+<p>このような場合，ターゲットプラットフォームを指定したカスタムイメージのクロスビルドを行うことになります．</p>
+<p>クロスビルドを行う場合，クロスビルドを実行するマシンとは異なるCPUアーキテクチャー用のプログラムを実行する場合があます．例えば，aptで追加のパッケージをインストールする場合です．このような場合，クロスビルド前にQEMUユーザーモードエミュレーションのための準備が必要です．macOS向けdocker desktopでは最初から有効になっているようですが，Linux環境では以下を実行する必要があります．</p>
+<pre><code class="lang-shell">docker run --privileged --rm tonistiigi/binfmt --install all
+</code></pre>
+<p>詳細については，<a href="https://hub.docker.com/r/tonistiigi/binfmt" target="_blank">tonistiigi/binfmt</a>を参照してください．</p>
+<p>QEMUの準備ができたら，後はクロスビルドするだけです．試しに，<code>linux/arm/v7</code>向けイメージをmacOS（amd64）上でクロスビルドしてみます．</p>
+<pre><code class="lang-shell"><span class="hljs-meta">#</span><span class="bash"> 「カスタムイメージの作成」で使用したDockerfile</span>
+cat &lt;&lt;EOF &gt;Dockerfile
+FROM mirakc/mirakc:alpine
+<span class="hljs-meta">
+#</span><span class="bash"> 短時間でテストできるように，チェック間隔を１０秒に設定しています</span>
+HEALTHCHECK --interval=10s --timeout=3s \
+  CMD curl -fsSL http://localhost:40772/api/status || exit 1
+EOF
+
+docker build -t custom/mirakc:arm32v7 --platform=linux/arm/v7 .
+</code></pre>
+<p>クロスビルドに成功したか確認してみます．</p>
+<pre><code class="lang-console"><span class="hljs-meta">$</span><span class="bash"> docker image inspect custom/mirakc:arm32v7 | \
+    jq <span class="hljs-string">&apos;.[] | [.Os, .Architecture, .Variant] | join(&quot;/&quot;)&apos;</span></span>
+&quot;linux/arm/v7&quot;
+</code></pre>
 
                                 
                                 </section>
@@ -423,7 +439,7 @@ sudo docker stop custom-mirakc
     <script>
         var gitbook = gitbook || [];
         gitbook.push(function() {
-            gitbook.page.hasChanged({"page":{"title":"カスタムイメージの作成","level":"1.6","depth":1,"next":{"title":"トラブルシューティング","level":"1.7","depth":1,"path":"troubleshooting.md","ref":"./troubleshooting.md","articles":[]},"previous":{"title":"フロントエンドアプリケーションとの連携","level":"1.5","depth":1,"path":"frontend_applications.md","ref":"./frontend_applications.md","articles":[]},"dir":"ltr"},"config":{"plugins":["gitbook-plugin-japanese-support"],"root":"./src","styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"pluginsConfig":{"gitbook-plugin-japanese-support":{},"highlight":{},"search":{},"lunr":{"maxIndexSize":1000000,"ignoreSpecialCharacters":false},"fontsettings":{"theme":"white","family":"sans","size":2},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false}},"theme":"default","author":"masnagam","pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56},"embedFonts":false},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"variables":{},"title":"できるmirakc","language":"ja","gitbook":"*"},"file":{"path":"custom_image.md","mtime":"2020-12-26T09:53:02.585Z","type":"markdown"},"gitbook":{"version":"3.6.16","time":"2020-12-26T09:53:16.059Z"},"basePath":".","book":{"language":""}});
+            gitbook.page.hasChanged({"page":{"title":"カスタムイメージの作成","level":"1.6","depth":1,"next":{"title":"トラブルシューティング","level":"1.7","depth":1,"path":"troubleshooting.md","ref":"./troubleshooting.md","articles":[]},"previous":{"title":"フロントエンドアプリケーションとの連携","level":"1.5","depth":1,"path":"frontend_applications.md","ref":"./frontend_applications.md","articles":[]},"dir":"ltr"},"config":{"plugins":["gitbook-plugin-japanese-support"],"root":"./src","styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"pluginsConfig":{"gitbook-plugin-japanese-support":{},"highlight":{},"search":{},"lunr":{"maxIndexSize":1000000,"ignoreSpecialCharacters":false},"fontsettings":{"theme":"white","family":"sans","size":2},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false}},"theme":"default","author":"masnagam","pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56},"embedFonts":false},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"variables":{},"title":"できるmirakc","language":"ja","gitbook":"*"},"file":{"path":"custom_image.md","mtime":"2020-12-27T02:04:49.475Z","type":"markdown"},"gitbook":{"version":"3.6.16","time":"2020-12-27T02:04:56.994Z"},"basePath":".","book":{"language":""}});
         });
     </script>
 </div>
