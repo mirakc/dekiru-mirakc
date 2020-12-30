@@ -40,3 +40,25 @@ EPGStationを再起動すると置き換えは完了します．チャンネル�
 できます．
 
 [BonDriver_mirakc]: https://github.com/epgdatacapbon/BonDriver_mirakc
+
+## Kodi
+
+[PVR IPTV Simple Client]アドオンをインストールすれば，Kodiからライブ視聴が可能と
+なります．
+
+アドオンの設定画面から，以下を設定してください．
+
+* General | M3U Play List URL
+  * http&#58;//`HOST`:`PORT`/api/iptv/playlist
+* EPG Settings | XMLTV URL
+  * http&#58;//`HOST`:`PORT`/api/iptv/epg
+
+`HOST`および`PORT`は，自分の環境に合わせて書き換えてください．
+
+スキン設定からフォントを`Arial based`に変更しても日本語が正しく表示されない場合
+があります．そのような場合は，Kodi内の`arial.ttf`を日本語グリフを含んだUnicode対
+応フォントに置き換えることで改善します．以下にmacOSでの設定例があります．
+
+* https://gist.github.com/masnagam/e79a1e5e02c8343f5117dd6572be8031
+
+[PVR IPTV Simple Client]: https://kodi.wiki/view/Add-on:PVR_IPTV_Simple_Client
