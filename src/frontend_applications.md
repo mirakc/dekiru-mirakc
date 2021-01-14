@@ -3,7 +3,7 @@
 mirakcの準備が整ったので，フロントエンドアプリケーションから利用できるように設定
 を変更してみましょう．
 
-## EPGStation
+## EPGStation v1
 
 EPGStationのセットアップ方法は，すでに色々なところに書かれているので省略します．
 以下，既にセットアップ済みの環境が存在すると仮定して説明を行います．
@@ -29,6 +29,16 @@ EPGStationを動かしているサーバーから`raspberrypi.local`をmDNSを�
 
 EPGStationを再起動すると置き換えは完了します．チャンネル設定で指定したチャンネル
 の番組表が表示されていれば，置き換え成功です．
+
+## EPGStation v2
+
+EPGStation v2では，設定ファイルの形式がJSONからYAMLに変わりました．しかし，
+Mirakurunからの移行時に書き換える箇所は変わりません．
+
+```yaml
+# 変更不要な設定は省略
+mirakurunPath: http://raspberrypi.local:40772/
+```
 
 ## TVTest
 
