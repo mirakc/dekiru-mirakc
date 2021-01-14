@@ -23,13 +23,16 @@ Docker Hubで配布している[mirakc/mirakc]イメージには，mirakcと`rec
 
 > `0.11.0`より古いAlpine系イメージは，Alpine/3.11をベースとしています．
 
-これらのイメージは全てマルチアーキイメージです．以下のアーキテクチャーをサポート
+これらのイメージは全てマルチアーキイメージです．以下のプラットフォームをサポート
 しています．
 
-* amd64
-* arm32v6
-* arm32v7
-* arm64v8
+* linux/386
+* linux/amd64
+* linux/arm/v6（Alpineイメージのみ）
+* linux/arm/v7
+* linux/arm64/v8
+
+> リンクエラーを回避するため，Alpineのlinux/386に含まれる`mirakc-arib`はSSPが無効化されています．
 
 Raspberry PiなどのSBCで実行する場合は，先の例で使用した`mirakc/mirakc:alpine`
 を選択することを推奨しています．詳しい理由については[mirakc/docs/notes.md]を見て
