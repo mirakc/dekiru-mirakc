@@ -3,7 +3,7 @@
 <html lang="ja" >
     <head>
         <meta charset="UTF-8">
-        <title>カスタムイメージの作成 · できるmirakc</title>
+        <title>tsdサーバーの詳しい話 · できるmirakc</title>
         <meta http-equiv="X-UA-Compatible" content="IE=edge" />
         <meta name="description" content="">
         <meta name="generator" content="HonKit 3.6.16">
@@ -56,10 +56,8 @@
     <link rel="shortcut icon" href="gitbook/images/favicon.ico" type="image/x-icon">
 
     
-    <link rel="next" href="troubleshooting.html" />
     
-    
-    <link rel="prev" href="frontend_applications.html" />
+    <link rel="prev" href="troubleshooting.html" />
     
 
     </head>
@@ -269,7 +267,7 @@
             
         </li>
     
-        <li class="chapter active" data-level="1.6" data-path="custom_image.html">
+        <li class="chapter " data-level="1.6" data-path="custom_image.html">
             
                 <a href="custom_image.html">
             
@@ -302,7 +300,7 @@
         
         
     
-        <li class="chapter " data-level="2.1" data-path="tsd_server.html">
+        <li class="chapter active" data-level="2.1" data-path="tsd_server.html">
             
                 <a href="tsd_server.html">
             
@@ -345,7 +343,7 @@
     <!-- Title -->
     <h1>
         <i class="fa fa-circle-o-notch fa-spin"></i>
-        <a href="." >カスタムイメージの作成</a>
+        <a href="." >tsdサーバーの詳しい話</a>
     </h1>
 </div>
 
@@ -360,61 +358,128 @@
     
                                 <section class="normal markdown-section">
                                 
-                                <h1 id="カスタムイメージの作成">カスタムイメージの作成</h1>
-<p>多くの人は，ここまでの説明と<code>mirakc/mirakc</code>イメージを使って録画システムを構築できたと思います．しかし，配布しているDockerイメージに含まれていないツール，例えば<code>recpt1</code>と<code>recdvb</code>以外のチューナーコマンドを使っている人は，このDockerイメージだけでは録画システムを構築できません．自力でカスタムイメージを作成する必要があります．</p>
-<h2 id="カスタムイメージのネイティブビルド">カスタムイメージのネイティブビルド</h2>
-<p>カスタムイメージの作成はそれほど難しい作業ではありません．試しに<code>HEALTHCHECK</code>を追加してみます．</p>
-<p>まず，以下のような<code>Dockerfile</code>を作成します．</p>
-<pre><code class="lang-Dockerfile"><span class="hljs-keyword">FROM</span> mirakc/mirakc:alpine
-
-<span class="hljs-comment"># 短時間でテストできるように，チェック間隔を１０秒に設定しています</span>
-<span class="hljs-keyword">HEALTHCHECK</span><span class="bash"> --interval=10s --timeout=3s \
-  CMD curl -fsSL http://localhost:40772/api/status || <span class="hljs-built_in">exit</span> 1</span>
-</code></pre>
-<p>次にカスタムイメージのビルド．</p>
-<pre><code class="lang-shell">sudo docker build -t custom/mirakc .
-</code></pre>
-<p>あとは起動して動作確認．</p>
-<pre><code class="lang-shell">sudo docker run -d --rm --name custom-mirakc \
-  -v $(pwd)/config.yml:/etc/mirakc/config.yml custom/mirakc
-<span class="hljs-meta">
-#</span><span class="bash"> １０秒ごとにログが表示される</span>
-sudo docker events
-
-sudo docker stop custom-mirakc
-</code></pre>
-<p>より実用的な例としては，以下のDockerfileを参考にしてください．</p>
+                                <h1 id="tsdサーバーの詳しい話">tsdサーバーの詳しい話</h1>
+<p>私が動作検証用に利用しているTSストリームを処理するためのサーバーです．サーバー化することで，TSストリーム処理機能を開発環境（macOS）と動作検証環境（SBC）に個別に準備する手間が省けます．また，TSストリームに対する処理は，SBCにとって軽い処理ではないため，複数のTSストリームを同時に処理する場合，１台のSBCで全てを処理することが困難であるという事情もあります．</p>
+<p><code>tsd</code>サーバーでは，以下の２つのDockerコンテナーが動いています．</p>
 <ul>
-<li><a href="https://github.com/collelog/tv-recorder-dockerfile/tree/master/mirakc" target="_blank">tv-recorder-dockerfile/mirakc</a></li>
-<li><a href="https://github.com/68fpjc/docker-bon-mirakurun/blob/master/dockerfiles/mirakc" target="_blank">docker-bon-mirakurun/dockerfiles/mirakc</a></li>
+<li><code>b25</code>コンテナー</li>
+<li><code>bcas</code>コンテナー</li>
 </ul>
-<h2 id="カスタムイメージのクロスビルド">カスタムイメージのクロスビルド</h2>
-<p>ほとんどの場合，カスタムイメージを特定の実行環境上でビルド（ネイティブビルド）すると思います．しかし，カスタムイメージをクロスビルドすべき幾つかの状況が存在します．</p>
-<ul>
-<li>Multi-Archイメージを作成したい</li>
-<li>コンパイルが必要がツールをカスタムイメージに追加したいが，SBCでは時間がかかる</li>
-</ul>
-<p>このような場合，ターゲットプラットフォームを指定したカスタムイメージのクロスビルドを行うことになります．</p>
-<p>クロスビルドを行う場合，クロスビルドを実行するマシンとは異なるCPUアーキテクチャー用のプログラムを実行する場合があます．例えば，aptで追加のパッケージをインストールする場合です．このような場合，クロスビルド前にQEMUユーザーモードエミュレーションのための準備が必要です．macOS向けdocker desktopでは最初から有効になっているようですが，Linux環境では以下を実行する必要があります．</p>
-<pre><code class="lang-shell">docker run --privileged --rm tonistiigi/binfmt --install all
-</code></pre>
-<p>詳細については，<a href="https://hub.docker.com/r/tonistiigi/binfmt" target="_blank">tonistiigi/binfmt</a>を参照してください．</p>
-<p>QEMUの準備ができたら，後はクロスビルドするだけです．試しに，<code>linux/arm/v7</code>向けイメージをmacOS（amd64）上でクロスビルドしてみます．</p>
-<pre><code class="lang-shell"><span class="hljs-meta">#</span><span class="bash"> 「カスタムイメージの作成」で使用したDockerfile</span>
-cat &lt;&lt;EOF &gt;Dockerfile
-FROM mirakc/mirakc:alpine
-<span class="hljs-meta">
-#</span><span class="bash"> 短時間でテストできるように，チェック間隔を１０秒に設定しています</span>
-HEALTHCHECK --interval=10s --timeout=3s \
-  CMD curl -fsSL http://localhost:40772/api/status || exit 1
-EOF
+<p><code>b25</code>コンテナーは，TCP経由で入力されるTSストリームを，<code>bcas</code>コンテナーを利用して処理し，処理結果をTCP接続元に返します．</p>
+<p><code>bcas</code>コンテナーは，TCP経由でのスマートカードリーダーへのアクセスを提供します．このコンテナーを使うことで，複数のサーバーから１つのスマートカードリーダーを使用可能となります．</p>
+<p>どちらのコンテナーもTCP接続のために<code>socat</code>を使っています．以下を見ると分かりますが，<code>socat</code>を使うとUNIXソケットの共有が簡単にできます．</p>
+<p><code>b25</code>コンテナーのDockerfile:</p>
+<pre><code class="lang-Dockerfile"><span class="hljs-keyword">FROM</span> alpine:latest
 
-docker build -t custom/mirakc:arm32v7 --platform=linux/arm/v7 .
+<span class="hljs-keyword">RUN</span><span class="bash"> <span class="hljs-built_in">set</span> -eux \
+ &amp;&amp; apk add --no-cache \
+      ccid \
+      musl \
+      pcsc-lite-libs \
+      socat \
+      tzdata \
+ &amp;&amp; apk add --no-cache --virtual .build-deps \
+      gcc \
+      g++\
+      make \
+      musl-dev \
+      nodejs \
+      npm \
+      pcsc-lite-dev \
+      pkgconf \
+ <span class="hljs-comment"># Use arib-b25-stream-test instead of stz2012/libarib25.</span></span>
+ <span class="hljs-comment"># Because stz2012/libarib25 doesn&apos;t support STDIN/STDOUT.</span>
+ <span class="hljs-comment"># stz2012/libarib25 supports NEON, but it doesn&apos;t improve the performance</span>
+ <span class="hljs-comment"># significantly.</span>
+ &amp;&amp; (cd /tmp; npm i arib-b25-stream-test) \
+ &amp;&amp; cp /tmp/node_modules/.bin/arib-b25-stream-test /usr/local/bin/b25 \
+ <span class="hljs-comment"># cleanup</span>
+ &amp;&amp; apk del --purge .build-deps \
+ &amp;&amp; rm -rf /tmp/*
+
+<span class="hljs-keyword">COPY</span><span class="bash"> b25-server /usr/<span class="hljs-built_in">local</span>/bin/</span>
+
+<span class="hljs-keyword">EXPOSE</span> <span class="hljs-number">40773</span>
+<span class="hljs-keyword">ENTRYPOINT</span><span class="bash"> [<span class="hljs-string">&quot;b25-server&quot;</span>]</span>
 </code></pre>
-<p>クロスビルドに成功したか確認してみます．</p>
-<pre><code class="lang-console"><span class="hljs-meta">$</span><span class="bash"> docker image inspect custom/mirakc:arm32v7 | \
-    jq <span class="hljs-string">&apos;.[] | [.Os, .Architecture, .Variant] | join(&quot;/&quot;)&apos;</span></span>
-&quot;linux/arm/v7&quot;
+<p><code>b25-server</code>:</p>
+<pre><code class="lang-shell"><span class="hljs-meta">#</span><span class="bash">!/bin/sh -eu</span>
+
+B25_BCAS_SERVER=${B25_BCAS_SERVER:-}
+
+if [ -z &quot;$B25_BCAS_SERVER&quot; ]; then
+    echo &quot;B25_BCAS_SERVER must be defined&quot; &gt;&amp;2
+    exit 1
+fi
+
+rm -rf /var/run/pcscd
+mkdir -p /var/run/pcscd
+
+echo &quot;Create a UNIX-domain socket to communicate with a remote BCAS server listening on $B25_BCAS_SERVER&quot;
+socat unix-listen:/var/run/pcscd/pcscd.comm,fork \
+      tcp-connect:$B25_BCAS_SERVER &amp;
+
+echo &quot;Start a descrambling server on tcp 40773&quot;
+socat tcp-listen:40773,fork,reuseaddr system:b25
+</code></pre>
+<p><code>bcas</code>コンテナーのDockerfile:</p>
+<pre><code class="lang-Dockerfile"><span class="hljs-keyword">FROM</span> alpine:latest
+
+<span class="hljs-keyword">RUN</span><span class="bash"> <span class="hljs-built_in">set</span> -eux \
+ &amp;&amp; apk add --no-cache \
+      ccid \
+      musl \
+      pcsc-lite-libs \
+      socat \
+      tzdata</span>
+
+<span class="hljs-keyword">COPY</span><span class="bash"> bcas-server /usr/<span class="hljs-built_in">local</span>/bin/</span>
+
+<span class="hljs-keyword">EXPOSE</span> <span class="hljs-number">40774</span>
+<span class="hljs-keyword">ENTRYPOINT</span><span class="bash"> [<span class="hljs-string">&quot;bcas-server&quot;</span>]</span>
+</code></pre>
+<p><code>bcas-server</code>:</p>
+<pre><code class="lang-shell"><span class="hljs-meta">#</span><span class="bash">!/bin/sh -eu</span>
+
+BCAS_DEBUG=${BCAS_DEBUG:-}
+
+rm -rf /var/run/pcscd
+mkdir -p /var/run/pcscd
+
+echo &quot;Start pcscd&quot;
+if [ -n &quot;$BCAS_DEBUG&quot; ]; then
+    pcscd -f --debug &amp;
+else
+    pcscd -f &amp;
+fi
+
+echo &quot;Start a pcscd proxy on tcp 40774&quot;
+socat tcp-listen:40774,fork,reuseaddr \
+      unix-connect:/var/run/pcscd/pcscd.comm
+</code></pre>
+<p>あとはこれらを起動するだけ．</p>
+<pre><code class="lang-yaml"><span class="hljs-attr">version:</span> <span class="hljs-string">&apos;3.7&apos;</span>
+
+<span class="hljs-attr">services:</span>
+  <span class="hljs-attr">b25:</span>
+    <span class="hljs-attr">container_name:</span> <span class="hljs-string">b25</span>
+    <span class="hljs-attr">ports:</span>
+      <span class="hljs-bullet">-</span> <span class="hljs-number">40773</span><span class="hljs-string">:40773</span>
+    <span class="hljs-attr">environment:</span>
+      <span class="hljs-attr">B25_BCAS_SERVER:</span> <span class="hljs-string">bcas:40774</span>
+      <span class="hljs-attr">TZ:</span> <span class="hljs-string">Asia/Tokyo</span>
+    <span class="hljs-attr">depends_on:</span>
+      <span class="hljs-bullet">-</span> <span class="hljs-string">bcas</span>
+
+  <span class="hljs-attr">bcas:</span>
+    <span class="hljs-attr">container_name:</span> <span class="hljs-string">bcas</span>
+    <span class="hljs-attr">devices:</span>
+      <span class="hljs-bullet">-</span> <span class="hljs-string">/dev/bus/usb</span>
+    <span class="hljs-attr">ports:</span>
+      <span class="hljs-bullet">-</span> <span class="hljs-number">40774</span><span class="hljs-string">:40774</span>
+    <span class="hljs-attr">environment:</span>
+      <span class="hljs-comment">#BCAS_DE<span class="hljs-doctag">BUG:</span> 1</span>
+      <span class="hljs-attr">TZ:</span> <span class="hljs-string">Asia/Tokyo</span>
 </code></pre>
 
                                 
@@ -443,14 +508,10 @@ docker build -t custom/mirakc:arm32v7 --platform=linux/arm/v7 .
 
             
                 
-                <a href="frontend_applications.html" class="navigation navigation-prev " aria-label="Previous page: フロントエンドアプリケーションとの連携">
+                <a href="troubleshooting.html" class="navigation navigation-prev navigation-unique" aria-label="Previous page: トラブルシューティング">
                     <i class="fa fa-angle-left"></i>
                 </a>
                 
-                
-                <a href="troubleshooting.html" class="navigation navigation-next " aria-label="Next page: トラブルシューティング">
-                    <i class="fa fa-angle-right"></i>
-                </a>
                 
             
         
@@ -459,7 +520,7 @@ docker build -t custom/mirakc:arm32v7 --platform=linux/arm/v7 .
     <script>
         var gitbook = gitbook || [];
         gitbook.push(function() {
-            gitbook.page.hasChanged({"page":{"title":"カスタムイメージの作成","level":"1.6","depth":1,"next":{"title":"トラブルシューティング","level":"1.7","depth":1,"path":"troubleshooting.md","ref":"./troubleshooting.md","articles":[]},"previous":{"title":"フロントエンドアプリケーションとの連携","level":"1.5","depth":1,"path":"frontend_applications.md","ref":"./frontend_applications.md","articles":[]},"dir":"ltr"},"config":{"plugins":["gitbook-plugin-japanese-support"],"root":"./src","styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"pluginsConfig":{"gitbook-plugin-japanese-support":{},"highlight":{},"search":{},"lunr":{"maxIndexSize":1000000,"ignoreSpecialCharacters":false},"fontsettings":{"theme":"white","family":"sans","size":2},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false}},"theme":"default","author":"masnagam","pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56},"embedFonts":false},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"variables":{},"title":"できるmirakc","language":"ja","gitbook":"*"},"file":{"path":"custom_image.md","mtime":"2021-02-08T01:38:17.265Z","type":"markdown"},"gitbook":{"version":"3.6.16","time":"2021-02-08T01:38:25.205Z"},"basePath":".","book":{"language":""}});
+            gitbook.page.hasChanged({"page":{"title":"tsdサーバーの詳しい話","level":"2.1","depth":1,"previous":{"title":"トラブルシューティング","level":"1.7","depth":1,"path":"troubleshooting.md","ref":"./troubleshooting.md","articles":[]},"dir":"ltr"},"config":{"plugins":["gitbook-plugin-japanese-support"],"root":"./src","styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"pluginsConfig":{"gitbook-plugin-japanese-support":{},"highlight":{},"search":{},"lunr":{"maxIndexSize":1000000,"ignoreSpecialCharacters":false},"fontsettings":{"theme":"white","family":"sans","size":2},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false}},"theme":"default","author":"masnagam","pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56},"embedFonts":false},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"variables":{},"title":"できるmirakc","language":"ja","gitbook":"*"},"file":{"path":"tsd_server.md","mtime":"2021-02-08T01:38:17.269Z","type":"markdown"},"gitbook":{"version":"3.6.16","time":"2021-02-08T01:38:25.205Z"},"basePath":".","book":{"language":""}});
         });
     </script>
 </div>

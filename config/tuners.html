@@ -93,7 +93,7 @@
                 <a href="../">
             
                     
-                    Introduction
+                    できるmirakc
             
                 </a>
             
@@ -297,6 +297,26 @@
     
 
     
+        
+        <li class="divider"></li>
+        
+        
+    
+        <li class="chapter " data-level="2.1" data-path="../tsd_server.html">
+            
+                <a href="../tsd_server.html">
+            
+                    
+                    tsdサーバーの詳しい話
+            
+                </a>
+            
+
+            
+        </li>
+    
+
+    
 
     <li class="divider"></li>
 
@@ -410,6 +430,26 @@ APIは，チューナーからの出力をそのまま送出します．NULLパ�
 <pre><code class="lang-shell">curl -s http://mirakc:40772/api/channels/GR/27/stream | \
   MIRAKC_ARIB_LOG=debug mirakc-arib scan-services
 </code></pre>
+<h2 id="設定例">設定例</h2>
+<p>一般的に利用されているチューナーコマンドに対する設定例を以下に記載します．</p>
+<pre><code class="lang-yaml"><span class="hljs-comment"># typesプロパティ及びデバイスファイルのパスなどは，自分の環境に合わせて書き換え</span>
+<span class="hljs-comment"># る必要があります</span>
+<span class="hljs-attr">tuners:</span>
+  <span class="hljs-bullet">-</span> <span class="hljs-attr">name:</span> <span class="hljs-string">recpt1</span>
+    <span class="hljs-attr">types:</span> [<span class="hljs-string">GR</span>]
+    <span class="hljs-attr">command:</span> <span class="hljs-string">&gt;-
+      recpt1 --device /path/to/dev {{{channel}}} - -
+</span>
+  <span class="hljs-bullet">-</span> <span class="hljs-attr">name:</span> <span class="hljs-string">recdvb</span>
+    <span class="hljs-attr">types:</span> [<span class="hljs-string">GR</span>]
+    <span class="hljs-attr">command:</span> <span class="hljs-string">&gt;-
+      recdvb --dev 1 {{{channel}}} - -
+</span>
+  <span class="hljs-bullet">-</span> <span class="hljs-attr">name:</span> <span class="hljs-string">dvbv5-zap</span>
+    <span class="hljs-attr">types:</span> [<span class="hljs-string">GR</span>]
+    <span class="hljs-attr">command:</span> <span class="hljs-string">&gt;-
+      dvbv5-zap -a 0 -c /path/to/conf -r -P {{{channel}}} -o -
+</span></code></pre>
 
                                 
                                 </section>
@@ -453,7 +493,7 @@ APIは，チューナーからの出力をそのまま送出します．NULLパ�
     <script>
         var gitbook = gitbook || [];
         gitbook.push(function() {
-            gitbook.page.hasChanged({"page":{"title":"チューナー設定","level":"1.4.2","depth":2,"next":{"title":"EGPデータキャッシュ","level":"1.4.3","depth":2,"path":"config/epg.md","ref":"./config/epg.md","articles":[]},"previous":{"title":"チャンネル設定","level":"1.4.1","depth":2,"path":"config/channels.md","ref":"./config/channels.md","articles":[]},"dir":"ltr"},"config":{"plugins":["gitbook-plugin-japanese-support"],"root":"./src","styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"pluginsConfig":{"gitbook-plugin-japanese-support":{},"highlight":{},"search":{},"lunr":{"maxIndexSize":1000000,"ignoreSpecialCharacters":false},"fontsettings":{"theme":"white","family":"sans","size":2},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false}},"theme":"default","author":"masnagam","pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56},"embedFonts":false},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"variables":{},"title":"できるmirakc","language":"ja","gitbook":"*"},"file":{"path":"config/tuners.md","mtime":"2021-01-14T13:08:08.314Z","type":"markdown"},"gitbook":{"version":"3.6.16","time":"2021-01-14T13:08:17.793Z"},"basePath":"..","book":{"language":""}});
+            gitbook.page.hasChanged({"page":{"title":"チューナー設定","level":"1.4.2","depth":2,"next":{"title":"EGPデータキャッシュ","level":"1.4.3","depth":2,"path":"config/epg.md","ref":"./config/epg.md","articles":[]},"previous":{"title":"チャンネル設定","level":"1.4.1","depth":2,"path":"config/channels.md","ref":"./config/channels.md","articles":[]},"dir":"ltr"},"config":{"plugins":["gitbook-plugin-japanese-support"],"root":"./src","styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"pluginsConfig":{"gitbook-plugin-japanese-support":{},"highlight":{},"search":{},"lunr":{"maxIndexSize":1000000,"ignoreSpecialCharacters":false},"fontsettings":{"theme":"white","family":"sans","size":2},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false}},"theme":"default","author":"masnagam","pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56},"embedFonts":false},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"variables":{},"title":"できるmirakc","language":"ja","gitbook":"*"},"file":{"path":"config/tuners.md","mtime":"2021-02-08T01:38:17.265Z","type":"markdown"},"gitbook":{"version":"3.6.16","time":"2021-02-08T01:38:25.205Z"},"basePath":"..","book":{"language":""}});
         });
     </script>
 </div>
