@@ -61,9 +61,7 @@ ENTRYPOINT ["b25-server"]
 `b25-server`:
 
 ```shell
-#!/bin/sh
-
-set -eu
+#!/bin/sh -eu
 
 B25_BCAS_SERVER=${B25_BCAS_SERVER:-}
 
@@ -105,22 +103,14 @@ ENTRYPOINT ["bcas-server"]
 `bcas-server`:
 
 ```shell
-#!/bin/sh
-
-set -eu
+#!/bin/sh -eu
 
 BCAS_DEBUG=${BCAS_DEBUG:-}
-BCAS_DEVICE=${BCAS_DEVICE:-}
-
-if [ -z "$BCAS_DEVICE" ]; then
-    echo "BCAS_DEVICE must be defined" >&2
-    exit 1
-fi
 
 rm -rf /var/run/pcscd
 mkdir -p /var/run/pcscd
 
-echo "Start pcscd on $BCAS_DEVICE"
+echo "Start pcscd"
 if [ -n "$BCAS_DEBUG" ]; then
     pcscd -f --debug &
 else
@@ -151,11 +141,10 @@ services:
   bcas:
     container_name: bcas
     devices:
-      - /dev/bus/usb/001/002
+      - /dev/bus/usb
     ports:
       - 40774:40774
     environment:
-      BCAS_DEVICE: /dev/bus/usb/001/002
       #BCAS_DEBUG: 1
       TZ: Asia/Tokyo
 ```
