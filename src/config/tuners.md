@@ -106,4 +106,28 @@ curl -s http://mirakc:40772/api/channels/GR/27/stream | \
   MIRAKC_ARIB_LOG=debug mirakc-arib scan-services
 ```
 
+## 設定例
+
+一般的に利用されているチューナーコマンドに対する設定例を以下に記載します．
+
+```yaml
+# typesプロパティ及びデバイスファイルのパスなどは，自分の環境に合わせて書き換え
+# る必要があります
+tuners:
+  - name: recpt1
+    types: [GR]
+    command: >-
+      recpt1 --device /path/to/dev {{{channel}}} - -
+
+  - name: recdvb
+    types: [GR]
+    command: >-
+      recdvb --dev 1 {{{channel}}} - -
+
+  - name: dvbv5-zap
+    types: [GR]
+    command: >-
+      dvbv5-zap -a 0 -c /path/to/conf -r -P {{{channel}}} -o -
+```
+
 [Mustache]: https://mustache.github.io/
