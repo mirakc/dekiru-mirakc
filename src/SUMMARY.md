@@ -12,6 +12,7 @@
   * [チューナー設定](./config/tuners.md)
   * [EGPデータキャッシュ](./config/epg.md)
   * [フィルター設定](./config/filters.md)
+  * [タイムシフト録画](./config/timeshift.md)
 * [フロントエンドアプリケーションとの連携](./frontend_applications.md)
 * [カスタムイメージの作成](./custom_image.md)
 * [トラブルシューティング](./troubleshooting.md)
