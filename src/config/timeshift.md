@@ -233,7 +233,7 @@ $ ls timeshift-fs
 bs1 nhk
 
 $ ls timeshift-fs/bs1
-000000006052B1C8_ＢＳニュース.m2ts
+6052B1C8_ＢＳニュース.m2ts
 ```
 
 タイムシフト・ファイルシステムは読み取り専用なので書き込みはできません．録画が進むとファイルが増え
@@ -248,6 +248,9 @@ $ ls timeshift-fs/bs1
 services:
   ...
   samba:
+    depends_on:
+      # ./timeshift-fsへのタイムシフト・ファイルシステムのマウント完了後に起動する
+      - mirakc-timeshift-fs
     container_name: samba
     image: dperson/samba
     command:
@@ -268,9 +271,6 @@ services:
     environment:
       TZ: Asia/Tokyo
       RUST_LOG: info
-    depends_on:
-      # ./timeshift-fsへのタイムシフト・ファイルシステムのマウント完了後に起動するため
-      - mirakc-timeshift-fs
 ```
 
 `samba`コンテナーを起動します．
@@ -282,10 +282,10 @@ sudo docker-compose up -d samba
 エクスプローラーやFinderでSambaに接続し，MPEG2-TSを再生可能なメディアプレーヤーでファイルを開けば，
 番組が再生されるはずです．
 
-macOSユーザーには，Finderのプレビューを無効にすることをおすすめします．これを有効にしていると，動
-画のサムネイル画像の生成処理が開始され，Finderが操作不能になる場合があります．また，アプリケーショ
-ンのメニューからファイルを開くと，Finderのプレビューを無効にしているのに，なぜかサムネイル画像を生
-成しようとすることがあるようなので，m2tsファイルをメディアプレーヤーに関連付けて，`open`コマンドで
-開くことをおすすめします．
+macOSユーザーには，Finderのプレビューを無効にすることをお勧めします．これを有効にしていると，動画
+のサムネイル画像の生成処理が開始され，Finderが操作不能になる場合があります．また，アプリケーション
+のメニューからファイルを開くと，Finderのプレビューを無効にしているのに，なぜかサムネイル画像を生成
+しようとすることがあるようなので，m2tsファイルをメディアプレーヤーに関連付けて，`open`コマンドで開
+くことをお勧めします．
 
 [FUSE]: https://en.wikipedia.org/wiki/Filesystem_in_Userspace
