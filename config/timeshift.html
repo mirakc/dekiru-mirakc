@@ -492,7 +492,8 @@ curl -sG http://raspberrypi.local:40772/api/timeshift/bs1/records/$ID/stream | f
                 見ることはできない
 </code></pre><p>上記では<code>Chunk#0</code>はデータで埋まっているため録画済みとして扱われます．一方，<code>Chunk#1</code>は現在書き込みを行っているチャンクで，データで埋まるまで録画画済みとは扱われません．<code>Chunk#1</code>には過去の録画データが記録されている場合がありますが，データは上書きされていきます．</p>
 <p><code>Chunk#2</code>にも録画データが書き込まれているかもしれませんが，このデータは古くなったものとして扱われます．その結果，古い番組のデータが消えていきます．</p>
-<p>TSパケットの他に，録画済み番組情報などを記録しておく必要があり，<code>data-file</code>はそのために使用されます．<code>data-file</code>を削除すると，<code>ts-file</code>があっても，どこにどの番組が録画されているのかわからなくなり，録画された番組はないものとして扱われます．そのため，<code>data-file</code>を定期的に更新する必要がありますが，これがチャンク単位で行われるようになっています．</p>
+<p>TSパケットの他に，録画済み番組情報などを記録しておく必要があり，<code>data-file</code>はそのために使用されます．<code>data-file</code>を定期的に更新する必要がありますが，これがチャンク単位で行われるようになっています．
+<code>data-file</code>を削除すると，<code>ts-file</code>があっても，どこにどの番組が録画されているのかわからなくなり，録画された番組はないものとして扱われます．</p>
 <h2 id="タイムシフト・ファイルシステム">タイムシフト・ファイルシステム</h2>
 <p>mirakcはバックエンド機能しか提供しません．そのため，タイムシフト録画した番組を再生する場合，<code>curl</code>
 や<code>jq</code>などを使って，必要な情報を取得する必要があります．Web UIなどのフロントエンドを実装すればよいのでしょうが，今の所はその計画はありません．</p>
@@ -563,13 +564,16 @@ $</span><span class="bash"> ls timeshift-fs/bs1</span>
       <span class="hljs-bullet">-</span> <span class="hljs-string">./timeshift-fs:/mnt:ro</span>
     <span class="hljs-attr">environment:</span>
       <span class="hljs-attr">TZ:</span> <span class="hljs-string">Asia/Tokyo</span>
-      <span class="hljs-attr">RUST_LOG:</span> <span class="hljs-string">info</span>
 </code></pre>
 <p><code>samba</code>コンテナーを起動します．</p>
 <pre><code class="lang-shell">sudo docker-compose up -d samba
 </code></pre>
 <p>エクスプローラーやFinderでSambaに接続し，MPEG2-TSを再生可能なメディアプレーヤーでファイルを開けば，番組が再生されるはずです．</p>
 <p>macOSユーザーには，Finderのプレビューを無効にすることをお勧めします．これを有効にしていると，動画のサムネイル画像の生成処理が開始され，Finderが操作不能になる場合があります．また，アプリケーションのメニューからファイルを開くと，Finderのプレビューを無効にしているのに，なぜかサムネイル画像を生成しようとすることがあるようなので，m2tsファイルをメディアプレーヤーに関連付けて，<code>open</code>コマンドで開くことをお勧めします．</p>
+<p>どうもタイムシフト・ファイルシステムのアンマウントがうまくできないようで，それが原因で
+<code>mirakc-timeshift-fs</code>コンテナーの再起動に失敗するようです．そのような場合は，以下のようにアンマウント後に<code>mirakc-timeshift-fs</code>コンテナーを起動してください．</p>
+<pre><code class="lang-shell">sudo umount ./timeshift-fs
+</code></pre>
 
                                 
                                 </section>
@@ -613,7 +617,7 @@ $</span><span class="bash"> ls timeshift-fs/bs1</span>
     <script>
         var gitbook = gitbook || [];
         gitbook.push(function() {
-            gitbook.page.hasChanged({"page":{"title":"タイムシフト録画","level":"1.4.5","depth":2,"next":{"title":"フロントエンドアプリケーションとの連携","level":"1.5","depth":1,"path":"frontend_applications.md","ref":"./frontend_applications.md","articles":[]},"previous":{"title":"フィルター設定","level":"1.4.4","depth":2,"path":"config/filters.md","ref":"./config/filters.md","articles":[]},"dir":"ltr"},"config":{"plugins":["gitbook-plugin-japanese-support"],"root":"./src","styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"pluginsConfig":{"gitbook-plugin-japanese-support":{},"highlight":{},"search":{},"lunr":{"maxIndexSize":1000000,"ignoreSpecialCharacters":false},"fontsettings":{"theme":"white","family":"sans","size":2},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false}},"theme":"default","author":"masnagam","pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56},"embedFonts":false},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"variables":{},"title":"できるmirakc","language":"ja","gitbook":"*"},"file":{"path":"config/timeshift.md","mtime":"2021-03-25T01:34:56.004Z","type":"markdown"},"gitbook":{"version":"3.6.17","time":"2021-03-25T01:35:03.745Z"},"basePath":"..","book":{"language":""}});
+            gitbook.page.hasChanged({"page":{"title":"タイムシフト録画","level":"1.4.5","depth":2,"next":{"title":"フロントエンドアプリケーションとの連携","level":"1.5","depth":1,"path":"frontend_applications.md","ref":"./frontend_applications.md","articles":[]},"previous":{"title":"フィルター設定","level":"1.4.4","depth":2,"path":"config/filters.md","ref":"./config/filters.md","articles":[]},"dir":"ltr"},"config":{"plugins":["gitbook-plugin-japanese-support"],"root":"./src","styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"pluginsConfig":{"gitbook-plugin-japanese-support":{},"highlight":{},"search":{},"lunr":{"maxIndexSize":1000000,"ignoreSpecialCharacters":false},"fontsettings":{"theme":"white","family":"sans","size":2},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false}},"theme":"default","author":"masnagam","pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56},"embedFonts":false},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"variables":{},"title":"できるmirakc","language":"ja","gitbook":"*"},"file":{"path":"config/timeshift.md","mtime":"2021-03-28T01:35:46.954Z","type":"markdown"},"gitbook":{"version":"3.6.17","time":"2021-03-28T01:35:58.863Z"},"basePath":"..","book":{"language":""}});
         });
     </script>
 </div>
