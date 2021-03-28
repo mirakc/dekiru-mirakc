@@ -71,4 +71,12 @@ mirakurunPath: http://raspberrypi.local:40772/
 
 * https://gist.github.com/masnagam/e79a1e5e02c8343f5117dd6572be8031
 
+[タイムシフト・ファイルシステム](./config/timeshift.md#タイムシフト・ファイルシステム)をSambaで公開
+している場合，`smb://<host>/<folder>`をビデオソースとして登録することで，録画ファイルをKodi
+で再生できます．以下のオプションがお薦めです．
+
+* Viewtype: VideList
+* Sort by: Date
+* Order: Descending
+
 [PVR IPTV Simple Client]: https://kodi.wiki/view/Add-on:PVR_IPTV_Simple_Client
