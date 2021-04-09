@@ -574,6 +574,42 @@ $</span><span class="bash"> ls timeshift-fs/bs1</span>
 <code>mirakc-timeshift-fs</code>コンテナーの再起動に失敗するようです．そのような場合は，以下のようにアンマウント後に<code>mirakc-timeshift-fs</code>コンテナーを起動してください．</p>
 <pre><code class="lang-shell">sudo umount ./timeshift-fs
 </code></pre>
+<h2 id="多重音声（デュアルモノラル）について">多重音声（デュアルモノラル）について</h2>
+<p>タイムシフト録画は，単にTSパケットをファイルに書き込むだけなので，多重音声（デュアルモノラル）な録画を再生する場合，メディアプレーヤーがこれをサポートしていないと２つの音声（例えば，日本語と英語）が同時に再生されます．</p>
+<p>多重音声（デュアルモノラル）をサポートしているメディアプレーヤーは数が限られています．例えば，日本向けのTVなどでは音声切り替え可能ですが，Kodiなどはサポートしていません．</p>
+<p>非サポートのメディアプレーヤーで正しく再生するためには，再生前にトランスコードする必要があります．
+<a href="filters">フィルター設定</a>で説明しましたが，mirakcのフィルターを使えば，わざわざトランスコード済みのファイルを作成する必要はありません．</p>
+<p>以下の<code>split-dual-mono</code>フィルターは，ステレオ音声を２つの音声に分離します．</p>
+<pre><code class="lang-yaml"><span class="hljs-comment"># ffmpegがインストール済みのカスタムイメージを使うこと</span>
+<span class="hljs-attr">filters:</span>
+  <span class="hljs-attr">post-filters:</span>
+    <span class="hljs-comment"># See https://trac.ffmpeg.org/wiki/AudioChannelManipulation</span>
+    <span class="hljs-attr">split-dual-mono:</span>
+      <span class="hljs-attr">command:</span> <span class="hljs-string">&gt;-
+        ffmpeg -i - -hide_banner -vcodec copy
+        -filter_complex &quot;[0:a]channelsplit=channel_layout=stereo&quot;
+        -f mpegts pipe:1
+</span></code></pre>
+<p>音声トラックを切り替え可能なメディアプレーヤーで再生すれば，目的の言語の音声のみを再生できます．</p>
+<pre><code class="lang-shell"><span class="hljs-meta">#</span><span class="bash"> ステレオ音声が２つのモノラル音声に分離されることを確認</span>
+<span class="hljs-meta">#</span><span class="bash"> 実際は多重音声（デュアルモノラル）の録画にフィルターを適用する</span>
+STREAM=http://raspberrypi.local:40772/api/timeshift/bs1/stream
+curl -sG &quot;$STREAM?post-filters[]=split-dual-mono&quot; | ffprobe
+</code></pre>
+<p>コンソール上のログから，ステレオ音声が分離されていることを確認できます．</p>
+<pre><code class="lang-console">Input #0, mpegts, from &apos;pipe:&apos;:
+  Duration: N/A, start: 1.400000, bitrate: N/A
+  Program 1
+    Metadata:
+      service_name    : Service01
+      service_provider: FFmpeg
+    Stream #0:0[0x100]: Audio: mp2 ([3][0][0][0] / 0x0003), 48000 Hz, mono, fltp, 384 kb/s
+    Stream #0:1[0x101]: Audio: mp2 ([3][0][0][0] / 0x0003), 48000 Hz, mono, fltp, 384 kb/s
+    Stream #0:2[0x102]: Video: mpeg2video (Main) ([2][0][0][0] / 0x0002), yuv420p(tv, bt709, top first), 1440x1080 [SAR 4:3 DAR 16:9], 29.97 fps, 29.97 tbr, 90k tbn, 59.94 tbc
+    Side data:
+      cpb: bitrate max/min/avg: 20000000/0/0 buffer size: 9781248 vbv_delay: N/A
+</code></pre>
+<p>欠点として，post-filterでストリームを変換した場合，シークできなくなります．変換によりストリームが動的に生成されるため，HTTPレスポンスは<code>Content-Length</code>ヘッダーを含まず，HTTPレスポンス・ボディにはチャンク・エンコーディングが適用されるためです．</p>
 
                                 
                                 </section>
@@ -617,7 +653,7 @@ $</span><span class="bash"> ls timeshift-fs/bs1</span>
     <script>
         var gitbook = gitbook || [];
         gitbook.push(function() {
-            gitbook.page.hasChanged({"page":{"title":"タイムシフト録画","level":"1.4.5","depth":2,"next":{"title":"フロントエンドアプリケーションとの連携","level":"1.5","depth":1,"path":"frontend_applications.md","ref":"./frontend_applications.md","articles":[]},"previous":{"title":"フィルター設定","level":"1.4.4","depth":2,"path":"config/filters.md","ref":"./config/filters.md","articles":[]},"dir":"ltr"},"config":{"plugins":["gitbook-plugin-japanese-support"],"root":"./src","styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"pluginsConfig":{"gitbook-plugin-japanese-support":{},"highlight":{},"search":{},"lunr":{"maxIndexSize":1000000,"ignoreSpecialCharacters":false},"fontsettings":{"theme":"white","family":"sans","size":2},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false}},"theme":"default","author":"masnagam","pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56},"embedFonts":false},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"variables":{},"title":"できるmirakc","language":"ja","gitbook":"*"},"file":{"path":"config/timeshift.md","mtime":"2021-03-31T10:16:04.575Z","type":"markdown"},"gitbook":{"version":"3.6.19","time":"2021-03-31T10:16:09.004Z"},"basePath":"..","book":{"language":""}});
+            gitbook.page.hasChanged({"page":{"title":"タイムシフト録画","level":"1.4.5","depth":2,"next":{"title":"フロントエンドアプリケーションとの連携","level":"1.5","depth":1,"path":"frontend_applications.md","ref":"./frontend_applications.md","articles":[]},"previous":{"title":"フィルター設定","level":"1.4.4","depth":2,"path":"config/filters.md","ref":"./config/filters.md","articles":[]},"dir":"ltr"},"config":{"plugins":["gitbook-plugin-japanese-support"],"root":"./src","styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"pluginsConfig":{"gitbook-plugin-japanese-support":{},"highlight":{},"search":{},"lunr":{"maxIndexSize":1000000,"ignoreSpecialCharacters":false},"fontsettings":{"theme":"white","family":"sans","size":2},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false}},"theme":"default","author":"masnagam","pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56},"embedFonts":false},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"variables":{},"title":"できるmirakc","language":"ja","gitbook":"*"},"file":{"path":"config/timeshift.md","mtime":"2021-04-09T04:14:06.312Z","type":"markdown"},"gitbook":{"version":"3.6.19","time":"2021-04-09T04:14:13.718Z"},"basePath":"..","book":{"language":""}});
         });
     </script>
 </div>

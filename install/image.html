@@ -375,7 +375,7 @@
                                 
                                 <h1 id="dockerイメージ">Dockerイメージ</h1>
 <p>Docker Hubで配布している<a href="https://hub.docker.com/repository/docker/mirakc/mirakc" target="_blank">mirakc/mirakc</a>イメージには，mirakcと<code>recpt1</code>などの主要なツールがすでに含まれています．多くの場合，各自でツールをソースからビルドしたりインストールする必要はありません．</p>
-<p><a href="https://github.com/mirakc/mirakc/blob/master/docs/docker.md#pre-built-images-in-dockerhub" target="_blank">mirakc/docs/docker.md</a>に記載されているように，<code>mirakc/mirakc</code>イメージには複数のタグがあり，この中から自分の目的に合ったタグを選択します．以下に代表的なタグを列挙します．</p>
+<p><a href="https://github.com/mirakc/mirakc/blob/main/docs/docker.md#pre-built-images-in-dockerhub" target="_blank">mirakc/docs/docker.md</a>に記載されているように，<code>mirakc/mirakc</code>イメージには複数のタグがあり，この中から自分の目的に合ったタグを選択します．以下に代表的なタグを列挙します．</p>
 <ul>
 <li>latest<ul>
 <li>debianのエイリアス</li>
@@ -386,24 +386,26 @@
 </ul>
 </li>
 <li>alpine<ul>
-<li>最新リリースのAlpine/3.12ベースのイメージ</li>
+<li>最新リリースのAlpine/3.13ベースのイメージ</li>
 </ul>
 </li>
-<li>master<ul>
-<li>master-debianのエイリアス</li>
+<li>main<ul>
+<li>main-debianのエイリアス</li>
 </ul>
 </li>
-<li>master-debian<ul>
-<li>GitHub masterブランチの最新コミットから作成したDebian/Busterベースのイメージ</li>
+<li>main-debian<ul>
+<li>GitHub mainブランチの最新コミットから作成したDebian/Busterベースのイメージ</li>
 </ul>
 </li>
-<li>master-alpine<ul>
-<li>GitHub masterブランチの最新コミットから作成したAlpine/3.12ベースのイメージ</li>
+<li>main-alpine<ul>
+<li>GitHub mainブランチの最新コミットから作成したAlpine/3.13ベースのイメージ</li>
 </ul>
 </li>
 </ul>
 <blockquote>
-<p><code>0.11.0</code>より古いAlpine系イメージは，Alpine/3.11をベースとしています．</p>
+<p><code>0.17.0</code>以降のAlpineイメージは，32ビットCPUでは動作しない可能性があります．詳しいことを以下のペー
+ジを見てください．</p>
+<p><a href="https://wiki.alpinelinux.org/wiki/Release_Notes_for_Alpine_3.13.0#musl_1.2" target="_blank">https://wiki.alpinelinux.org/wiki/Release_Notes_for_Alpine_3.13.0#musl_1.2</a></p>
 </blockquote>
 <p>これらのイメージは全てマルチアーキイメージです．以下のプラットフォームをサポートしています．</p>
 <ul>
@@ -417,7 +419,7 @@
 <p>リンクエラーを回避するため，Alpineのlinux/386に含まれる<code>mirakc-arib</code>はSSPが無効化されています．</p>
 </blockquote>
 <p>Raspberry PiなどのSBCで実行する場合は，先の例で使用した<code>mirakc/mirakc:alpine</code>
-を選択することを推奨しています．詳しい理由については<a href="https://github.com/mirakc/mirakc/blob/master/docs/notes.md#mirakc-leaks-memory" target="_blank">mirakc/docs/notes.md</a>を見てください．</p>
+を選択することを推奨しています．詳しい理由については<a href="https://github.com/mirakc/mirakc/blob/main/docs/notes.md#mirakc-leaks-memory" target="_blank">mirakc/docs/notes.md</a>を見てください．</p>
 
                                 
                                 </section>
@@ -461,7 +463,7 @@
     <script>
         var gitbook = gitbook || [];
         gitbook.push(function() {
-            gitbook.page.hasChanged({"page":{"title":"Dockerイメージ","level":"1.3.4","depth":2,"next":{"title":"mirakcの設定","level":"1.4","depth":1,"path":"config/README.md","ref":"./config/README.md","articles":[{"title":"チャンネル設定","level":"1.4.1","depth":2,"path":"config/channels.md","ref":"./config/channels.md","articles":[]},{"title":"チューナー設定","level":"1.4.2","depth":2,"path":"config/tuners.md","ref":"./config/tuners.md","articles":[]},{"title":"EGPデータキャッシュ","level":"1.4.3","depth":2,"path":"config/epg.md","ref":"./config/epg.md","articles":[]},{"title":"フィルター設定","level":"1.4.4","depth":2,"path":"config/filters.md","ref":"./config/filters.md","articles":[]},{"title":"タイムシフト録画","level":"1.4.5","depth":2,"path":"config/timeshift.md","ref":"./config/timeshift.md","articles":[]}]},"previous":{"title":"mirakcのインストール","level":"1.3.3","depth":2,"path":"install/mirakc.md","ref":"./install/mirakc.md","articles":[]},"dir":"ltr"},"config":{"plugins":["gitbook-plugin-japanese-support"],"root":"./src","styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"pluginsConfig":{"gitbook-plugin-japanese-support":{},"highlight":{},"search":{},"lunr":{"maxIndexSize":1000000,"ignoreSpecialCharacters":false},"fontsettings":{"theme":"white","family":"sans","size":2},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false}},"theme":"default","author":"masnagam","pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56},"embedFonts":false},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"variables":{},"title":"できるmirakc","language":"ja","gitbook":"*"},"file":{"path":"install/image.md","mtime":"2021-03-31T10:16:04.575Z","type":"markdown"},"gitbook":{"version":"3.6.19","time":"2021-03-31T10:16:09.004Z"},"basePath":"..","book":{"language":""}});
+            gitbook.page.hasChanged({"page":{"title":"Dockerイメージ","level":"1.3.4","depth":2,"next":{"title":"mirakcの設定","level":"1.4","depth":1,"path":"config/README.md","ref":"./config/README.md","articles":[{"title":"チャンネル設定","level":"1.4.1","depth":2,"path":"config/channels.md","ref":"./config/channels.md","articles":[]},{"title":"チューナー設定","level":"1.4.2","depth":2,"path":"config/tuners.md","ref":"./config/tuners.md","articles":[]},{"title":"EGPデータキャッシュ","level":"1.4.3","depth":2,"path":"config/epg.md","ref":"./config/epg.md","articles":[]},{"title":"フィルター設定","level":"1.4.4","depth":2,"path":"config/filters.md","ref":"./config/filters.md","articles":[]},{"title":"タイムシフト録画","level":"1.4.5","depth":2,"path":"config/timeshift.md","ref":"./config/timeshift.md","articles":[]}]},"previous":{"title":"mirakcのインストール","level":"1.3.3","depth":2,"path":"install/mirakc.md","ref":"./install/mirakc.md","articles":[]},"dir":"ltr"},"config":{"plugins":["gitbook-plugin-japanese-support"],"root":"./src","styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"pluginsConfig":{"gitbook-plugin-japanese-support":{},"highlight":{},"search":{},"lunr":{"maxIndexSize":1000000,"ignoreSpecialCharacters":false},"fontsettings":{"theme":"white","family":"sans","size":2},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false}},"theme":"default","author":"masnagam","pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56},"embedFonts":false},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"variables":{},"title":"できるmirakc","language":"ja","gitbook":"*"},"file":{"path":"install/image.md","mtime":"2021-04-09T04:14:06.312Z","type":"markdown"},"gitbook":{"version":"3.6.19","time":"2021-04-09T04:14:13.718Z"},"basePath":"..","book":{"language":""}});
         });
     </script>
 </div>
