@@ -80,3 +80,28 @@ mirakurunPath: http://raspberrypi.local:40772/
 * Order: Descending
 
 [PVR IPTV Simple Client]: https://kodi.wiki/view/Add-on:PVR_IPTV_Simple_Client
+
+## MiniDLNA (ReadyMedia)
+
+タイムシフト録画をTVで視聴しようと思っても，TVがSambaをサポートしていない場合があります．このような
+場合でも，もしTVがDLNA/UPnPをサポートしているなら，[MiniDLNA]を使えばTVで視聴可能です．
+
+MiniDLNAは[inotify]を使って録画ファイルの更新を検出できますが，残念ながら以下のような状況では機能し
+ません．
+
+* [タイムシフト・ファイルシステム](./config/timeshift.md#タイムシフト・ファイルシステム)の実装で利
+  用しているFUSEでは，inotifyがサポートされていません
+  * https://github.com/libfuse/libfuse/wiki/Fsnotify-and-FUSE
+* `mount.cifs`でマウントしたファイルシステムはinotifyをサポートしていません
+  * https://lists.samba.org/archive/linux-cifs-client/2009-April/004318.html
+* Dockerコンテナーにマウントしたホストファイルシステム上では，inotifyが動作しない場合があります
+  * https://github.com/moby/moby/issues/18246
+
+そこで，MiniDLNAにパッチを当てたDockerイメージ[mirakc/minidlna]を用意してあります．これを使えば
+DLNA/UPnPをサポートしているTVでタイムシフト録画を視聴可能です．
+
+使用方法については，[README.md](https://github.com/mirakc/docker-minidlna)を参照してください．
+
+[MiniDLNA]: https://sourceforge.net/projects/minidlna/
+[inotify]: https://ja.wikipedia.org/wiki/Inotify
+[mirakc/minidlna]: https://hub.docker.com/r/mirakc/minidlna
