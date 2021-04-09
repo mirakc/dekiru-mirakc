@@ -295,4 +295,60 @@ macOSユーザーには，Finderのプレビューを無効にすることをお
 sudo umount ./timeshift-fs
 ```
 
+## 多重音声（デュアルモノラル）について
+
+タイムシフト録画は，単にTSパケットをファイルに書き込むだけなので，多重音声（デュアルモノラル）な録
+画を再生する場合，メディアプレーヤーがこれをサポートしていないと２つの音声（例えば，日本語と英語）
+が同時に再生されます．
+
+多重音声（デュアルモノラル）をサポートしているメディアプレーヤーは数が限られています．例えば，日本
+向けのTVなどでは音声切り替え可能ですが，Kodiなどはサポートしていません．
+
+非サポートのメディアプレーヤーで正しく再生するためには，再生前にトランスコードする必要があります．
+[フィルター設定](./filters)で説明しましたが，mirakcのフィルターを使えば，わざわざトランスコード済み
+のファイルを作成する必要はありません．
+
+以下の`split-dual-mono`フィルターは，ステレオ音声を２つの音声に分離します．
+
+```yaml
+# ffmpegがインストール済みのカスタムイメージを使うこと
+filters:
+  post-filters:
+    # See https://trac.ffmpeg.org/wiki/AudioChannelManipulation
+    split-dual-mono:
+      command: >-
+        ffmpeg -i - -hide_banner -vcodec copy
+        -filter_complex "[0:a]channelsplit=channel_layout=stereo"
+        -f mpegts pipe:1
+```
+
+音声トラックを切り替え可能なメディアプレーヤーで再生すれば，目的の言語の音声のみを再生できます．
+
+```shell
+# ステレオ音声が２つのモノラル音声に分離されることを確認
+# 実際は多重音声（デュアルモノラル）の録画にフィルターを適用する
+STREAM=http://raspberrypi.local:40772/api/timeshift/bs1/stream
+curl -sG "$STREAM?post-filters[]=split-dual-mono" | ffprobe
+```
+
+コンソール上のログから，ステレオ音声が分離されていることを確認できます．
+
+```console
+Input #0, mpegts, from 'pipe:':
+  Duration: N/A, start: 1.400000, bitrate: N/A
+  Program 1
+    Metadata:
+      service_name    : Service01
+      service_provider: FFmpeg
+    Stream #0:0[0x100]: Audio: mp2 ([3][0][0][0] / 0x0003), 48000 Hz, mono, fltp, 384 kb/s
+    Stream #0:1[0x101]: Audio: mp2 ([3][0][0][0] / 0x0003), 48000 Hz, mono, fltp, 384 kb/s
+    Stream #0:2[0x102]: Video: mpeg2video (Main) ([2][0][0][0] / 0x0002), yuv420p(tv, bt709, top first), 1440x1080 [SAR 4:3 DAR 16:9], 29.97 fps, 29.97 tbr, 90k tbn, 59.94 tbc
+    Side data:
+      cpb: bitrate max/min/avg: 20000000/0/0 buffer size: 9781248 vbv_delay: N/A
+```
+
+欠点として，post-filterでストリームを変換した場合，シークできなくなります．変換によりストリームが動
+的に生成されるため，HTTPレスポンスは`Content-Length`ヘッダーを含まず，HTTPレスポンス・ボディにはチ
+ャンク・エンコーディングが適用されるためです．
+
 [FUSE]: https://en.wikipedia.org/wiki/Filesystem_in_Userspace
