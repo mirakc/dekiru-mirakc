@@ -33,7 +33,7 @@ docker version
 
 ```shell
 # Dockerイメージからdocker-composeコマンドを抽出
-curl -fsSL https://raw.githubusercontent.com/masnagam/sbc-scripts/master/get-docker-compose | \
+curl -fsSL https://raw.githubusercontent.com/masnagam/sbc-scripts/main/get-docker-compose | \
   sh | sudo tar -x -C /usr/local/bin
 
 # バージョンが表示されればOK
@@ -51,11 +51,13 @@ RaspbianのバージョンもDebian/Busterをベースとして作成されて�
 ルドしたマルチアーキイメージです．現時点では，以下のアーキテクチャーのみサポート
 しています．
 
-* amd64
+* linux/amd64
   * 一般的なデスクトップPCに搭載されているIntel系やRyzen系
-* arm32v7
+* linux/arm/v6
+  * Raspberry Pi 2より前のRaspbianなど
+* linux/arm/v7
   * Raspberry Pi 2以降のRaspbianやZeroPiなど
-* arm64v8
+* linux/arm64/v8
   * ROCK64向けArmbianなど
   * Raspberry Pi 2B v1.2以降の64bits OS
 

@@ -57,5 +57,5 @@ ROCK64でした．価格も手頃だったので悩むことなく購入しま�
 りました．
 
 [シングルボードコンピュータ]: https://ja.wikipedia.org/wiki/%E3%82%B7%E3%83%B3%E3%82%B0%E3%83%AB%E3%83%9C%E3%83%BC%E3%83%89%E3%82%B3%E3%83%B3%E3%83%94%E3%83%A5%E3%83%BC%E3%82%BF
-[Web API]: https://github.com/mirakc/mirakc/blob/master/docs/web-api.md
+[Web API]: https://github.com/mirakc/mirakc/blob/main/docs/web-api.md
 [ROCK64]: https://wiki.pine64.org/index.php/ROCK64

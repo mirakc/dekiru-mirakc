@@ -13,15 +13,18 @@ Docker Hubで配布している[mirakc/mirakc]イメージには，mirakcと`rec
 * debian
   * 最新リリースのDebian/Busterベースのイメージ
 * alpine
-  * 最新リリースのAlpine/3.12ベースのイメージ
-* master
-  * master-debianのエイリアス
-* master-debian
-  * GitHub masterブランチの最新コミットから作成したDebian/Busterベースのイメージ
-* master-alpine
-  * GitHub masterブランチの最新コミットから作成したAlpine/3.12ベースのイメージ
+  * 最新リリースのAlpine/3.13ベースのイメージ
+* main
+  * main-debianのエイリアス
+* main-debian
+  * GitHub mainブランチの最新コミットから作成したDebian/Busterベースのイメージ
+* main-alpine
+  * GitHub mainブランチの最新コミットから作成したAlpine/3.13ベースのイメージ
 
-> `0.11.0`より古いAlpine系イメージは，Alpine/3.11をベースとしています．
+> `0.17.0`以降のAlpineイメージは，32ビットCPUでは動作しない可能性があります．詳しいことを以下のペー
+> ジを見てください．
+>
+> https://wiki.alpinelinux.org/wiki/Release_Notes_for_Alpine_3.13.0#musl_1.2
 
 これらのイメージは全てマルチアーキイメージです．以下のプラットフォームをサポート
 しています．
@@ -39,5 +42,5 @@ Raspberry PiなどのSBCで実行する場合は，先の例で使用した`mira
 ください．
 
 [mirakc/mirakc]: https://hub.docker.com/repository/docker/mirakc/mirakc
-[mirakc/docs/docker.md]: https://github.com/mirakc/mirakc/blob/master/docs/docker.md#pre-built-images-in-dockerhub
-[mirakc/docs/notes.md]: https://github.com/mirakc/mirakc/blob/master/docs/notes.md#mirakc-leaks-memory
+[mirakc/docs/docker.md]: https://github.com/mirakc/mirakc/blob/main/docs/docker.md#pre-built-images-in-dockerhub
+[mirakc/docs/notes.md]: https://github.com/mirakc/mirakc/blob/main/docs/notes.md#mirakc-leaks-memory
