@@ -75,9 +75,14 @@ mirakurunPath: http://raspberrypi.local:40772/
 している場合，`smb://<host>/<folder>`をビデオソースとして登録することで，録画ファイルをKodi
 で再生できます．以下のオプションがお薦めです．
 
-* Viewtype: VideList
+* Viewtype: WideList
 * Sort by: Date
 * Order: Descending
+
+Sambaを使った場合，サムネイル画像の生成などのために集中的なファイルアクセスが発生し，
+mirakc-timeshift-fsおよびSambaを稼働させているマシンが一時的に高負荷状態になることがあります．この負荷状態は，サムネイル画像の生成をやめるなどKodiの設定を見直すことでを回避できます．しかし，他にも
+問題があるようで，タイムシフト録画ファイルが大量に存在すると，Kodiがハングすることがありました．そ
+のため，Kodiでタイムシフト録画を視聴する場合，後述のMiniDLNA経由にすることを推奨します．
 
 [PVR IPTV Simple Client]: https://kodi.wiki/view/Add-on:PVR_IPTV_Simple_Client
 
