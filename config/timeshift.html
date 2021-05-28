@@ -418,7 +418,7 @@ total 3.1G
 &quot;nhk&quot;
 &quot;bs1&quot;
 </code></pre>
-<p>起動直後は何も録画されていなので何も視聴できませんが，１，２分程度待つと視聴可能な状態になります．</p>
+<p>起動直後は何も録画されていないので何も視聴できませんが，１，２分程度待つと視聴可能な状態になります．</p>
 <pre><code class="lang-console"><span class="hljs-meta">#</span><span class="bash"> 直後は0で視聴できないが，そのうち0以外が表示されるようになる</span>
 <span class="hljs-meta">$</span><span class="bash"> curl -sG http://localhost:40772/api/timeshift/bs1 | jq .duration</span>
 75420
@@ -436,7 +436,7 @@ curl -sG http://raspberrypi.local:40772/api/timeshift/bs1/records/$ID/stream | f
 <h2 id="タイムシフト録画とは？">タイムシフト録画とは？</h2>
 <p>冒頭でも書きましたが，mirakcのタイムシフト録画は，いわるゆ全録機能です．以下のような特徴を持ちます．</p>
 <ul>
-<li>固定サイズのファイルをリングバッファーとして録画を行ないます<ul>
+<li>固定サイズのファイルをリングバッファーとして，指定サービスのTSストリームを録画します<ul>
 <li>サイズは<code>config.yml</code>で指定します</li>
 </ul>
 </li>
@@ -653,7 +653,7 @@ curl -sG &quot;$STREAM?post-filters[]=split-dual-mono&quot; | ffprobe
     <script>
         var gitbook = gitbook || [];
         gitbook.push(function() {
-            gitbook.page.hasChanged({"page":{"title":"タイムシフト録画","level":"1.4.5","depth":2,"next":{"title":"フロントエンドアプリケーションとの連携","level":"1.5","depth":1,"path":"frontend_applications.md","ref":"./frontend_applications.md","articles":[]},"previous":{"title":"フィルター設定","level":"1.4.4","depth":2,"path":"config/filters.md","ref":"./config/filters.md","articles":[]},"dir":"ltr"},"config":{"plugins":["gitbook-plugin-japanese-support"],"root":"./src","styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"pluginsConfig":{"gitbook-plugin-japanese-support":{},"highlight":{},"search":{},"lunr":{"maxIndexSize":1000000,"ignoreSpecialCharacters":false},"fontsettings":{"theme":"white","family":"sans","size":2},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false}},"theme":"default","author":"masnagam","pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56},"embedFonts":false},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"variables":{},"title":"できるmirakc","language":"ja","gitbook":"*"},"file":{"path":"config/timeshift.md","mtime":"2021-04-24T09:10:07.462Z","type":"markdown"},"gitbook":{"version":"3.6.20","time":"2021-04-24T09:10:13.961Z"},"basePath":"..","book":{"language":""}});
+            gitbook.page.hasChanged({"page":{"title":"タイムシフト録画","level":"1.4.5","depth":2,"next":{"title":"フロントエンドアプリケーションとの連携","level":"1.5","depth":1,"path":"frontend_applications.md","ref":"./frontend_applications.md","articles":[]},"previous":{"title":"フィルター設定","level":"1.4.4","depth":2,"path":"config/filters.md","ref":"./config/filters.md","articles":[]},"dir":"ltr"},"config":{"plugins":["gitbook-plugin-japanese-support"],"root":"./src","styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"pluginsConfig":{"gitbook-plugin-japanese-support":{},"highlight":{},"search":{},"lunr":{"maxIndexSize":1000000,"ignoreSpecialCharacters":false},"fontsettings":{"theme":"white","family":"sans","size":2},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false}},"theme":"default","author":"masnagam","pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56},"embedFonts":false},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"variables":{},"title":"できるmirakc","language":"ja","gitbook":"*"},"file":{"path":"config/timeshift.md","mtime":"2021-05-28T14:51:48.126Z","type":"markdown"},"gitbook":{"version":"3.6.20","time":"2021-05-28T14:51:55.349Z"},"basePath":"..","book":{"language":""}});
         });
     </script>
 </div>
