@@ -28,7 +28,7 @@ epg:
 `docker-compose.yml`:
 
 ```yaml
-version: '3.7'
+version: '3'
 
 services:
   mirakc:

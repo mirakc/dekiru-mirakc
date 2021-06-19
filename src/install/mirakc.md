@@ -5,7 +5,7 @@
 まず，以下のような`docker-compose.yml`を作成します．
 
 ```yaml
-version: '3.7'
+version: '3'
 
 services:
   mirakc:

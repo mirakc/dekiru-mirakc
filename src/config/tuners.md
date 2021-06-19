@@ -38,7 +38,7 @@ Dockerを使用している場合，以下のように`docker-compose.yml`に使
 イルを記述する必要があります．
 
 ```yaml
-version: '3.7'
+version: '3'
 
 services:
   mirakc:
