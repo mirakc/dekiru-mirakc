@@ -3,7 +3,7 @@
 <html lang="ja" >
     <head>
         <meta charset="UTF-8">
-        <title>フィルター設定 · できるmirakc</title>
+        <title>局ロゴの表示 · できるmirakc</title>
         <meta http-equiv="X-UA-Compatible" content="IE=edge" />
         <meta name="description" content="">
         <meta name="generator" content="HonKit 3.6.20">
@@ -56,10 +56,10 @@
     <link rel="shortcut icon" href="../gitbook/images/favicon.ico" type="image/x-icon">
 
     
-    <link rel="next" href="logos.html" />
+    <link rel="next" href="timeshift.html" />
     
     
-    <link rel="prev" href="epg.html" />
+    <link rel="prev" href="filters.html" />
     
 
     </head>
@@ -238,7 +238,7 @@
             
         </li>
     
-        <li class="chapter active" data-level="1.4.4" data-path="filters.html">
+        <li class="chapter " data-level="1.4.4" data-path="filters.html">
             
                 <a href="filters.html">
             
@@ -251,7 +251,7 @@
             
         </li>
     
-        <li class="chapter " data-level="1.4.5" data-path="logos.html">
+        <li class="chapter active" data-level="1.4.5" data-path="logos.html">
             
                 <a href="logos.html">
             
@@ -371,7 +371,7 @@
     <!-- Title -->
     <h1>
         <i class="fa fa-circle-o-notch fa-spin"></i>
-        <a href=".." >フィルター設定</a>
+        <a href=".." >局ロゴの表示</a>
     </h1>
 </div>
 
@@ -386,97 +386,61 @@
     
                                 <section class="normal markdown-section">
                                 
-                                <h1 id="フィルター設定">フィルター設定</h1>
+                                <h1 id="局ロゴの表示">局ロゴの表示</h1>
 <blockquote>
-<p>以下の<code>config.yml</code>の記述例は，<code>0.12.0</code>以降でのみ有効です．これより古いバージョ
-ンでのフィルターの記述方法については，GitHubの履歴を確認してください．</p>
+<p>以下の内容は<code>0.18.0</code>以降でのみ有効です．</p>
 </blockquote>
-<p>EPGデータの取得が完了すると，特定サービスのTSストリーミングが可能となります．</p>
-<pre><code class="lang-console"><span class="hljs-meta">#</span><span class="bash"> mirakcコンテナーをバックグラウンドで起動</span>
-<span class="hljs-meta">$</span><span class="bash"> sudo docker-compose up -d</span>
-Starting mirakc ... done
-<span class="hljs-meta">
-#</span><span class="bash"> 最初のサービス（ＮＨＫ総合１）のIDを表示</span>
-<span class="hljs-meta">$</span><span class="bash"> curl -s http://localhost:40772/api/services | jq .[0].id</span>
-3273601024
-<span class="hljs-meta">
-#</span><span class="bash"> ＮＨＫ総合１のTSストリーミングを実行（Ctrl+Cで停止）</span>
-<span class="hljs-meta">$</span><span class="bash"> curl http://localhost:40772/api/services/3273601024/stream &gt;/dev/null</span>
-<span class="hljs-meta">  %</span><span class="bash"> Total    % Received % Xferd  Average Speed   Time    Time     Time  Current</span>
-                                 Dload  Upload   Total   Spent    Left  Speed
-100 16.8M    0 16.8M    0     0  1578k      0 --:--:--  0:00:10 --:--:-- 1725k
-</code></pre>
-<p>しかし，今の設定のままでは，TSストリームを<code>ffmpeg</code>で変換したりすることはできません．なぜならば，フィルターが設定されていないためです．</p>
-<p>フィルターは，TSストリームを標準入力から受け取り，処理後のTSストリームを標準出力に出力する外部プログラムです．mirakc自体にはこのような機能は実装されておらず，フィルター設定で指定された外部プログラムにTSストリームの処理を委譲します．</p>
-<p>フィルターの動作を確認するため，以下のような設定を行ってみます．</p>
+<p>番組表の表示が可能なテレビなどでは，番組表に局ロゴが表示されます．局ロゴはTSストリーム上で定期的に配信されており，テレビなどはこれを抽出・表示しています．</p>
+<p>残念ながら，mirakcは起動中の局ロゴ抽出をサポートしていません．しかし，
+<code>resource.logos</code>プロパティーを設定することで，任意の画像を局ロゴとして利用することが可能です．</p>
 <p><code>config.yml</code>:</p>
-<pre><code class="lang-yaml"><span class="hljs-attr">filters:</span>
-  <span class="hljs-attr">decode-filter:</span>
-    <span class="hljs-attr">command:</span> <span class="hljs-string">&gt;-
-      echo &quot;{{{channel_type}}}/{{{channel}}} SID#{{{sid}}}&quot;
-</span></code></pre>
-<p>設定反映のためmirakcコンテナーを再起動し，動作確認します．</p>
-<pre><code class="lang-console"><span class="hljs-meta">#</span><span class="bash"> mirakcコンテナーを再起動</span>
-<span class="hljs-meta">$</span><span class="bash"> sudo docker-compose restart</span>
-<span class="hljs-meta">
-#</span><span class="bash"> post-filter付きTSストリーミングを実行</span>
-<span class="hljs-meta">$</span><span class="bash"> curl -s http://localhost:40772/api/services/3273601024/stream?decode=1</span>
-GR/27 SID#1024
+<pre><code class="lang-yaml"><span class="hljs-comment"># NHK総合のロゴ画像を指定</span>
+<span class="hljs-attr">resource:</span>
+  <span class="hljs-attr">logos:</span>
+    <span class="hljs-bullet">-</span> <span class="hljs-attr">service-triple:</span> [<span class="hljs-number">32736</span>, <span class="hljs-number">32736</span>, <span class="hljs-number">1024</span>]
+      <span class="hljs-attr">image:</span> <span class="hljs-string">/var/lib/mirakc/logos/nhk.png</span>
 </code></pre>
-<p>TSストリームをチャンネル情報に置き換えることに成功しました．</p>
-<p>なお，<code>filters.decode-filter</code>は，Mirakurunの<code>tuners.yml</code>での<code>decoder</code>に相当する設定です．</p>
-<p>フィルターの動作確認も終了したので，実用的なフィルターを設定してみます．</p>
-<pre><code class="lang-yaml"><span class="hljs-attr">filters:</span>
-  <span class="hljs-comment"># Chinachu/Mirakurunの設定例より</span>
-  <span class="hljs-attr">decode-filter:</span>
-    <span class="hljs-attr">command:</span> <span class="hljs-string">&gt;-
-      arib-b25-stream-test
-</span></code></pre>
-<p>また，以下のように外部サーバーでTSストリームを処理し，その結果をクライアントに返すことも可能です．</p>
-<pre><code class="lang-yaml"><span class="hljs-attr">filters:</span>
-  <span class="hljs-attr">decode-filter:</span>
-    <span class="hljs-comment"># 標準入力から入力されるTSストリームをリモートホストtsdのTCP 40773ポートに転</span>
-    <span class="hljs-comment"># 送し，tsdから返されたTSストリームを標準出力に出力</span>
-    <span class="hljs-attr">command:</span> <span class="hljs-string">&gt;-
-      socat - tcp-connect:tsd:40773
-</span></code></pre>
-<p><a href="http://www.dest-unreach.org/socat/doc/socat.html" target="_blank">socat</a>は，配布している<code>mirakc/mirakc</code>イメージにも含まれているツールです．詳しい説明はリンク先を見るかGoogle先生に教えてもらってください．</p>
-<p><code>filters</code>プロパティーはチューナーごとに設定するのではなく，すべてのチューナーに対して共通で利用される設定です．そのため，特定のチューナーに対して特別な処理を行いたい場合は，渡されたテンプレートパラメーターを利用して処理を分岐するようなスクリプトを作成し，これをフィルターとして設定する必要があります．</p>
-<p>試しに，以下のような簡単な<code>bs-not-supported</code>スクリプトを作って，動作を確認してみます．</p>
-<pre><code class="lang-shell"><span class="hljs-meta">#</span><span class="bash">!/bin/sh</span>
-
-CHANNEL_TYPE=&quot;$1&quot;
-CHANNEL=&quot;$2&quot;
-
-if [ &quot;$CHANNEL_TYPE&quot; = &quot;GR&quot; ]; then
-  echo &quot;$CHANNEL&quot;
-else
-  echo &quot;BS not supported&quot;
-fi
+<p>ここで<code>nhk.png</code>は局ロゴとして使用する画像です．この画像はどこかから拾ってくるか（ライセンスに注意！），自力でTSストリームから抽出する必要があります．今回は
+<code>mirakc/mirakc</code>イメージ含まれている<code>mirakc-arib</code>を使って，TSストリームからロゴを抽出することにします．</p>
+<pre><code class="lang-shell"><span class="hljs-meta">#</span><span class="bash"> mirakcは起動済みとする</span>
+mkdir -p logos
+curl -sG http://localhost:40772/api/channels/GR/27/stream | \
+  sudo docker run --rm -i --entrypoint=/usr/bin/env mirakc/mirakc:alpine \
+    mirakc-arib collect-logos | head -1 | jq -Mr &apos;.data&apos; | \
+    base64 -d &gt;logos/nhk.png
 </code></pre>
-<p><code>config.yml</code>:</p>
-<pre><code class="lang-yaml"><span class="hljs-comment"># 変更部分のみ記載</span>
-<span class="hljs-attr">filters:</span>
-  <span class="hljs-attr">decode-filter:</span>
-    <span class="hljs-attr">command:</span> <span class="hljs-string">&gt;-
-      bs-not-supported {{{channel_type}}} {{{channel}}}
-</span></code></pre>
-<p><code>docker-compose.yml</code>:</p>
-<pre><code class="lang-yaml"><span class="hljs-comment"># 変更部分のみ記載</span>
-<span class="hljs-string">...</span>
+<p>局ロゴは頻繁には流れてこないので，抽出には数分（NHKの場合は１０分以下）かかります．お茶でも飲んでしばらく待ちましょう．</p>
+<p>抽出が完了したら，<code>docker-compose.yml</code>を以下のように書き換えて，コンテナーに
+<code>logos</code>フォルダーをマウントします．</p>
+<pre><code class="lang-yaml"><span class="hljs-attr">version:</span> <span class="hljs-string">&apos;3&apos;</span>
+
+<span class="hljs-attr">services:</span>
+  <span class="hljs-attr">mirakc:</span>
+    <span class="hljs-string">...</span>
     <span class="hljs-attr">volumes:</span>
-      <span class="hljs-bullet">-</span> <span class="hljs-string">mirakc-epg:/var/lib/mirakc/epg</span>
-      <span class="hljs-bullet">-</span> <span class="hljs-string">./config.yml:/etc/mirakc/config.yml:ro</span>
-      <span class="hljs-comment"># 忘れずに`chmod +x bs-not-supported`しておくこと</span>
-      <span class="hljs-bullet">-</span> <span class="hljs-string">./bs-not-supported:/usr/local/bin/bs-not-supported:ro</span>
-<span class="hljs-string">...</span>
+      <span class="hljs-string">...</span>
+      <span class="hljs-comment"># logosフォルダーを読み取り専用でマウント</span>
+      <span class="hljs-bullet">-</span> <span class="hljs-string">./logos:/var/lib/mirakc/logos:ro</span>
 </code></pre>
-<p>以下のように表示されれば，<code>bs-not-supported</code>スクリプトは機能しています．</p>
-<pre><code class="lang-console"><span class="hljs-meta">$</span><span class="bash"> curl http://localhost:40772/api/channels/GR/27/stream?decode=1</span>
-27
+<p>コンテナーを再起動して動作を確認します．</p>
+<pre><code class="lang-console"><span class="hljs-meta">$</span><span class="bash"> curl -I http://localhost:40772/api/services/3273601024/logo</span>
+HTTP/1.1 200 OK
+content-length: 760
+server: mirakc-core/0.18.0
+accept-ranges: bytes
+last-modified: Sat, 19 Jun 2021 07:26:36 GMT
+content-disposition: inline; filename=&quot;nhk.png&quot;
+content-type: image/png
+etag: &quot;e830d5818f5490f2:2f8:60cd9c2c:0&quot;
+date: Sat, 19 Jun 2021 07:29:46 GMT
+</code></pre>
+<p>ブラウザーを使えば，実際に表示される画像を確認できます．</p>
+<p>設定した局ロゴは，<code>/api/iptv/*</code>にも反映されます．</p>
+<pre><code class="lang-console"><span class="hljs-meta">$</span><span class="bash"> curl -sG http://localhost:40772/api/iptv/playlist | grep tvg-logo</span>
+... tvg-logo=&quot;http://localhost:40772/api/services/3273601024/logo&quot; ...
 <span class="hljs-meta">
-$</span><span class="bash"> curl http://localhost:40772/api/channels/BS/BS15_0/stream?decode=1</span>
-BS not supported
+$</span><span class="bash"> curl -sG http://localhost:40772/api/iptv/epg | xmllint --format - | grep icon</span>
+    &lt;icon src=&quot;http://localhost:40772/api/services/3273601024/logo&quot;/&gt;
 </code></pre>
 
                                 
@@ -505,12 +469,12 @@ BS not supported
 
             
                 
-                <a href="epg.html" class="navigation navigation-prev " aria-label="Previous page: EGPデータキャッシュ">
+                <a href="filters.html" class="navigation navigation-prev " aria-label="Previous page: フィルター設定">
                     <i class="fa fa-angle-left"></i>
                 </a>
                 
                 
-                <a href="logos.html" class="navigation navigation-next " aria-label="Next page: 局ロゴの表示">
+                <a href="timeshift.html" class="navigation navigation-next " aria-label="Next page: タイムシフト録画">
                     <i class="fa fa-angle-right"></i>
                 </a>
                 
@@ -521,7 +485,7 @@ BS not supported
     <script>
         var gitbook = gitbook || [];
         gitbook.push(function() {
-            gitbook.page.hasChanged({"page":{"title":"フィルター設定","level":"1.4.4","depth":2,"next":{"title":"局ロゴの表示","level":"1.4.5","depth":2,"path":"config/logos.md","ref":"./config/logos.md","articles":[]},"previous":{"title":"EGPデータキャッシュ","level":"1.4.3","depth":2,"path":"config/epg.md","ref":"./config/epg.md","articles":[]},"dir":"ltr"},"config":{"plugins":["gitbook-plugin-japanese-support"],"root":"./src","styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"pluginsConfig":{"gitbook-plugin-japanese-support":{},"highlight":{},"search":{},"lunr":{"maxIndexSize":1000000,"ignoreSpecialCharacters":false},"fontsettings":{"theme":"white","family":"sans","size":2},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false}},"theme":"default","author":"masnagam","pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56},"embedFonts":false},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"variables":{},"title":"できるmirakc","language":"ja","gitbook":"*"},"file":{"path":"config/filters.md","mtime":"2021-06-19T07:52:43.372Z","type":"markdown"},"gitbook":{"version":"3.6.20","time":"2021-06-19T07:52:50.612Z"},"basePath":"..","book":{"language":""}});
+            gitbook.page.hasChanged({"page":{"title":"局ロゴの表示","level":"1.4.5","depth":2,"next":{"title":"タイムシフト録画","level":"1.4.6","depth":2,"path":"config/timeshift.md","ref":"./config/timeshift.md","articles":[]},"previous":{"title":"フィルター設定","level":"1.4.4","depth":2,"path":"config/filters.md","ref":"./config/filters.md","articles":[]},"dir":"ltr"},"config":{"plugins":["gitbook-plugin-japanese-support"],"root":"./src","styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"pluginsConfig":{"gitbook-plugin-japanese-support":{},"highlight":{},"search":{},"lunr":{"maxIndexSize":1000000,"ignoreSpecialCharacters":false},"fontsettings":{"theme":"white","family":"sans","size":2},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false}},"theme":"default","author":"masnagam","pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56},"embedFonts":false},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"variables":{},"title":"できるmirakc","language":"ja","gitbook":"*"},"file":{"path":"config/logos.md","mtime":"2021-06-19T07:52:43.372Z","type":"markdown"},"gitbook":{"version":"3.6.20","time":"2021-06-19T07:52:50.612Z"},"basePath":"..","book":{"language":""}});
         });
     </script>
 </div>
