@@ -458,6 +458,15 @@
 </span>    <span class="hljs-attr">schedule:</span> <span class="hljs-string">&apos;0 7,37 * * * * *&apos;</span>
 </code></pre>
 <p><code>timeout</code>によりジョブが中断された場合，番組表の一部が未取得・未更新の状態になります．前述のように，ジョブは再実行されるため，時間が経てば全ての番組情報が取得されます．</p>
+<h2 id="no-space-for-tnuerxxx-drop-the-chunk">No space for tnuer#x.x.x, drop the chunk</h2>
+<p>mirakcはチューナー共有をサポートしており，チューナーから読み込んだデーターをクライアント毎のキューに書き込みます．このキューが溢れた場合，以下のようなワーニングメッセージが出力されます．</p>
+<pre><code>...: No space for tuner#0.6.1, drop the chunk
+</code></pre><p>本事象に関する問題がいくつか報告されています．</p>
+<ul>
+<li><a href="https://github.com/mirakc/mirakc/issues/18" target="_blank">EPGStation ライブ視聴時の再生が約5秒で止まる</a></li>
+<li><a href="https://github.com/mirakc/mirakc/issues/236" target="_blank">No space in chunk queues for a few minutes</a></li>
+</ul>
+<p>解析の結果，環境依存問題であることがわかっています．まずはログレベルを上げてログメッセージから何が起きているのか確認してください．その後の対処は，発生している事象に依存するため，ここで明確に対処法を記述することはできません．上記報告済み不具合のやり取りを確認の上，自分で問題を解決してください．もちろん，mirakcの不具合と思われる事象については，問題を登録していただけると助かります．</p>
 <h2 id="github-issuesの検索">GitHub Issuesの検索</h2>
 <p>同様の問題が他の人の環境でも発生している場合，<a href="https://github.com/mirakc/mirakc/issues" target="_blank">GitHub Issues</a>に既に報告済みかもしれません．思いつくキーワードを指定して，報告済みの問題を検索することで，解決方法が見つかるかもしれません．</p>
 <p>問題が既に解決済みである場合もあります．<code>is:closed</code>での検索してみてください．</p>
@@ -505,7 +514,7 @@
     <script>
         var gitbook = gitbook || [];
         gitbook.push(function() {
-            gitbook.page.hasChanged({"page":{"title":"トラブルシューティング","level":"1.7","depth":1,"next":{"title":"tsdサーバーの詳しい話","level":"2.1","depth":1,"path":"tsd_server.md","ref":"./tsd_server.md","articles":[]},"previous":{"title":"カスタムイメージの作成","level":"1.6","depth":1,"path":"custom_image.md","ref":"./custom_image.md","articles":[]},"dir":"ltr"},"config":{"plugins":["gitbook-plugin-japanese-support"],"root":"./src","styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"pluginsConfig":{"gitbook-plugin-japanese-support":{},"highlight":{},"search":{},"lunr":{"maxIndexSize":1000000,"ignoreSpecialCharacters":false},"fontsettings":{"theme":"white","family":"sans","size":2},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false}},"theme":"default","author":"masnagam","pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56},"embedFonts":false},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"variables":{},"title":"できるmirakc","language":"ja","gitbook":"*"},"file":{"path":"troubleshooting.md","mtime":"2021-07-27T13:10:15.483Z","type":"markdown"},"gitbook":{"version":"3.6.20","time":"2021-07-27T13:10:19.956Z"},"basePath":".","book":{"language":""}});
+            gitbook.page.hasChanged({"page":{"title":"トラブルシューティング","level":"1.7","depth":1,"next":{"title":"tsdサーバーの詳しい話","level":"2.1","depth":1,"path":"tsd_server.md","ref":"./tsd_server.md","articles":[]},"previous":{"title":"カスタムイメージの作成","level":"1.6","depth":1,"path":"custom_image.md","ref":"./custom_image.md","articles":[]},"dir":"ltr"},"config":{"plugins":["gitbook-plugin-japanese-support"],"root":"./src","styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"pluginsConfig":{"gitbook-plugin-japanese-support":{},"highlight":{},"search":{},"lunr":{"maxIndexSize":1000000,"ignoreSpecialCharacters":false},"fontsettings":{"theme":"white","family":"sans","size":2},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false}},"theme":"default","author":"masnagam","pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56},"embedFonts":false},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"variables":{},"title":"できるmirakc","language":"ja","gitbook":"*"},"file":{"path":"troubleshooting.md","mtime":"2021-09-04T01:58:40.562Z","type":"markdown"},"gitbook":{"version":"3.6.20","time":"2021-09-04T01:58:46.368Z"},"basePath":".","book":{"language":""}});
         });
     </script>
 </div>
