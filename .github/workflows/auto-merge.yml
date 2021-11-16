@@ -20,7 +20,7 @@ jobs:
           # Use PAT in order to invoke other workflows.
           github-token: ${{ secrets.BOT_GITHUB_TOKEN }}
           script: |
-            const pr = await github.pulls.get({
+            const pr = await github.rest.pulls.get({
               owner: context.repo.owner,
               repo: context.repo.repo,
               pull_number: context.payload.workflow_run.pull_requests[0].number,
@@ -33,7 +33,7 @@ jobs:
               console.log(`Condition unmet: title: "${pr.data.title}"`);
               return;
             }
-            await github.pulls.merge({
+            await github.rest.pulls.merge({
               owner: context.repo.owner,
               repo: context.repo.repo,
               pull_number: context.payload.workflow_run.pull_requests[0].number,
