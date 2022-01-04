@@ -27,10 +27,13 @@ resource:
 ```shell
 # mirakcは起動済みとする
 mkdir -p logos
+# `.data`はdata URL文字列
+# Base64文字列の前に`data:image/png;base64,`が付与されている
+# Base64文字列内に`,`は存在しないので，これを区切り文字とできる
 curl -sG http://localhost:40772/api/channels/GR/27/stream | \
   sudo docker run --rm -i --entrypoint=/usr/bin/env mirakc/mirakc:alpine \
     mirakc-arib collect-logos | head -1 | jq -Mr '.data' | \
-    base64 -d >logos/nhk.png
+    cut -d ',' -f 2 | base64 -d >logos/nhk.png
 ```
 
 局ロゴは頻繁には流れてこないので，抽出には数分（NHKの場合は１０分以下）かかりま
