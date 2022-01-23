@@ -393,7 +393,7 @@
 </blockquote>
 <p>EPGデータの取得が完了すると，特定サービスのTSストリーミングが可能となります．</p>
 <pre><code class="lang-console"><span class="hljs-meta">#</span><span class="bash"> mirakcコンテナーをバックグラウンドで起動</span>
-<span class="hljs-meta">$</span><span class="bash"> sudo docker-compose up -d</span>
+<span class="hljs-meta">$</span><span class="bash"> sudo docker compose up -d</span>
 Starting mirakc ... done
 <span class="hljs-meta">
 #</span><span class="bash"> 最初のサービス（ＮＨＫ総合１）のIDを表示</span>
@@ -417,7 +417,7 @@ Starting mirakc ... done
 </span></code></pre>
 <p>設定反映のためmirakcコンテナーを再起動し，動作確認します．</p>
 <pre><code class="lang-console"><span class="hljs-meta">#</span><span class="bash"> mirakcコンテナーを再起動</span>
-<span class="hljs-meta">$</span><span class="bash"> sudo docker-compose restart</span>
+<span class="hljs-meta">$</span><span class="bash"> sudo docker compose restart</span>
 <span class="hljs-meta">
 #</span><span class="bash"> post-filter付きTSストリーミングを実行</span>
 <span class="hljs-meta">$</span><span class="bash"> curl -s http://localhost:40772/api/services/3273601024/stream?decode=1</span>
@@ -521,7 +521,7 @@ BS not supported
     <script>
         var gitbook = gitbook || [];
         gitbook.push(function() {
-            gitbook.page.hasChanged({"page":{"title":"フィルター設定","level":"1.4.4","depth":2,"next":{"title":"局ロゴの表示","level":"1.4.5","depth":2,"path":"config/logos.md","ref":"./config/logos.md","articles":[]},"previous":{"title":"EGPデータキャッシュ","level":"1.4.3","depth":2,"path":"config/epg.md","ref":"./config/epg.md","articles":[]},"dir":"ltr"},"config":{"plugins":["gitbook-plugin-japanese-support"],"root":"./src","styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"pluginsConfig":{"gitbook-plugin-japanese-support":{},"highlight":{},"search":{},"lunr":{"maxIndexSize":1000000,"ignoreSpecialCharacters":false},"fontsettings":{"theme":"white","family":"sans","size":2},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false}},"theme":"default","author":"masnagam","pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56},"embedFonts":false},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"variables":{},"title":"できるmirakc","language":"ja","gitbook":"*"},"file":{"path":"config/filters.md","mtime":"2022-01-17T17:04:45.439Z","type":"markdown"},"gitbook":{"version":"3.7.1","time":"2022-01-17T17:04:53.353Z"},"basePath":"..","book":{"language":""}});
+            gitbook.page.hasChanged({"page":{"title":"フィルター設定","level":"1.4.4","depth":2,"next":{"title":"局ロゴの表示","level":"1.4.5","depth":2,"path":"config/logos.md","ref":"./config/logos.md","articles":[]},"previous":{"title":"EGPデータキャッシュ","level":"1.4.3","depth":2,"path":"config/epg.md","ref":"./config/epg.md","articles":[]},"dir":"ltr"},"config":{"plugins":["gitbook-plugin-japanese-support"],"root":"./src","styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"pluginsConfig":{"gitbook-plugin-japanese-support":{},"highlight":{},"search":{},"lunr":{"maxIndexSize":1000000,"ignoreSpecialCharacters":false},"fontsettings":{"theme":"white","family":"sans","size":2},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false}},"theme":"default","author":"masnagam","pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56},"embedFonts":false},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"variables":{},"title":"できるmirakc","language":"ja","gitbook":"*"},"file":{"path":"config/filters.md","mtime":"2022-01-23T04:03:20.913Z","type":"markdown"},"gitbook":{"version":"3.7.1","time":"2022-01-23T04:03:26.385Z"},"basePath":"..","book":{"language":""}});
         });
     </script>
 </div>
