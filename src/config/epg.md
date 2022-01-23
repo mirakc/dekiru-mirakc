@@ -66,7 +66,7 @@ volumes:
 
 ```console
 # mirakcコンテナーの起動（５分程度待ってからCtrl+Cで停止）
-$ sudo docker-compose up
+$ sudo docker compose up
 ...
 ... ERROR ... Failed to load services: ...
 ... ERROR ... Failed to load clocks: ...
@@ -81,7 +81,7 @@ $ sudo docker-compose up
 
 ```console
 # mirakcコンテナーのシャットダウン
-$ sudo docker-compose down
+$ sudo docker compose down
 Removing mirakc ... done
 Removing network pi_default
 
@@ -96,7 +96,7 @@ local               mirakc_epg
 
 ```console
 # mirakcコンテナーの起動（Ctrl+Cで停止）
-$ sudo docker-compose up
+$ sudo docker compose up
 ```
 
 今度はEPGデータ読み込みエラーが表示されなくなっているはずです．キャッシュは正し
@@ -109,7 +109,7 @@ EPGデータが正しく取得できているのか確認してみましょう�
 $ sudo apt-get install -y jq
 
 # mirakcコンテナーをバックグラウンドで起動
-$ sudo docker-compose up -d
+$ sudo docker compose up -d
 
 $ curl -s http://localhost:40772/api/services | jq .[0]
 {
@@ -132,14 +132,14 @@ $ sudo docker logs --tail=1 mirakc
 ... 172.19.0.1:59498 "GET /api/services HTTP/1.1" 200 564 ...
 
 # mirakcコンテナーをシャットダウン
-$ sudo docker-compose down
+$ sudo docker compose down
 ```
 
 なお，以下のコマンドを実行すると，シャットダウン時にデータボリュームを削除しま
 す．
 
 ```console
-$ sudo docker-compose down -v
+$ sudo docker compose down -v
 ...
 Removing volume mirakc_epg
 

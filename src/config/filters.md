@@ -7,7 +7,7 @@ EPGデータの取得が完了すると，特定サービスのTSストリーミ
 
 ```console
 # mirakcコンテナーをバックグラウンドで起動
-$ sudo docker-compose up -d
+$ sudo docker compose up -d
 Starting mirakc ... done
 
 # 最初のサービス（ＮＨＫ総合１）のIDを表示
@@ -43,7 +43,7 @@ filters:
 
 ```console
 # mirakcコンテナーを再起動
-$ sudo docker-compose restart
+$ sudo docker compose restart
 
 # post-filter付きTSストリーミングを実行
 $ curl -s http://localhost:40772/api/services/3273601024/stream?decode=1

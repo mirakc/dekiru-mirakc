@@ -52,7 +52,7 @@ timeshift:
 準備は整いました．mirakcを起動してください．
 
 ```console
-$ sudo docker-compose up -d
+$ sudo docker compose up -d
 ```
 
 タイムシフト録画が動いていれば，以下のように表示されます．
@@ -223,7 +223,7 @@ services:
 
 ```
 mkdir timeshift-fs
-sudo docker-compose up -d mirakc-timeshift-fs
+sudo docker compose up -d mirakc-timeshift-fs
 ```
 
 起動に成功すれば，`timeshift-fs`にタイムシフト・ファイルシステムがマウントされます．
@@ -275,7 +275,7 @@ services:
 `samba`コンテナーを起動します．
 
 ```shell
-sudo docker-compose up -d samba
+sudo docker compose up -d samba
 ```
 
 エクスプローラーやFinderでSambaに接続し，MPEG2-TSを再生可能なメディアプレーヤーでファイルを開けば，

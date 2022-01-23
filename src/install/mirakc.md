@@ -34,7 +34,7 @@ server:
 
 ```console
 # mirakcコンテナーをバックグラウンドで起動
-$ sudo docker-compose up -d
+$ sudo docker compose up -d
 Starting mirakc ... done
 
 # バージョン文字列の取得
@@ -42,7 +42,7 @@ $ curl -s http://localhost:40772/api/version
 "0.15.0"
 
 # mirakcコンテナーのシャットダウン
-$ sudo docker-compose down
+$ sudo docker compose down
 Stopping mirakc ... done
 Removing mirakc ... done
 Removing network pi_default
