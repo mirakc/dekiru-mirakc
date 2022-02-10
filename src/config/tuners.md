@@ -91,18 +91,18 @@ tuners:
   - name: upstream
     types: [GR, BS]
     command: >-
-      curl -s http://upstream:40772/api/channels/{{{channel_type}}}/{{{channel}}}/stream
+      curl -s http://upstream:40772/api/channels/{{{channel_type}}}/{{{channel}}}/stream?decode=0
 ```
 
 上記の`http://upstream:40772`の部分は接続先のMirakurunまたはmirakcサーバーのURL
 に置き換えてください．
 
-Mirakurunとは異なり，mirakcの`/api/channels/{{{channel_type}}}/{{{channel}}}/stream`
+Mirakurunとは異なり，mirakcの`/api/channels/{{{channel_type}}}/{{{channel}}}/stream?decode=0`
 APIは，チューナーからの出力をそのまま送出します．NULLパケットすらドロップしま
 せん．そのため，TSパケットを処理するツールのテストなどにも使えて便利です．
 
 ```shell
-curl -s http://mirakc:40772/api/channels/GR/27/stream | \
+curl -s http://mirakc:40772/api/channels/GR/27/stream?decode=0 | \
   MIRAKC_ARIB_LOG=debug mirakc-arib scan-services
 ```
 

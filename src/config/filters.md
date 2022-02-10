@@ -15,11 +15,15 @@ $ curl -s http://localhost:40772/api/services | jq .[0].id
 3273601024
 
 # ＮＨＫ総合１のTSストリーミングを実行（Ctrl+Cで停止）
-$ curl http://localhost:40772/api/services/3273601024/stream >/dev/null
+$ curl http://localhost:40772/api/services/3273601024/stream?decode=0 >/dev/null
   % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
                                  Dload  Upload   Total   Spent    Left  Speed
 100 16.8M    0 16.8M    0     0  1578k      0 --:--:--  0:00:10 --:--:-- 1725k
 ```
+
+> `1.0.29`以前では，`decode`クエリーパラメーター未指定時の動作がMirakurunと異っていました．
+> mirakcは`decode=1`を指定したときのみデコードしていましたが，
+> Mirakurunは`decode=0`を指定したときのみデコードしないようになっています．
 
 しかし，今の設定のままでは，TSストリームを`ffmpeg`で変換したりすることはできませ
 ん．なぜならば，フィルターが設定されていないためです．
@@ -45,7 +49,7 @@ filters:
 # mirakcコンテナーを再起動
 $ sudo docker compose restart
 
-# post-filter付きTSストリーミングを実行
+# decode-filter付きTSストリーミングを実行
 $ curl -s http://localhost:40772/api/services/3273601024/stream?decode=1
 GR/27 SID#1024
 ```

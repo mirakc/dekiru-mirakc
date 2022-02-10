@@ -74,7 +74,7 @@ sudo docker logs --tail=1000 mirakc 2>&1 | grep -e WARN -e ERROR
 
 ```shell
 sudo docker exec -it mirakc sh -c \
-  'curl -s http://localhost:40772/api/channels/GR/27/stream | \
+  'curl -s http://localhost:40772/api/channels/GR/27/stream?decode=0 | \
      MIRAKC_ARIB_LOG=debug mirakc-arib filter-service --sid=1024 >/dev/null'
 ```
 
