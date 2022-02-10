@@ -159,6 +159,28 @@ mirakcはチューナー共有をサポートしており，チューナーか�
 を記述することはできません．上記報告済み不具合のやり取りを確認の上，自分で問題を解決してください．
 もちろん，mirakcの不具合と思われる事象については，問題を登録していただけると助かります．
 
+## mirakc/mirakcイメージでTSストリームがデコードできない
+
+mirakc/mirakcイメージにはTSストリームをデコードするためのコマンドが含まれていま
+せん．そのため，このイメージに対して`arib-b25-stream-test`を設定すると，以下のようなエラーが表示さ
+れて，TSストリームを取得できなくなります．
+
+```console
+$ curl -sG http://localhost:40772/api/channels/GR/27/stream
+{"code":500,"reason":null,"errors":[]}
+
+$ docker logs mirakc | grep arib-b25-stream-test
+... DEBUG ... CommandFailed(UnableToSpawn("arib-b25-stream-test", ...
+```
+
+デコードするためには，以下のいずれかの対応が必要です．
+
+* `filters.decode-filter.command`に指定したコマンドを含むカスタムイメージを作成する
+* `filters.decode-filter.command`に指定したコマンドを`docker run`の`-v`オプションでホスト上のコマン
+  ドをコンテナーにマウントする
+  * ただし，コンテナー内で実行可能なコマンドに限る
+* `socat`を使って外部サーバー上でデコードする
+
 ## GitHub Issuesの検索
 
 同様の問題が他の人の環境でも発生している場合，[GitHub Issues]に既に報告済みかも
