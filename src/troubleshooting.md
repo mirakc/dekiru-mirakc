@@ -33,7 +33,7 @@ sudo docker logs --tail=1000 mirakc 2>&1 | grep -e WARN -e ERROR
 ...
     environment:
       # mirakcのログレベルをdebugに
-      RUST_LOG: 'info,mirakc=debug'
+      RUST_LOG: info,mirakc=debug
 ```
 
 フィルター等の外部プログラムが`stderr`に出力するログを確認したい場合は，環境変数
@@ -44,14 +44,14 @@ sudo docker logs --tail=1000 mirakc 2>&1 | grep -e WARN -e ERROR
 # docker-compose.ymlからの抜粋
 ...
     environment:
-      MIRAKC_DEBUG_CHILD_PROCESS: ''
-      RUST_LOG: 'info,mirakc=debug'
-      MIRAKC_ARIB_NO_TIMESTAMP: ''
-      MIRAKC_ARIB_LOG: 'info'
+      MIRAKC_ARIB_LOG: info
+      MIRAKC_ARIB_NO_TIMESTAMP: 1
+      MIRAKC_DEBUG_CHILD_PROCESS: 1
+      RUST_LOG: info,mirakc=debug
 ```
 
-環境変数`MIRAKC_ARIB_LOG_NO_TIMESTAMP`を定義すると，`mirakc-arib`のログメッセー
-ジからタイムスタンプを削除できます．
+環境変数`MIRAKC_ARIB_LOG_NO_TIMESTAMP=1`を定義すると，`mirakc-arib`のログメッセ
+ージからタイムスタンプを削除できます．
 
 デフォルト設定では，`mirakc-arib`は何もログを出力しません．必ず，環境変数
 `MIRAKC_ARIB_LOG`でログレベルを指定してください．`RUST_LOG`のように，コマンド毎
@@ -62,7 +62,7 @@ sudo docker logs --tail=1000 mirakc 2>&1 | grep -e WARN -e ERROR
 ...
     environment:
       # filter-serviceとfilter-programはdebug，それ以外はinfo
-      MIRAKC_ARIB_LOG: 'info,filter-service=debug,filter-program=debug'
+      MIRAKC_ARIB_LOG: info,filter-service=debug,filter-program=debug
 ```
 
 ## フィルターの動作確認
@@ -169,6 +169,7 @@ mirakc/mirakcイメージにはTSストリームをデコードするための�
 $ curl -sG http://localhost:40772/api/channels/GR/27/stream
 {"code":500,"reason":null,"errors":[]}
 
+# actix-webのログレベルをdebug以上に設定しておく必要があります
 $ docker logs mirakc | grep arib-b25-stream-test
 ... DEBUG ... CommandFailed(UnableToSpawn("arib-b25-stream-test", ...
 ```
