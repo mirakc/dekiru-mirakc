@@ -384,7 +384,10 @@
     
                                 <section class="normal markdown-section">
                                 
-                                <h1 id="tsdサーバーの詳しい話">tsdサーバーの詳しい話</h1>
+                                <h1 id="tsdサーバーの詳しい話"><code>tsd</code>サーバーの詳しい話</h1>
+<blockquote>
+<p>実運用ので<code>tsd</code>サーバーの使用はお勧めしません．理由は以下を参照してください．</p>
+</blockquote>
 <p>私が動作検証用に利用しているTSストリームを処理するためのサーバーです．サーバー化することで，TSストリーム処理機能を開発環境（macOS）と動作検証環境（SBC）に個別に準備する手間が省けます．また，TSストリームに対する処理は，SBCにとって軽い処理ではないため，複数のTSストリームを同時に処理する場合，１台のSBCで全てを処理することが困難であるという事情もあります．</p>
 <p><code>tsd</code>サーバーでは，以下の２つのDockerコンテナーが動いています．</p>
 <ul>
@@ -394,7 +397,20 @@
 <p><code>b25</code>コンテナーは，TCP経由で入力されるTSストリームを，<code>bcas</code>コンテナーを利用して処理し，処理結果をTCP接続元に返します．</p>
 <p><code>bcas</code>コンテナーは，TCP経由でのスマートカードリーダーへのアクセスを提供します．このコンテナーを使うことで，複数のサーバーから１つのスマートカードリーダーを使用可能となります．</p>
 <p>どちらのコンテナーもTCP接続のために<code>socat</code>を使っています．以下を見ると分かりますが，<code>socat</code>を使うとUNIXソケットの共有が簡単にできます．</p>
-<p><code>b25</code>コンテナーのDockerfile:</p>
+<p><code>tsd</code>サーバーとして機能を分離することで，</p>
+<ul>
+<li><code>mirakc</code>コンテナーの構築が簡単になる</li>
+<li>分離した各コンテナーの機能を他のサーバー/コンテナーから再利用できる</li>
+</ul>
+<p>いう利点が得られる一方，分離したことによる以下のような欠点も存在します．</p>
+<ul>
+<li>ネットワークトラフィックの増大</li>
+<li>CPU使用量が増加する可能性</li>
+</ul>
+<p>特に，<code>b25</code>コンテナーによるデコード処理の分離は影響が大きいです．<code>socat</code>によるES
+パケットの転送処理により，デコード処理を分離した恩恵（CPU使用量の低下）を打ち消してしまう可能性があります．</p>
+<h2 id="b25コンテナー"><code>b25</code>コンテナー</h2>
+<p><code>Dockerfile</code>:</p>
 <pre><code class="lang-Dockerfile"><span class="hljs-keyword">FROM</span> alpine:latest
 
 <span class="hljs-keyword">RUN</span><span class="bash"> <span class="hljs-built_in">set</span> -eux \
@@ -448,7 +464,8 @@ socat unix-listen:/var/run/pcscd/pcscd.comm,fork \
 echo &quot;Start a descrambling server on tcp 40773&quot;
 socat tcp-listen:40773,fork,reuseaddr system:b25
 </code></pre>
-<p><code>bcas</code>コンテナーのDockerfile:</p>
+<h2 id="bcasコンテナー"><code>bcas</code>コンテナー</h2>
+<p><code>Dockerfile</code>:</p>
 <pre><code class="lang-Dockerfile"><span class="hljs-keyword">FROM</span> alpine:latest
 
 <span class="hljs-keyword">RUN</span><span class="bash"> <span class="hljs-built_in">set</span> -eux \
@@ -483,6 +500,7 @@ echo &quot;Start a pcscd proxy on tcp 40774&quot;
 socat tcp-listen:40774,fork,reuseaddr \
       unix-connect:/var/run/pcscd/pcscd.comm
 </code></pre>
+<h2 id="docker-composeyml">docker-compose.yml</h2>
 <p>あとはこれらを起動するだけ．</p>
 <pre><code class="lang-yaml"><span class="hljs-attr">version:</span> <span class="hljs-string">&apos;3&apos;</span>
 
@@ -546,7 +564,7 @@ socat tcp-listen:40774,fork,reuseaddr \
     <script>
         var gitbook = gitbook || [];
         gitbook.push(function() {
-            gitbook.page.hasChanged({"page":{"title":"tsdサーバーの詳しい話","level":"2.1","depth":1,"previous":{"title":"トラブルシューティング","level":"1.7","depth":1,"path":"troubleshooting.md","ref":"./troubleshooting.md","articles":[]},"dir":"ltr"},"config":{"plugins":["gitbook-plugin-japanese-support"],"root":"./src","styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"pluginsConfig":{"gitbook-plugin-japanese-support":{},"highlight":{},"search":{},"lunr":{"maxIndexSize":1000000,"ignoreSpecialCharacters":false},"fontsettings":{"theme":"white","family":"sans","size":2},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false}},"theme":"default","author":"masnagam","pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56},"embedFonts":false},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"variables":{},"title":"できるmirakc","language":"ja","gitbook":"*"},"file":{"path":"tsd_server.md","mtime":"2022-06-21T17:17:21.799Z","type":"markdown"},"gitbook":{"version":"3.7.4","time":"2022-06-21T17:17:30.691Z"},"basePath":".","book":{"language":""}});
+            gitbook.page.hasChanged({"page":{"title":"tsdサーバーの詳しい話","level":"2.1","depth":1,"previous":{"title":"トラブルシューティング","level":"1.7","depth":1,"path":"troubleshooting.md","ref":"./troubleshooting.md","articles":[]},"dir":"ltr"},"config":{"plugins":["gitbook-plugin-japanese-support"],"root":"./src","styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"pluginsConfig":{"gitbook-plugin-japanese-support":{},"highlight":{},"search":{},"lunr":{"maxIndexSize":1000000,"ignoreSpecialCharacters":false},"fontsettings":{"theme":"white","family":"sans","size":2},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false}},"theme":"default","author":"masnagam","pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56},"embedFonts":false},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"variables":{},"title":"できるmirakc","language":"ja","gitbook":"*"},"file":{"path":"tsd_server.md","mtime":"2022-06-25T03:30:25.147Z","type":"markdown"},"gitbook":{"version":"3.7.4","time":"2022-06-25T03:30:32.918Z"},"basePath":".","book":{"language":""}});
         });
     </script>
 </div>
