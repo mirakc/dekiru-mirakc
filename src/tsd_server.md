@@ -1,4 +1,6 @@
-# tsdサーバーの詳しい話
+# `tsd`サーバーの詳しい話
+
+> 実運用ので`tsd`サーバーの使用はお勧めしません．理由は以下を参照してください．
 
 私が動作検証用に利用しているTSストリームを処理するためのサーバーです．サーバー化
 することで，TSストリーム処理機能を開発環境（macOS）と動作検証環境（SBC）に個別に
@@ -21,7 +23,23 @@
 どちらのコンテナーもTCP接続のために`socat`を使っています．以下を見ると分かります
 が，`socat`を使うとUNIXソケットの共有が簡単にできます．
 
-`b25`コンテナーのDockerfile:
+`tsd`サーバーとして機能を分離することで，
+
+* `mirakc`コンテナーの構築が簡単になる
+* 分離した各コンテナーの機能を他のサーバー/コンテナーから再利用できる
+
+いう利点が得られる一方，分離したことによる以下のような欠点も存在します．
+
+* ネットワークトラフィックの増大
+* CPU使用量が増加する可能性
+
+特に，`b25`コンテナーによるデコード処理の分離は影響が大きいです．`socat`によるES
+パケットの転送処理により，デコード処理を分離した恩恵（CPU使用量の低下）を打ち消
+してしまう可能性があります．
+
+## `b25`コンテナー
+
+`Dockerfile`:
 
 ```Dockerfile
 FROM alpine:latest
@@ -81,7 +99,9 @@ echo "Start a descrambling server on tcp 40773"
 socat tcp-listen:40773,fork,reuseaddr system:b25
 ```
 
-`bcas`コンテナーのDockerfile:
+## `bcas`コンテナー
+
+`Dockerfile`:
 
 ```Dockerfile
 FROM alpine:latest
@@ -121,6 +141,8 @@ echo "Start a pcscd proxy on tcp 40774"
 socat tcp-listen:40774,fork,reuseaddr \
       unix-connect:/var/run/pcscd/pcscd.comm
 ```
+
+## docker-compose.yml
 
 あとはこれらを起動するだけ．
 
