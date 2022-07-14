@@ -17,7 +17,7 @@
   "homepage": "https://github.com/mirakc/dekiru-mirakc#readme",
   "devDependencies": {
     "gitbook-plugin-japanese-support": "0.0.1",
-    "honkit": "^3.7.4"
+    "honkit": "^3.7.5"
   },
   "private": true
 }
