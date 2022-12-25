@@ -1,0 +1,647 @@
+
+<!DOCTYPE HTML>
+<html lang="ja" >
+    <head>
+        <meta charset="UTF-8">
+        <title>tsdサーバーの詳しい話 · できるmirakc</title>
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <meta name="description" content="">
+        <meta name="generator" content="HonKit 4.0.4">
+        <meta name="author" content="masnagam">
+        
+        
+    
+    <link rel="stylesheet" href="gitbook/style.css">
+
+    
+            
+                
+                <link rel="stylesheet" href="gitbook/@honkit/honkit-plugin-highlight/website.css">
+                
+            
+                
+                <link rel="stylesheet" href="gitbook/gitbook-plugin-search/search.css">
+                
+            
+                
+                <link rel="stylesheet" href="gitbook/gitbook-plugin-fontsettings/website.css">
+                
+            
+        
+
+    
+
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+
+        
+    
+    
+    <meta name="HandheldFriendly" content="true"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <link rel="apple-touch-icon-precomposed" sizes="152x152" href="gitbook/images/apple-touch-icon-precomposed-152.png">
+    <link rel="shortcut icon" href="gitbook/images/favicon.ico" type="image/x-icon">
+
+    
+    
+    <link rel="prev" href="troubleshooting.html" />
+    
+
+    </head>
+    <body>
+        
+<div class="book honkit-cloak">
+    <div class="book-summary">
+        
+            
+<div id="book-search-input" role="search">
+    <input type="text" placeholder="検索ワードを入力" />
+</div>
+
+            
+                <nav role="navigation">
+                
+
+
+<ul class="summary">
+    
+    
+
+    
+
+    
+        
+        
+    
+        <li class="chapter " data-level="1.1" data-path="./">
+            
+                <a href="./">
+            
+                    
+                    できるmirakc (1.*)
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.2" data-path="what.html">
+            
+                <a href="what.html">
+            
+                    
+                    mirakcって何ですか？
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.3" data-path="install/">
+            
+                <a href="install/">
+            
+                    
+                    Dockerを使ったインストール
+            
+                </a>
+            
+
+            
+            <ul class="articles">
+                
+    
+        <li class="chapter " data-level="1.3.1" data-path="install/setup_rpi.html">
+            
+                <a href="install/setup_rpi.html">
+            
+                    
+                    Raspberry Piのセットアップ
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.3.2" data-path="install/docker.html">
+            
+                <a href="install/docker.html">
+            
+                    
+                    Dockerのインストール
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.3.3" data-path="install/mirakc.html">
+            
+                <a href="install/mirakc.html">
+            
+                    
+                    mirakcのインストール
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.3.4" data-path="install/image.html">
+            
+                <a href="install/image.html">
+            
+                    
+                    Dockerイメージ
+            
+                </a>
+            
+
+            
+        </li>
+    
+
+            </ul>
+            
+        </li>
+    
+        <li class="chapter " data-level="1.4" data-path="config/">
+            
+                <a href="config/">
+            
+                    
+                    mirakcの設定
+            
+                </a>
+            
+
+            
+            <ul class="articles">
+                
+    
+        <li class="chapter " data-level="1.4.1" data-path="config/channels.html">
+            
+                <a href="config/channels.html">
+            
+                    
+                    チャンネル設定
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.4.2" data-path="config/tuners.html">
+            
+                <a href="config/tuners.html">
+            
+                    
+                    チューナー設定
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.4.3" data-path="config/epg.html">
+            
+                <a href="config/epg.html">
+            
+                    
+                    EGPデータキャッシュ
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.4.4" data-path="config/filters.html">
+            
+                <a href="config/filters.html">
+            
+                    
+                    フィルター設定
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.4.5" data-path="config/logos.html">
+            
+                <a href="config/logos.html">
+            
+                    
+                    局ロゴの表示
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.4.6" data-path="config/timeshift.html">
+            
+                <a href="config/timeshift.html">
+            
+                    
+                    タイムシフト録画
+            
+                </a>
+            
+
+            
+        </li>
+    
+
+            </ul>
+            
+        </li>
+    
+        <li class="chapter " data-level="1.5" data-path="frontend_applications.html">
+            
+                <a href="frontend_applications.html">
+            
+                    
+                    フロントエンドアプリケーションとの連携
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.6" data-path="custom_image.html">
+            
+                <a href="custom_image.html">
+            
+                    
+                    カスタムイメージの作成
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.7" data-path="troubleshooting.html">
+            
+                <a href="troubleshooting.html">
+            
+                    
+                    トラブルシューティング
+            
+                </a>
+            
+
+            
+        </li>
+    
+
+    
+        
+        <li class="divider"></li>
+        
+        
+    
+        <li class="chapter active" data-level="2.1" data-path="tsd_server.html">
+            
+                <a href="tsd_server.html">
+            
+                    
+                    tsdサーバーの詳しい話
+            
+                </a>
+            
+
+            
+        </li>
+    
+
+    
+
+    <li class="divider"></li>
+
+    <li>
+        <a href="https://github.com/honkit/honkit" target="blank" class="gitbook-link">
+            HonKitで公開 
+        </a>
+    </li>
+</ul>
+
+
+                </nav>
+            
+        
+    </div>
+
+    <div class="book-body">
+        
+            <div class="body-inner">
+                
+                    
+
+<div class="book-header" role="navigation">
+    
+
+    <!-- Title -->
+    <h1>
+        <i class="fa fa-circle-o-notch fa-spin"></i>
+        <a href="." >tsdサーバーの詳しい話</a>
+    </h1>
+</div>
+
+
+
+
+                    <div class="page-wrapper" tabindex="-1" role="main">
+                        <div class="page-inner">
+                            
+<div id="book-search-results">
+    <div class="search-noresults">
+    
+                                <section class="normal markdown-section">
+                                
+                                <h1 id="tsdサーバーの詳しい話"><code>tsd</code>サーバーの詳しい話</h1>
+<blockquote>
+<p>実運用ので<code>tsd</code>サーバーの使用はお勧めしません．理由は以下を参照してください．</p>
+</blockquote>
+<p>私が動作検証用に利用しているTSストリームを処理するためのサーバーです．サーバー化することで，TSストリーム処理機能を開発環境（macOS）と動作検証環境（SBC）に個別に準備する手間が省けます．また，TSストリームに対する処理は，SBCにとって軽い処理ではないため，複数のTSストリームを同時に処理する場合，１台のSBCで全てを処理することが困難であるという事情もあります．</p>
+<p><code>tsd</code>サーバーでは，以下の２つのDockerコンテナーが動いています．</p>
+<ul>
+<li><code>b25</code>コンテナー</li>
+<li><code>bcas</code>コンテナー</li>
+</ul>
+<p><code>b25</code>コンテナーは，TCP経由で入力されるTSストリームを，<code>bcas</code>コンテナーを利用して処理し，処理結果をTCP接続元に返します．</p>
+<p><code>bcas</code>コンテナーは，TCP経由でのスマートカードリーダーへのアクセスを提供します．このコンテナーを使うことで，複数のサーバーから１つのスマートカードリーダーを使用可能となります．</p>
+<p>どちらのコンテナーもTCP接続のために<code>socat</code>を使っています．以下を見ると分かりますが，<code>socat</code>を使うとUNIXソケットの共有が簡単にできます．</p>
+<p><code>tsd</code>サーバーとして機能を分離することで，</p>
+<ul>
+<li><code>mirakc</code>コンテナーの構築が簡単になる</li>
+<li>分離した各コンテナーの機能を他のサーバー/コンテナーから再利用できる</li>
+</ul>
+<p>いう利点が得られる一方，分離したことによる以下のような欠点も存在します．</p>
+<ul>
+<li>ネットワークトラフィックの増大</li>
+<li>CPU使用量が増加する可能性</li>
+</ul>
+<p>特に，<code>b25</code>コンテナーによるデコード処理の分離は影響が大きいです．<code>socat</code>によるES
+パケットの転送処理により，デコード処理を分離した恩恵（CPU使用量の低下）を打ち消してしまう可能性があります．</p>
+<h2 id="b25コンテナー"><code>b25</code>コンテナー</h2>
+<p><code>Dockerfile</code>:</p>
+<pre><code class="lang-Dockerfile"><span class="hljs-keyword">FROM</span> alpine:latest
+
+<span class="hljs-keyword">RUN</span><span class="bash"> <span class="hljs-built_in">set</span> -eux \
+ &amp;&amp; apk add --no-cache \
+      ccid \
+      musl \
+      pcsc-lite-libs \
+      socat \
+      tzdata \
+ &amp;&amp; apk add --no-cache --virtual .build-deps \
+      gcc \
+      g++\
+      make \
+      musl-dev \
+      nodejs \
+      npm \
+      pcsc-lite-dev \
+      pkgconf \
+ <span class="hljs-comment"># Use arib-b25-stream-test instead of stz2012/libarib25.</span></span>
+ <span class="hljs-comment"># Because stz2012/libarib25 doesn&apos;t support STDIN/STDOUT.</span>
+ <span class="hljs-comment"># stz2012/libarib25 supports NEON, but it doesn&apos;t improve the performance</span>
+ <span class="hljs-comment"># significantly.</span>
+ &amp;&amp; (cd /tmp; npm i arib-b25-stream-test) \
+ &amp;&amp; cp /tmp/node_modules/.bin/arib-b25-stream-test /usr/local/bin/b25 \
+ <span class="hljs-comment"># cleanup</span>
+ &amp;&amp; apk del --purge .build-deps \
+ &amp;&amp; rm -rf /tmp/*
+
+<span class="hljs-keyword">COPY</span><span class="bash"> b25-server /usr/<span class="hljs-built_in">local</span>/bin/</span>
+
+<span class="hljs-keyword">EXPOSE</span> <span class="hljs-number">40773</span>
+<span class="hljs-keyword">ENTRYPOINT</span><span class="bash"> [<span class="hljs-string">&quot;b25-server&quot;</span>]</span>
+</code></pre>
+<p><code>b25-server</code>:</p>
+<pre><code class="lang-shell"><span class="hljs-meta">#</span><span class="bash">!/bin/sh -eu</span>
+
+B25_BCAS_SERVER=${B25_BCAS_SERVER:-}
+
+if [ -z &quot;$B25_BCAS_SERVER&quot; ]; then
+    echo &quot;B25_BCAS_SERVER must be defined&quot; &gt;&amp;2
+    exit 1
+fi
+
+rm -rf /var/run/pcscd
+mkdir -p /var/run/pcscd
+
+echo &quot;Create a UNIX-domain socket to communicate with a remote BCAS server listening on $B25_BCAS_SERVER&quot;
+socat unix-listen:/var/run/pcscd/pcscd.comm,fork \
+      tcp-connect:$B25_BCAS_SERVER &amp;
+
+echo &quot;Start a descrambling server on tcp 40773&quot;
+socat tcp-listen:40773,fork,reuseaddr system:b25
+</code></pre>
+<h2 id="bcasコンテナー"><code>bcas</code>コンテナー</h2>
+<p><code>Dockerfile</code>:</p>
+<pre><code class="lang-Dockerfile"><span class="hljs-keyword">FROM</span> alpine:latest
+
+<span class="hljs-keyword">RUN</span><span class="bash"> <span class="hljs-built_in">set</span> -eux \
+ &amp;&amp; apk add --no-cache \
+      ccid \
+      musl \
+      pcsc-lite-libs \
+      socat \
+      tzdata</span>
+
+<span class="hljs-keyword">COPY</span><span class="bash"> bcas-server /usr/<span class="hljs-built_in">local</span>/bin/</span>
+
+<span class="hljs-keyword">EXPOSE</span> <span class="hljs-number">40774</span>
+<span class="hljs-keyword">ENTRYPOINT</span><span class="bash"> [<span class="hljs-string">&quot;bcas-server&quot;</span>]</span>
+</code></pre>
+<p><code>bcas-server</code>:</p>
+<pre><code class="lang-shell"><span class="hljs-meta">#</span><span class="bash">!/bin/sh -eu</span>
+
+BCAS_DEBUG=${BCAS_DEBUG:-}
+
+rm -rf /var/run/pcscd
+mkdir -p /var/run/pcscd
+
+echo &quot;Start pcscd&quot;
+if [ -n &quot;$BCAS_DEBUG&quot; ]; then
+    pcscd -f --debug &amp;
+else
+    pcscd -f &amp;
+fi
+
+echo &quot;Start a pcscd proxy on tcp 40774&quot;
+socat tcp-listen:40774,fork,reuseaddr \
+      unix-connect:/var/run/pcscd/pcscd.comm
+</code></pre>
+<h2 id="docker-composeyml">docker-compose.yml</h2>
+<p>あとはこれらを起動するだけ．</p>
+<pre><code class="lang-yaml"><span class="hljs-attr">version:</span> <span class="hljs-string">&apos;3&apos;</span>
+
+<span class="hljs-attr">services:</span>
+  <span class="hljs-attr">b25:</span>
+    <span class="hljs-attr">container_name:</span> <span class="hljs-string">b25</span>
+    <span class="hljs-attr">ports:</span>
+      <span class="hljs-bullet">-</span> <span class="hljs-number">40773</span><span class="hljs-string">:40773</span>
+    <span class="hljs-attr">environment:</span>
+      <span class="hljs-attr">B25_BCAS_SERVER:</span> <span class="hljs-string">bcas:40774</span>
+      <span class="hljs-attr">TZ:</span> <span class="hljs-string">Asia/Tokyo</span>
+    <span class="hljs-attr">depends_on:</span>
+      <span class="hljs-bullet">-</span> <span class="hljs-string">bcas</span>
+
+  <span class="hljs-attr">bcas:</span>
+    <span class="hljs-attr">container_name:</span> <span class="hljs-string">bcas</span>
+    <span class="hljs-attr">devices:</span>
+      <span class="hljs-bullet">-</span> <span class="hljs-string">/dev/bus/usb</span>
+    <span class="hljs-attr">ports:</span>
+      <span class="hljs-bullet">-</span> <span class="hljs-number">40774</span><span class="hljs-string">:40774</span>
+    <span class="hljs-attr">environment:</span>
+      <span class="hljs-comment">#BCAS_DE<span class="hljs-doctag">BUG:</span> 1</span>
+      <span class="hljs-attr">TZ:</span> <span class="hljs-string">Asia/Tokyo</span>
+</code></pre>
+
+                                
+                                </section>
+                            
+    </div>
+    <div class="search-results">
+        <div class="has-results">
+            
+            <h1 class="search-results-title"><span class='search-results-count'></span> results matching "<span class='search-query'></span>"</h1>
+            <ul class="search-results-list"></ul>
+            
+        </div>
+        <div class="no-results">
+            
+            <h1 class="search-results-title">No results matching "<span class='search-query'></span>"</h1>
+            
+        </div>
+    </div>
+</div>
+
+                        </div>
+                    </div>
+                
+            </div>
+
+            
+                
+                <a href="troubleshooting.html" class="navigation navigation-prev navigation-unique" aria-label="Previous page: トラブルシューティング">
+                    <i class="fa fa-angle-left"></i>
+                </a>
+                
+                
+            
+        
+    </div>
+
+    <script>
+        var gitbook = gitbook || [];
+        gitbook.push(function() {
+            gitbook.page.hasChanged({"page":{"title":"tsdサーバーの詳しい話","level":"2.1","depth":1,"previous":{"title":"トラブルシューティング","level":"1.7","depth":1,"path":"troubleshooting.md","ref":"./troubleshooting.md","articles":[]},"dir":"ltr"},"config":{"plugins":["gitbook-plugin-japanese-support","livereload"],"root":"./src","styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"pluginsConfig":{"gitbook-plugin-japanese-support":{},"livereload":{},"highlight":{},"search":{},"lunr":{"maxIndexSize":1000000,"ignoreSpecialCharacters":false},"fontsettings":{"theme":"white","family":"sans","size":2},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false}},"theme":"default","author":"masnagam","pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56},"embedFonts":false},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"variables":{},"title":"できるmirakc","language":"ja","gitbook":"*"},"file":{"path":"tsd_server.md","mtime":"2022-06-25T03:29:20.459Z","type":"markdown"},"gitbook":{"version":"4.0.4","time":"2022-12-25T02:34:32.610Z"},"basePath":".","book":{"language":""}});
+        });
+    </script>
+</div>
+
+        
+    <noscript>
+        <style>
+            .honkit-cloak {
+                display: block !important;
+            }
+        </style>
+    </noscript>
+    <script>
+        // Restore sidebar state as critical path for prevent layout shift
+        function __init__getSidebarState(defaultValue){
+            var baseKey = "";
+            var key = baseKey + ":sidebar";
+            try {
+                var value = localStorage[key];
+                if (value === undefined) {
+                    return defaultValue;
+                }
+                var parsed = JSON.parse(value);
+                return parsed == null ? defaultValue : parsed;
+            } catch (e) {
+                return defaultValue;
+            }
+        }
+        function __init__restoreLastSidebarState() {
+            var isMobile = window.matchMedia("(max-width: 600px)").matches;
+            if (isMobile) {
+                // Init last state if not mobile
+                return;
+            }
+            var sidebarState = __init__getSidebarState(true);
+            var book = document.querySelector(".book");
+            // Show sidebar if it enabled
+            if (sidebarState && book) {
+                book.classList.add("without-animation", "with-summary");
+            }
+        }
+
+        try {
+            __init__restoreLastSidebarState();
+        } finally {
+            var book = document.querySelector(".book");
+            book.classList.remove("honkit-cloak");
+        }
+    </script>
+    <script src="gitbook/gitbook.js"></script>
+    <script src="gitbook/theme.js"></script>
+    
+        
+        <script src="gitbook/gitbook-plugin-livereload/plugin.js"></script>
+        
+    
+        
+        <script src="gitbook/gitbook-plugin-search/search-engine.js"></script>
+        
+    
+        
+        <script src="gitbook/gitbook-plugin-search/search.js"></script>
+        
+    
+        
+        <script src="gitbook/gitbook-plugin-lunr/lunr.min.js"></script>
+        
+    
+        
+        <script src="gitbook/gitbook-plugin-lunr/search-lunr.js"></script>
+        
+    
+        
+        <script src="gitbook/gitbook-plugin-fontsettings/fontsettings.js"></script>
+        
+    
+
+    </body>
+</html>
+
