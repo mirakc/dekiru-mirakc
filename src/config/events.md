@@ -108,8 +108,9 @@ $ curl http://localhost:40772/api/recording/schedules -sG | jq '.[].programId'
 327360102410344
 327360102410933
 
-$ curl http://localhost:40772/api/programs/327360102407088 -sG | jq -r '.name'
-ＮＨＫニュース７　飯能市で３人殺害何が　▽中国感染急増で影響は[二][字]
+$ curl http://localhost:40772/api/programs/327360102407088 -sG | \
+    jq -r '.name | test("ＮＨＫニュース７")'
+true
 ```
 
 イベント・スクリプトのプロトコルの詳細については，[mirakc/docs/config.md]を参照
