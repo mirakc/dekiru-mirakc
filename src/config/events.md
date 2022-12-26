@@ -43,7 +43,7 @@ error() {
 }
 
 BASE_URL=http://localhost:40772
-TAG=nhk_news_7
+TAG='rule-nhk'
 
 # Service IDの取得
 SERVICE_ID=$(cat | jq -Mr '.serviceId')
@@ -54,16 +54,14 @@ then
   exit 0
 fi
 
-# `/api/services/{id}/programs`は終了した番組も含む
-NOW=$(expr $(date +%s) \* 1000 \+ 10000)  # now +10s
+# `/api/services/{id}/programs`は終了した番組も含んでいるので，それらを排除
+BASE_FILTER='select(.startAt >= (now + 10000))'  # now +10s
 
-FILTER=$(cat <<EOF | tr '\n' ' '
-select(.name | test("ＮＨＫニュース７")) | select(.startAt >= $NOW)
-EOF
-)
+# ルールをここに記述
+RULE_FILTER='select(.name | test("ＮＨＫニュース７"))'
 
 COLLECTED=$(curl $BASE_URL/api/services/$SERVICE_ID/programs -sG | \
-             jq -Mc ".[] | $FILTER | .")
+             jq -Mc ".[] | $BASE_FILTER | $RULE_FILTER | .")
 
 # 以前自動登録した録画予約を削除
 #
