@@ -457,7 +457,7 @@
 }
 
 BASE_URL=http://localhost:40772
-TAG=nhk_news_7
+TAG=<span class="hljs-string">&apos;rule-nhk&apos;</span>
 
 <span class="hljs-comment"># Service IDの取得</span>
 SERVICE_ID=$(cat | jq -Mr <span class="hljs-string">&apos;.serviceId&apos;</span>)
@@ -468,16 +468,14 @@ SERVICE_ID=$(cat | jq -Mr <span class="hljs-string">&apos;.serviceId&apos;</span
   <span class="hljs-built_in">exit</span> 0
 <span class="hljs-keyword">fi</span>
 
-<span class="hljs-comment"># `/api/services/{id}/programs`は終了した番組も含む</span>
-NOW=$(expr $(date +%s) \* 1000 \+ 10000)  <span class="hljs-comment"># now +10s</span>
+<span class="hljs-comment"># `/api/services/{id}/programs`は終了した番組も含んでいるので，それらを排除</span>
+BASE_FILTER=<span class="hljs-string">&apos;select(.startAt &gt;= (now + 10000))&apos;</span>  <span class="hljs-comment"># now +10s</span>
 
-FILTER=$(cat &lt;&lt;<span class="hljs-string">EOF | tr &apos;\n&apos; &apos; &apos;
-select(.name | test(&quot;ＮＨＫニュース７&quot;)) | select(.startAt &gt;= $NOW)
-EOF</span>
-)
+<span class="hljs-comment"># ルールをここに記述</span>
+RULE_FILTER=<span class="hljs-string">&apos;select(.name | test(&quot;ＮＨＫニュース７&quot;))&apos;</span>
 
 COLLECTED=$(curl <span class="hljs-variable">$BASE_URL</span>/api/services/<span class="hljs-variable">$SERVICE_ID</span>/programs -sG | \
-             jq -Mc <span class="hljs-string">&quot;.[] | <span class="hljs-variable">$FILTER</span> | .&quot;</span>)
+             jq -Mc <span class="hljs-string">&quot;.[] | <span class="hljs-variable">$BASE_FILTER</span> | <span class="hljs-variable">$RULE_FILTER</span> | .&quot;</span>)
 
 <span class="hljs-comment"># 以前自動登録した録画予約を削除</span>
 <span class="hljs-comment">#</span>
@@ -573,7 +571,7 @@ $</span><span class="bash"> curl http://localhost:40772/api/programs/32736010240
     <script>
         var gitbook = gitbook || [];
         gitbook.push(function() {
-            gitbook.page.hasChanged({"page":{"title":"イベント通知","level":"1.4.8","depth":2,"next":{"title":"フロントエンドアプリケーションとの連携","level":"1.5","depth":1,"path":"frontend_applications.md","ref":"./frontend_applications.md","articles":[]},"previous":{"title":"タイムシフト録画","level":"1.4.7","depth":2,"path":"config/timeshift.md","ref":"./config/timeshift.md","articles":[]},"dir":"ltr"},"config":{"plugins":["gitbook-plugin-japanese-support"],"root":"./src","styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"pluginsConfig":{"gitbook-plugin-japanese-support":{},"highlight":{},"search":{},"lunr":{"maxIndexSize":1000000,"ignoreSpecialCharacters":false},"fontsettings":{"theme":"white","family":"sans","size":2},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false}},"theme":"default","author":"masnagam","pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56},"embedFonts":false},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"variables":{},"title":"できるmirakc","language":"ja","gitbook":"*"},"file":{"path":"config/events.md","mtime":"2022-12-26T07:02:08.511Z","type":"markdown"},"gitbook":{"version":"4.0.4","time":"2022-12-26T07:02:14.208Z"},"basePath":"..","book":{"language":""}});
+            gitbook.page.hasChanged({"page":{"title":"イベント通知","level":"1.4.8","depth":2,"next":{"title":"フロントエンドアプリケーションとの連携","level":"1.5","depth":1,"path":"frontend_applications.md","ref":"./frontend_applications.md","articles":[]},"previous":{"title":"タイムシフト録画","level":"1.4.7","depth":2,"path":"config/timeshift.md","ref":"./config/timeshift.md","articles":[]},"dir":"ltr"},"config":{"plugins":["gitbook-plugin-japanese-support"],"root":"./src","styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"pluginsConfig":{"gitbook-plugin-japanese-support":{},"highlight":{},"search":{},"lunr":{"maxIndexSize":1000000,"ignoreSpecialCharacters":false},"fontsettings":{"theme":"white","family":"sans","size":2},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false}},"theme":"default","author":"masnagam","pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56},"embedFonts":false},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"variables":{},"title":"できるmirakc","language":"ja","gitbook":"*"},"file":{"path":"config/events.md","mtime":"2022-12-26T11:48:45.016Z","type":"markdown"},"gitbook":{"version":"4.0.4","time":"2022-12-26T11:48:52.130Z"},"basePath":"..","book":{"language":""}});
         });
     </script>
 </div>
