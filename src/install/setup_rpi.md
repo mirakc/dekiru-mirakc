@@ -6,12 +6,12 @@ Raspberry Piのセットアップ手順については，「Raspberry Pi 4で構
 以降の説明は，
 
 * Raspberry Pi 3B
-* 2020-02-13-raspbian-buster-lite.img
+* Raspberry Pi OS Lite (64-bit)
 * PX-Q3U4 + [nns779/px4_drv]
 
 で動作確認をしましたが，以下のような環境でも動作します．
 
-* Raspberry Pi 2B以上 + Raspbian (arm32v7)
+* Raspberry Pi 2B以上 + Raspberry Pi OS Lite (32-bit)
 * ZeroPi + [Armbian] (arm32v7)
 * ROCK64 + Armbian (arm64v8)
 

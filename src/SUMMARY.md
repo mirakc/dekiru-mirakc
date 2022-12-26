@@ -13,10 +13,13 @@
   * [EGPデータキャッシュ](./config/epg.md)
   * [フィルター設定](./config/filters.md)
   * [局ロゴの表示](./config/logos.md)
+  * [録画予約](./config/recording.md)
   * [タイムシフト録画](./config/timeshift.md)
+  * [イベント通知](./config/events.md)
 * [フロントエンドアプリケーションとの連携](./frontend_applications.md)
 * [カスタムイメージの作成](./custom_image.md)
 * [トラブルシューティング](./troubleshooting.md)
 
 ---
 * [tsdサーバーの詳しい話](./tsd_server.md)
+* [旧バージョンのドキュメント](./older_versions.md)

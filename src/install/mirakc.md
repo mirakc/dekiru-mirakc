@@ -5,8 +5,6 @@
 まず，以下のような`docker-compose.yml`を作成します．
 
 ```yaml
-version: '3'
-
 services:
   mirakc:
     image: mirakc/mirakc:alpine
@@ -27,7 +25,7 @@ services:
 ```yaml
 server:
   addrs:
-    - http: 0.0.0.0:40772
+    - !http '0.0.0.0:40772'
 ```
 
 最後に，mirakcを起動します．

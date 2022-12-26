@@ -43,8 +43,6 @@ curl -sG http://localhost:40772/api/channels/GR/27/stream?decode=0 | \
 `logos`フォルダーをマウントします．
 
 ```yaml
-version: '3'
-
 services:
   mirakc:
     ...
