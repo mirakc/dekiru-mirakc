@@ -518,8 +518,9 @@ EOF</span>
 327360102410344
 327360102410933
 <span class="hljs-meta">
-$</span><span class="bash"> curl http://localhost:40772/api/programs/327360102407088 -sG | jq -r <span class="hljs-string">&apos;.name&apos;</span></span>
-ＮＨＫニュース７　飯能市で３人殺害何が　▽中国感染急増で影響は[二][字]
+$</span><span class="bash"> curl http://localhost:40772/api/programs/327360102407088 -sG | \
+    jq -r <span class="hljs-string">&apos;.name | test(&quot;ＮＨＫニュース７&quot;)&apos;</span></span>
+true
 </code></pre>
 <p>イベント・スクリプトのプロトコルの詳細については，<a href="https://github.com/mirakc/mirakc/blob/main/docs/config.md" target="_blank">mirakc/docs/config.md</a>を参照してください．</p>
 <h2 id="server-sent-event-sse">Server-Sent Event (SSE)</h2>
@@ -571,7 +572,7 @@ $</span><span class="bash"> curl http://localhost:40772/api/programs/32736010240
     <script>
         var gitbook = gitbook || [];
         gitbook.push(function() {
-            gitbook.page.hasChanged({"page":{"title":"イベント通知","level":"1.4.8","depth":2,"next":{"title":"フロントエンドアプリケーションとの連携","level":"1.5","depth":1,"path":"frontend_applications.md","ref":"./frontend_applications.md","articles":[]},"previous":{"title":"タイムシフト録画","level":"1.4.7","depth":2,"path":"config/timeshift.md","ref":"./config/timeshift.md","articles":[]},"dir":"ltr"},"config":{"plugins":["gitbook-plugin-japanese-support"],"root":"./src","styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"pluginsConfig":{"gitbook-plugin-japanese-support":{},"highlight":{},"search":{},"lunr":{"maxIndexSize":1000000,"ignoreSpecialCharacters":false},"fontsettings":{"theme":"white","family":"sans","size":2},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false}},"theme":"default","author":"masnagam","pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56},"embedFonts":false},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"variables":{},"title":"できるmirakc","language":"ja","gitbook":"*"},"file":{"path":"config/events.md","mtime":"2022-12-26T11:51:25.054Z","type":"markdown"},"gitbook":{"version":"4.0.4","time":"2022-12-26T11:51:33.494Z"},"basePath":"..","book":{"language":""}});
+            gitbook.page.hasChanged({"page":{"title":"イベント通知","level":"1.4.8","depth":2,"next":{"title":"フロントエンドアプリケーションとの連携","level":"1.5","depth":1,"path":"frontend_applications.md","ref":"./frontend_applications.md","articles":[]},"previous":{"title":"タイムシフト録画","level":"1.4.7","depth":2,"path":"config/timeshift.md","ref":"./config/timeshift.md","articles":[]},"dir":"ltr"},"config":{"plugins":["gitbook-plugin-japanese-support"],"root":"./src","styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"pluginsConfig":{"gitbook-plugin-japanese-support":{},"highlight":{},"search":{},"lunr":{"maxIndexSize":1000000,"ignoreSpecialCharacters":false},"fontsettings":{"theme":"white","family":"sans","size":2},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false}},"theme":"default","author":"masnagam","pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56},"embedFonts":false},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"variables":{},"title":"できるmirakc","language":"ja","gitbook":"*"},"file":{"path":"config/events.md","mtime":"2022-12-26T11:57:21.604Z","type":"markdown"},"gitbook":{"version":"4.0.4","time":"2022-12-26T11:57:29.098Z"},"basePath":"..","book":{"language":""}});
         });
     </script>
 </div>
