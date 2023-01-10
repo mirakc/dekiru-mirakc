@@ -5,15 +5,11 @@ mirakcの録画予約機能を有効にするには，以下の設定を`config.
 
 ```yaml
 recording:
-  records-dir: /var/lib/mirakc/recording
-  contents-dir: /var/lib/mirakc/recording/contents
+  basedir: /var/lib/mirakc/recording
 ```
 
-`records-dir`には登録した録画予約の内容など管理情報を保持するためのファイルが作
-成されます．
-
-`contents-dir`は指定しなくても録画予約機能は有効になりますが，通常は録画データの
-みを共有するので，指定することを推奨します．
+`basedir`には，登録した録画予約の内容など管理情報を保持するためのファイル
+（`schedules.json`）や，録画データが保存されます．
 
 `docker-compose.yml`でフォルダーをマウントします．
 
@@ -23,14 +19,7 @@ services:
     ...
     volumes:
       ...
-      - mirakc-recording:/var/lib/mirakc/recording
-      - ./videos:/var/lib/mirakc/recording/contents
-
-volumes:
-  ...
-  mirakc-recording:
-    name: mirakc_recording
-    driver: local
+      - ./recording:/var/lib/mirakc/recording
 ```
 
 mirakcコンテナーを再起動し，録画予約関係のWebエンドポイントが有効になっているか
@@ -43,6 +32,11 @@ $ curl http://localhost:40772/api/recording/schedules -sG
 []
 ```
 
+以降の説明では`recording.sh`というシェル・スクリプトを使用しています．詳細につい
+ては，[recording.sh](#recordingsh)を確認してください．
+
+## 録画予約の登録・削除
+
 試しに，現在放送中の番組を録画予約してみましょう．
 
 ```console
@@ -54,9 +48,7 @@ $ curl http://localhost:40772/api/services/3273601024/programs -sG | \
 
 # 録画予約を登録
 # もうすぐ終了する番組でなければ，登録に成功します
-# add-recording-schedule.shは後述
-$ sh add-recording-schedule.sh http://localhost:40772 327360102407046 | \
-    jq '.programId'
+$ sh recording.sh add 327360102407046 | jq '.program.id'
 327360102407046
 ```
 
@@ -64,142 +56,196 @@ $ sh add-recording-schedule.sh http://localhost:40772 327360102407046 | \
 
 ```console
 # すぐに録画が開始されるので，空のリストが返されます
-$ curl http://localhost:40772/api/recording/schedules -sG
-[]
+$ sh recording.sh list | jq '.[] | .program.id, .state'
+327360102407046
+"recording"
 
 # 番組がまだ放送中なら録画中のリストに含まれています
 $ curl http://localhost:40772/api/recording/recorders -sG | jq '.[].programId'
 327360102407046
 ```
 
-`contentPath`に指定したファイルが，`videos`フォルダー内に作成されていることが確認できます．
-
-```
-$ ls videos
-'Ｄｅａｒにっぽん「それでもいま　一歩前へ　〜核大国アメリカでの対話〜」[字][再].m2ts'
-```
-
-ここで使用した`add-recording-schedule.sh`は，以下のようなシェル・スクリプトです．
-
-```sh
-BASEURL=$1
-PROGRAM_ID=$2
-
-# 番組名をファイル名に使用
-TITLE=$(curl $BASEURL/api/programs/$PROGRAM_ID -sG | jq -Mr '.name')
-JSON=$(cat <<EOF | jq -Mc '.'
-{
-  "programId": $PROGRAM_ID,
-  "contentPath": "$TITLE.m2ts",
-  "tags": ["manual"]
-}
-EOF
-)
-
-# 録画予約を登録
-curl $BASEURL/api/recording/schedules -s \
-  -X POST \
-  -H 'Content-Type: application/json' \
-  -d "$JSON"
-```
-
-## 録画失敗時の動作
-
-何らかの理由で録画予約した番組の放送時間が急に変更された場合，mirakcは録画に失敗
-します．EpgStationなど他の多くのアプリケーションも同様に失敗するでしょう．
-
-mirakcは，このような場合の録画失敗を救済するための機能として，録画リトライ機能を
-実装しています．録画リトライ機能は，録画に失敗した番組の開始を検出するために，
-チューナーを定期的に使用します．そのため，チューナーに空きがない場合，正常に機能
-しません．
-
-録画リトライ機能を擬似的に体験してみましょう．
-
-まず，録画リトライ機能を有効にするために`config.yml`に
-`recording.max-start-delay`を設定します．
-
-```yaml
-recording:
-  ...
-  max-start-delay: 3h
-```
-
-今回の例では，番組開始時間の遅延を最大３時間まで許容するように設定します．２４時
-間（`24h`）以内の任意の値を指定可能です．
-書式については[こちら](https://github.com/tailhook/humantime)参照してください．
-
-コンテナーを再起動し，３時間以内に始まるが，現在放送中でも次に放送される番組でも
-ない番組を探します．
+`options.contentPath`に指定したファイルが，`recording/videos`フォルダー内に作成
+されていることが確認できます．
 
 ```console
-# 次の次に始まる番組のProgram IDを取得
-$ curl http://localhost:40772/api/services/3273601024/programs -sG | \
-    jq '.[] | select((.startAt / 1000) > now) | .id' | head -n 2
-327360102407064
-327360102407065
+$ ls recording
+schedules.json  videos
+
+$ ls recording/videos
+'<datetime>_<title>.m2ts'  # <datetime>および<title>は実際の値に読み替えること
 ```
 
-`327360102507065`の録画（録画予約ではありません）を開始します．
+このように，`options.contentPath`に存在しないディレクトリーが含まれている場合，
+録画時に自動でディレクトリーが作成されます．
+
+録画予約を削除すれば，録画も停止します．
 
 ```console
-# start-recording.shは後述
-$ sh start-recording.sh http://localhost:40772 327360102407065 | jq '.programId'
-327360102407065
-```
+$ sh recording.sh delete 327360102407046
 
-この番組はまだ始まっていないので，当然録画はすぐに停止します．
+$ sh recording.sh list
+[]
 
-```console
-# 録画はすぐに停止するので，空のリスト
 $ curl http://localhost:40772/api/recording/recorders -sG
 []
 ```
 
-以下のようなログが見つかります．
-
-```
-... WARN ... Recording stopped before the program starts program_quad=7FE07FE004001B99
-... INFO ... On-air program observer added service_triple=7FE07FE004000000 name="recording"
-... INFO ... Retry recording program_quad=7FE07FE004001B99
-```
-
-現在放送中の番組が終了し，次の番組が始まるころに，以下のようなログが表示されます．
-
-```
-... INFO ... Added schedule.program_quad=7FE07FE004001B99
-... INFO ... Rescheduled recording program.quad=7FE07FE004001B99 program.start_at=2022-12-26 14:00:00 +09:00
-```
-
-録画予約を確認すると，先程録画に失敗した番組が追加されていることを確認できます．
+録画予約を削除しても録画データは消えません．
 
 ```console
-$ curl http://localhost:40772/api/recording/schedules -sG | jq '.[].programId'
-327360102407065
+$ ls recording/videos
+'<datetime>_<title>.m2ts'
 ```
 
-ここで使用した`start-recording.sh`は，以下のようなシェル・スクリプトです．
+基本的に録画予約は，番組表に記載されている時刻に録画を開始します．多くの場合，こ
+れでも問題はないのですが，ごく稀に，前番組の放送延長などが原因で録画予約した番組
+の放送時間が変更されることがあります．このような場合，番組表に記載された時刻には
+番組は開始されないため，当然の結果として番組全体を正しく録画することはできません．
 
-```sh
-BASEURL=$1
-PROGRAM_ID=$2
+mirakcは，録画予約した番組の放送時間の変更を追跡する機能を実装しています．
 
-# 番組名をファイル名に使用
-TITLE=$(curl -sG $BASEURL/api/programs/$PROGRAM_ID | jq -Mr '.name')
-JSON=$(cat <<EOF | jq -Mc '.'
-{
-  "programId": $PROGRAM_ID,
-  "contentPath": "$TITLE.m2ts",
-  "tags": ["manual"]
-}
-EOF
-)
+## 放送中の番組の追跡
 
-# 録画を開始
-curl $BASEURL/api/recording/recorders -s \
-  -X POST \
-  -H 'Content-Type: application/json' \
-  -d "$JSON"
+mirakcは，現在放送中の番組（及び次に放送される番組）を追跡する機能を持っています．
+この機能を利用することで，録画予約した番組の放送時間が変更された場合でも，適切に
+録画予約情報を更新し，変更後の番組開始時間から録画を開始するようになります．
+
+本機能が安定的に機能するためには，本機能のために専用のチューナーを割り当てる必要
+があります．割り当てたチューナーは本機能以外では使用できなくなります．そのため，
+複数のチューナーが存在する環境以外で本機能を使用するのは困難でしょう．
+
+本機能を有効化するために，`config.yml`を以下のように修正します．
+
+```yaml
+tuners:
+  ...
+  # 放送中の番組追跡専用のチューナーを追加
+  - name: tracker
+    types: [GR, BS]
+    command: ...
+    # このプロパティでチューナーを独占的に使用するトラッカーを指定
+    dedicated-for: tracker
+
+onair-program-trackers:
+  tracker: !local
+    channel-types: [GR, BS]
 ```
+
+mirakcコンテナーを再起動してください．以下のようなログが毎分出力されるようになります．
+
+```console
+$ docker logs -f mirakc | grep OnairProgramTracker
+... INFO ... Use dedicated tuner tuner.index=1 channel=GR/27 user.info=OnairProgramTracker(tracker)
+... INFO ... Activate tuner.index=1 channel=GR/27 user.info=OnairProgramTracker(tracker)
+... INFO ... Subscribed subscription.id=tuner#1.0.1 user.info=OnairProgramTracker(tracker)
+... INFO ... Unsubscribed subscription.id=tuner#1.0.1 user.info=OnairProgramTracker(tracker)
+```
+
+本機能を有効化すると，毎分チューナーを開いて，各サービスで現在放送中の番組（及
+び次に放送される番組）を確認するようになります．
+
+注意点としては，毎分上記のようなログがサービスの数だけ出力されるため，場合によっ
+ては大量のログが出力されます．また，CPUやメモリー使用量も当然増えるため，すでに
+リソースが逼迫している環境での使用は困難です．
+
+本文書の例ではチャンネル数（サービス数）が少ないので問題ありませんが，多くのチャ
+ンネル（サービス）を使用している環境では，現在放送中の番組の取得処理が１分以内
+（安全を考えると50秒以内）に終了するようにトラッカー数を調整する必要があります．
+
+```yaml
+onair-program-trackers:
+  gr-tracker: !local
+    channel-types: [GR]
+  bs-tracker1: !local
+    channel-types: [BS]
+    # 期限内に処理が終了するように，対象サービスを制限
+    services: [...]
+  bs-tracker2: !local
+    channel-types: [BS]
+    # bs-tracker1で処理しないサービスを列挙
+    services: [...]
+```
+
+本機能がどのように動作するのか見るために，後続の２つの番組の録画予約を行ってみま
+しょう．
+
+まず，対象番組のIDを取得します．
+
+```console
+$ curl http://localhost:40772/api/services/3273601024/programs -sG | \
+    jq '.[] | select((.startAt / 1000) > now) | .id' | head -n 2
+327360102415793  # 番組表情，次の番組
+327360102415795  # その次の番組
+```
+
+まず，番組表で次の次に始まる番組予定を予約します．
+
+```console
+$ sh recording.sh add 327360102415795 | jq '.program.id, .state'
+327360102415795
+"scheduled"
+```
+
+状態`scheduled`とは，番組表の情報を元に録画予約された状態です．録画予約された番
+組が次に放送予定の番組（または現在放送中の番組）になると，状態が`tracking`へと変
+わります．これを確認するために，番組表で次に始まる予定の番組を録画予約します．
+
+```console
+$ sh recording.sh add 327360102415793 | jq '.program.id, .state'
+327360102415793
+"tracking"
+```
+
+## 録画失敗時の動作
+
+例え録画予約した番組の放送時間の変更を追跡していたとしても，番組が放送されなけれ
+ば録画予約は失敗します．録画に失敗した場合，録画予約の状態は`rescheduling`となり
+ます．
+
+> **注意**: 少しでも番組を録画できた場合は，録画失敗とは扱われません
+
+録画に失敗した録画予約はすぐには削除されず残り続けます．この間に，番組表や現在放
+送中の番組が更新されるなどして，録画に失敗した番組の放送時間が変更されると，再度
+録画予約が有効化されます．ただし，録画予約時に指定した番組ID（`programId`）を使
+って放送時間の更新を検出するため，対象としていた番組のIDが変わってしまうと，別の
+番組として扱われます．このような場合には，一旦録画予約を削除し，再度新しい番組ID
+で録画予約を登録し直す必要があります．
+
+> 現状，予定されていた番組の開始時刻から１５時間まで録画予約を保持します
+
+録画失敗の状況を擬似的に体験するため，すでに終了している番組の録画を録画予約して
+みます．
+
+```console
+$ curl http://localhost:40772/api/services/3273601024/programs -sG | \
+    jq '.[] | select((.startAt / 1000) <= now) | .id' | tail -n 2
+327360102415795  # 番組表上，終了している番組
+327360102415796  # 番組表上，現在放送中の番組
+
+$ sh recording.sh add 327360102415795 | jq '.program.id, .state'
+327360102415795
+"scheduled"
+```
+
+追加した録画予約に対する録画はすぐに開始されますが，番組は終了しているので当然失
+敗します．
+
+```console
+$ docker logs mirakc | grep WARN
+...  WARN ... Need rescheduling schedule.program.quad=7FE07FE004003DB3
+```
+
+その後，録画予約は`rescheduling`状態に．
+
+```console
+$ sh recording.sh list | jq '.[] | .program.id, .state'
+327360102415795
+"rescheduling"
+```
+
+この番組はすでに終了していて放送時間が更新される可能性はないので，実験後は録画予
+約を削除してください．
 
 ## 録画した番組の視聴
 
@@ -207,8 +253,12 @@ mirakcは，録画した番組を視聴するためのWebエンドポイント�
 これは，Kodiなどの優れたメディア・センター・アプリケーションがすでに存在している
 ためです．これらを使用すれば，mirakcで視聴するよりも良い体験を得られます．
 
-別アプリケーションをどうしても使用できないという場合には，`contents-dir`にしてい
-たフォルダーをmirakc上の特定URLにマウントすることができます．
+別アプリケーションをどうしても使用できないという場合には，録画データを含むフォル
+ダーをmirakc上の特定URLにマウントすることで，録画データをmirakc経由でダウンロー
+ドできるようになります．
+
+> ファイルシステム上の録画データに直接（またはsambaなどを使って間接的に）アクセ
+> スできるので，普通はこのようなことをする必要はありません
 
 `config.yml`
 
@@ -216,9 +266,8 @@ mirakcは，録画した番組を視聴するためのWebエンドポイント�
 server:
   ...
   mounts:
-    # `recording.contents-dir`に指定したパスを/videosにマウント
     /videos:
-      path: /var/lib/mirakc/recording/contents
+      path: /var/lib/mirakc/recording/videos
       listing: true
 ```
 
@@ -231,3 +280,89 @@ mirakc自体は，EPGStationなどがサポートしているようなルール�
 機能を提供していません．しかし，後述するイベント通知機能を利用することで，番組表
 更新時にルール・ベースの自動録画予約を行うことが可能です．詳細については
 [イベント通知](./events.md)を参照してください．
+
+## recording.sh
+
+説明で使用した`recording.sh`の内容を以下に記載します．
+
+```sh
+BASEURL=http://localhost:40772
+
+log() {
+  echo "$1" >&2
+}
+
+error() {
+  log "ERROR: $1"
+  exit 1
+}
+
+add() {
+  PROGRAM_ID=$1
+  PROGRAM=$(curl $BASEURL/api/programs/$PROGRAM_ID -sG)
+  # TODO
+  # ----
+  # Sanitize a string if you want to use it in the contentPath.
+  # mirakc doesn't sanitize its value.
+  TITLE=$(echo "$PROGRAM" | jq -Mr '.name')
+  START_AT=$(echo "$PROGRAM" | jq -Mr '.startAt')
+  DATE=$(date --date="@$(expr $START_AT / 1000)" +%Y%m%d%H%M)
+  JSON=$(cat <<EOF | jq -Mc '.'
+{
+  "programId": $PROGRAM_ID,
+  "options": {
+    "contentPath": "videos/${DATE}_${TITLE}.m2ts"
+  },
+  "tags": ["manual"]
+}
+EOF
+)
+  curl $BASEURL/api/recording/schedules -s \
+    -X POST \
+    -H 'Content-Type: application/json' \
+    -d "$JSON"
+}
+
+delete() {
+  curl $BASEURL/api/recording/schedules/$1 -s \
+    -X DELETE \
+    -H 'Content-Type: application/json'
+}
+
+list() {
+  curl $BASEURL/api/recording/schedules -sG
+}
+
+clear() {
+  curl $BASEURL/api/recording/schedules -s -X DELETE
+}
+
+while [ $# -gt 0 ]
+do
+  case "$1" in
+    'add')
+      add $2
+      shift 2
+      ;;
+    'delete')
+      delete $2
+      shift 2
+      ;;
+    'list')
+      list
+      shift
+      ;;
+    'clear')
+      clear
+      shift
+      ;;
+    '-b' | '--base-url')
+      BASEURL="$2"
+      shift 2
+      ;;
+    *)
+      break
+      ;;
+  esac
+done
+```
