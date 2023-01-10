@@ -81,7 +81,9 @@ do
   SCHEDULE_JSON=$(cat <<EOF | jq -Mc '.'
 {
   "programId": $PROGRAM_ID,
-  "contentPath": "${DATE}_${TITLE}.m2ts",
+  "options": {
+    "contentPath": "${DATE}_${TITLE}.m2ts"
+  },
   "tags": ["$TAG"]
 }
 EOF
