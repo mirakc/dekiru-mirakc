@@ -524,6 +524,13 @@
 </li>
 <li><code>socat</code>を使って外部サーバー上でデコードする</li>
 </ul>
+<h2 id="mirakc-timeshift-fsが起動しない">mirakc-timeshift-fsが起動しない</h2>
+<p><code>mirakc-timeshift-fs</code>起動時に以下のようなエラーメッセージが表示され起動できない場合，</p>
+<pre><code>Error: IoError(Os { code: 2, kind: NotFound, message: &quot;No such file or directory&quot; }
+</code></pre><p><code>fusermount</code>（もしくは<code>fusermount3</code>）が環境にインストールされていないか，インストール先が<code>PATH</code>に含まれていない可能性があります．</p>
+<p><a href="https://github.com/mirakc/mirakc/blob/main/docker/Dockerfile.debian" target="_blank">docker/Dockerfile.debian</a>
+などを参考に，不足パッケージをインストールし，<code>PATH</code>を適切に設定してください．</p>
+<p><code>-o allow_other</code>などのオプションを使用する場合は，起動前に<code>/etc/fuse.conf</code>を適切に設定しておく必要があります．詳細は<code>man fuse</code>を参照してください．</p>
 <h2 id="github-issuesの検索">GitHub Issuesの検索</h2>
 <p>同様の問題が他の人の環境でも発生している場合，<a href="https://github.com/mirakc/mirakc/issues" target="_blank">GitHub Issues</a>に既に報告済みかもしれません．思いつくキーワードを指定して，報告済みの問題を検索することで，解決方法が見つかるかもしれません．</p>
 <p>問題が既に解決済みである場合もあります．<code>is:closed</code>での検索してみてください．</p>
@@ -571,7 +578,7 @@
     <script>
         var gitbook = gitbook || [];
         gitbook.push(function() {
-            gitbook.page.hasChanged({"page":{"title":"トラブルシューティング","level":"1.7","depth":1,"next":{"title":"tsdサーバーの詳しい話","level":"2.1","depth":1,"path":"tsd_server.md","ref":"./tsd_server.md","articles":[]},"previous":{"title":"カスタムイメージの作成","level":"1.6","depth":1,"path":"custom_image.md","ref":"./custom_image.md","articles":[]},"dir":"ltr"},"config":{"plugins":["gitbook-plugin-japanese-support"],"root":"./src","styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"pluginsConfig":{"gitbook-plugin-japanese-support":{},"highlight":{},"search":{},"lunr":{"maxIndexSize":1000000,"ignoreSpecialCharacters":false},"fontsettings":{"theme":"white","family":"sans","size":2},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false}},"theme":"default","author":"masnagam","pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56},"embedFonts":false},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"variables":{},"title":"できるmirakc","language":"ja","gitbook":"*"},"file":{"path":"troubleshooting.md","mtime":"2023-01-10T03:49:19.507Z","type":"markdown"},"gitbook":{"version":"4.0.4","time":"2023-01-10T03:49:27.687Z"},"basePath":".","book":{"language":""}});
+            gitbook.page.hasChanged({"page":{"title":"トラブルシューティング","level":"1.7","depth":1,"next":{"title":"tsdサーバーの詳しい話","level":"2.1","depth":1,"path":"tsd_server.md","ref":"./tsd_server.md","articles":[]},"previous":{"title":"カスタムイメージの作成","level":"1.6","depth":1,"path":"custom_image.md","ref":"./custom_image.md","articles":[]},"dir":"ltr"},"config":{"plugins":["gitbook-plugin-japanese-support"],"root":"./src","styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"pluginsConfig":{"gitbook-plugin-japanese-support":{},"highlight":{},"search":{},"lunr":{"maxIndexSize":1000000,"ignoreSpecialCharacters":false},"fontsettings":{"theme":"white","family":"sans","size":2},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false}},"theme":"default","author":"masnagam","pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56},"embedFonts":false},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"variables":{},"title":"できるmirakc","language":"ja","gitbook":"*"},"file":{"path":"troubleshooting.md","mtime":"2023-01-10T08:23:17.907Z","type":"markdown"},"gitbook":{"version":"4.0.4","time":"2023-01-10T08:23:26.183Z"},"basePath":".","book":{"language":""}});
         });
     </script>
 </div>
