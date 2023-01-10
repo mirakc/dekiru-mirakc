@@ -182,6 +182,23 @@ $ docker logs mirakc | grep arib-b25-stream-test
   * ただし，コンテナー内で実行可能なコマンドに限る
 * `socat`を使って外部サーバー上でデコードする
 
+## mirakc-timeshift-fsが起動しない
+
+`mirakc-timeshift-fs`起動時に以下のようなエラーメッセージが表示され起動できない場合，
+
+```
+Error: IoError(Os { code: 2, kind: NotFound, message: "No such file or directory" }
+```
+
+`fusermount`（もしくは`fusermount3`）が環境にインストールされていないか，インス
+トール先が`PATH`に含まれていない可能性があります．
+
+[docker/Dockerfile.debian](https://github.com/mirakc/mirakc/blob/main/docker/Dockerfile.debian)
+などを参考に，不足パッケージをインストールし，`PATH`を適切に設定してください．
+
+`-o allow_other`などのオプションを使用する場合は，起動前に`/etc/fuse.conf`を適切
+に設定しておく必要があります．詳細は`man fuse`を参照してください．
+
 ## GitHub Issuesの検索
 
 同様の問題が他の人の環境でも発生している場合，[GitHub Issues]に既に報告済みかも
