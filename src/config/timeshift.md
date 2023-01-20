@@ -9,12 +9,12 @@ Mirakurunには無い機能として，mirakcはタイムシフト録画（い�
 
 ```console
 $ mkdir timeshift
-$ fallocate -l 1638400000 timeshift/nhk.timeshift.m2ts
-$ fallocate -l 1638400000 timeshift/bs1.timeshift.m2ts
+$ fallocate -l 1540096000 timeshift/nhk.timeshift.m2ts
+$ fallocate -l 1540096000 timeshift/bs1.timeshift.m2ts
 $ ls -lh timeshift
 total 3.1G
--rw-r--r-- 1 pi pi 1.6G Mar 18 07:21 bs1.timeshift.m2ts
--rw-r--r-- 1 pi pi 1.6G Mar 18 07:19 nhk.timeshift.m2ts
+-rw-r--r-- 1 pi pi 1.5G Mar 18 07:21 bs1.timeshift.m2ts
+-rw-r--r-- 1 pi pi 1.5G Mar 18 07:19 nhk.timeshift.m2ts
 ```
 
 ディスク容量が足りない場合，ファイル作成に失敗します．十分な空き容量を作ってから再チャレンジしてく
@@ -38,12 +38,12 @@ NHK総合とBS1をタイムシフト録画するように`config.yml`を修正�
 timeshift:
   recorders:
     nhk:
-      service-triple: [32736, 32736, 1024]
+      service-id: 3273601024
       ts-file: /var/lib/mirakc/timeshift/nhk.timeshift.m2ts
       data-file: /var/lib/mirakc/timeshift/nhk.timeshift.json
       num-chunks: 10
     bs1:
-      service-triple: [4, 16625, 101]
+      service-triple: 400101
       ts-file: /var/lib/mirakc/timeshift/bs1.timeshift.m2ts
       data-file: /var/lib/mirakc/timeshift/bs1.timeshift.json
       num-chunks: 10
@@ -116,7 +116,7 @@ curl -sG http://raspberrypi.local:40772/api/timeshift/bs1/records/$ID/stream | f
 * 十分なディスク容量を用意する
   * 容量が足りないと書き込みエラーが発生して機能しないため，予め`fallocate`などで`ts-file`を最大サ
     イズで確保しておくことが望ましいです
-  * `ts-file`の最大ファイルサイズは，チャンクサイズ（既定値は`163840000`で約160MB）に`num-chunks`
+  * `ts-file`の最大ファイルサイズは，チャンクサイズ（既定値は`154009600`で約154MB）に`num-chunks`
     を掛けた数
   * `data-file`の最大ファイルサイズは計算不可能ですが，多くても数MB程度
 * 常時起動
@@ -143,7 +143,7 @@ ts-file-max-size = chunk-size * num-chunks
 たい場合は，
 
 ```
-num-chunks = ts-file-max-size / chunk-size = 1000000000000 / 163840000 = 6103
+num-chunks = ts-file-max-size / chunk-size = 1000000000000 / 154009600 = 6493
 ```
 
 となります．
@@ -161,11 +161,11 @@ num-chunks = ts-file-max-size / chunk-size = 1000000000000 / 163840000 = 6103
 となります．これらを計算式に当てはめると，
 
 ```
-num-chunks = 1512000000000 / 163840000 = 9228
+num-chunks = 1512000000000 / 154009600 = 9817
 ```
 
 となるため，`num-chunks`に`10000`を指定しておけば，余裕を持って一週間分タイムシフト録画できると期待
-できます．この場合の`ts-file`の最大ファイルサイズは，`1638400000000`（約1.6TB）です．
+できます．この場合の`ts-file`の最大ファイルサイズは，`1540096000000`（約1.5TB）です．
 
 TSストリームのビットレートはサービスごとに異なるため，タイムシフト録画の期間を決めてからチャンク数
 を求めたい場合には，サービスごとにビットレートを計測する必要があります．また，ビットレートは固定で
@@ -175,10 +175,10 @@ TSストリームのビットレートはサービスごとに異なるため，
 
 |サービス           |chunk-size       |num-chunks|録画可能期間|
 |------------------|-----------------|----------|----------|
-|ＮＨＫ総合１・東京   |163840000（既定値）|12000     |二週間程度 |
-|ＮＨＫＥテレ１東京  |163840000（既定値）|12000     |二週間程度 |
-|ＮＨＫＢＳ１       |163840000（既定値）|15000     |二週間程度 |
-|ＮＨＫＢＳプレミアム|163840000（既定値）|15000     |二週間程度 |
+|ＮＨＫ総合１・東京  |154009600（既定値）|14000     |二週間程度 |
+|ＮＨＫＥテレ１東京  |154009600（既定値）|14000     |二週間程度 |
+|ＮＨＫＢＳ１       |154009600（既定値）|18000     |二週間程度 |
+|ＮＨＫＢＳプレミアム|154009600（既定値）|18000     |二週間程度 |
 
 上記各タイムシフト録画の`data-file`はどれも2MBを超えません．そのため，上記設定で４チャンネルのタイ
 ムシフト録画を10TBのHDDで行うことが可能です．
