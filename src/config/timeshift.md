@@ -33,6 +33,14 @@ NHK総合とBS1をタイムシフト録画するように`config.yml`を修正�
 
 ```yaml
 # 追加部分のみ抜粋
+jobs:
+  # 通常，タイムシフト録画では以下のジョブは不要
+  # 無効化すると`/api/programs`などが機能しなくなる
+  sync-clocks:
+    disabled: true
+  update-schdules:
+    disabled: true
+
 timeshift:
   recorders:
     nhk:
