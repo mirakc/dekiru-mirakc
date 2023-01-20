@@ -390,4 +390,35 @@ Input #0, mpegts, from 'pipe:':
 的に生成されるため，HTTPレスポンスは`Content-Length`ヘッダーを含まず，HTTPレスポンス・ボディにはチ
 ャンク・エンコーディングが適用されるためです．
 
+## タイムシフト録画の再実行
+
+タイムシフト録画が何らかの理由で停止した場合，自動でタイムシフト録画の再実行を試みます．
+
+```
+INFO mirakc_core::timeshift: Recording stopped recorder.name="nhk"
+WARN mirakc_core::timeshift: Recording pipeline broken, reactivate recorder.name="nhk"
+INFO mirakc_core::timeshift: Deactivated recorder.name="nhk"
+WARN mirakc_core::timeshift: Recording stopped due to some accident, \
+  activate again recorder.name="nhk"
+```
+
+再実行を何度か繰り返しても失敗し続ける場合，タイムシフト録画は停止します．
+
+```
+ERROR mirakc_core::timeshift: Recording stopped due to some accident, \
+  reactivation count reached the maximum number recorder.name="nhk"
+```
+
+この状態でも，`config.jobs.scan-services`ジョブが再実行され，停止中のサービスが見つかると，自動で再
+実行されます．
+
+```
+INFO mirakc_core::timeshift: Service is available, activate recorder.name="nhk" ...
+INFO mirakc_core::timeshift: Recording started recorder.name="nhk"
+```
+
+このような状況が放送休止中に発生することをユーザーが報告しています．
+
+* https://github.com/mirakc/mirakc/issues/693
+
 [FUSE]: https://en.wikipedia.org/wiki/Filesystem_in_Userspace
