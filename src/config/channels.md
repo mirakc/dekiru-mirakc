@@ -46,8 +46,6 @@ channels:
 | space               | extra-args （文字列）     |
 | （なし）              | excluded_services（配列） |
 
-> `channels[].extra-args`は`0.11.0`以降で利用可能です．
-
 チューナーコマンドとして`recpt1`を使用する場合，以下のようなMirakurun用のチャン
 ネルスキャンスクリプトを利用可能です．
 
