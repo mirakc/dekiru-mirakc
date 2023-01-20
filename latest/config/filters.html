@@ -426,10 +426,6 @@
                                 <section class="normal markdown-section">
                                 
                                 <h1 id="フィルター設定">フィルター設定</h1>
-<blockquote>
-<p>以下の<code>config.yml</code>の記述例は，<code>0.12.0</code>以降でのみ有効です．これより古いバージョ
-ンでのフィルターの記述方法については，GitHubの履歴を確認してください．</p>
-</blockquote>
 <p>EPGデータの取得が完了すると，特定サービスのTSストリーミングが可能となります．</p>
 <pre><code class="lang-console"><span class="hljs-meta">#</span><span class="bash"> mirakcコンテナーをバックグラウンドで起動</span>
 <span class="hljs-meta">$</span><span class="bash"> sudo docker compose up -d</span>
@@ -445,11 +441,6 @@ Starting mirakc ... done
                                  Dload  Upload   Total   Spent    Left  Speed
 100 16.8M    0 16.8M    0     0  1578k      0 --:--:--  0:00:10 --:--:-- 1725k
 </code></pre>
-<blockquote>
-<p><code>1.0.29</code>以前では，<code>decode</code>クエリーパラメーター未指定時の動作がMirakurunと異っていました．
-mirakcは<code>decode=1</code>を指定したときのみデコードしていましたが，
-Mirakurunは<code>decode=0</code>を指定したときのみデコードしないようになっています．</p>
-</blockquote>
 <p>しかし，今の設定のままでは，TSストリームを<code>ffmpeg</code>で変換したりすることはできません．なぜならば，フィルターが設定されていないためです．</p>
 <p>フィルターは，TSストリームを標準入力から受け取り，処理後のTSストリームを標準出力に出力する外部プログラムです．mirakc自体にはこのような機能は実装されておらず，フィルター設定で指定された外部プログラムにTSストリームの処理を委譲します．</p>
 <p>フィルターの動作を確認するため，以下のような設定を行ってみます．</p>
@@ -565,7 +556,7 @@ BS not supported
     <script>
         var gitbook = gitbook || [];
         gitbook.push(function() {
-            gitbook.page.hasChanged({"page":{"title":"フィルター設定","level":"1.4.4","depth":2,"next":{"title":"局ロゴの表示","level":"1.4.5","depth":2,"path":"config/logos.md","ref":"./config/logos.md","articles":[]},"previous":{"title":"EGPデータキャッシュ","level":"1.4.3","depth":2,"path":"config/epg.md","ref":"./config/epg.md","articles":[]},"dir":"ltr"},"config":{"plugins":["gitbook-plugin-japanese-support"],"root":"./src","styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"pluginsConfig":{"gitbook-plugin-japanese-support":{},"highlight":{},"search":{},"lunr":{"maxIndexSize":1000000,"ignoreSpecialCharacters":false},"fontsettings":{"theme":"white","family":"sans","size":2},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false}},"theme":"default","author":"masnagam","pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56},"embedFonts":false},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"variables":{},"title":"できるmirakc","language":"ja","gitbook":"*"},"file":{"path":"config/filters.md","mtime":"2023-01-10T08:23:17.907Z","type":"markdown"},"gitbook":{"version":"4.0.4","time":"2023-01-10T08:23:26.183Z"},"basePath":"..","book":{"language":""}});
+            gitbook.page.hasChanged({"page":{"title":"フィルター設定","level":"1.4.4","depth":2,"next":{"title":"局ロゴの表示","level":"1.4.5","depth":2,"path":"config/logos.md","ref":"./config/logos.md","articles":[]},"previous":{"title":"EGPデータキャッシュ","level":"1.4.3","depth":2,"path":"config/epg.md","ref":"./config/epg.md","articles":[]},"dir":"ltr"},"config":{"plugins":["gitbook-plugin-japanese-support"],"root":"./src","styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"pluginsConfig":{"gitbook-plugin-japanese-support":{},"highlight":{},"search":{},"lunr":{"maxIndexSize":1000000,"ignoreSpecialCharacters":false},"fontsettings":{"theme":"white","family":"sans","size":2},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false}},"theme":"default","author":"masnagam","pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56},"embedFonts":false},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"variables":{},"title":"できるmirakc","language":"ja","gitbook":"*"},"file":{"path":"config/filters.md","mtime":"2023-01-20T07:32:58.207Z","type":"markdown"},"gitbook":{"version":"4.0.4","time":"2023-01-20T07:33:04.796Z"},"basePath":"..","book":{"language":""}});
         });
     </script>
 </div>

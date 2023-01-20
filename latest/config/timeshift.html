@@ -426,18 +426,15 @@
                                 <section class="normal markdown-section">
                                 
                                 <h1 id="タイムシフト録画（全録）">タイムシフト録画（全録）</h1>
-<blockquote>
-<p>タイムシフト録画は，mirakc <code>0.17.0</code>以降で利用可能です．</p>
-</blockquote>
 <p>Mirakurunには無い機能として，mirakcはタイムシフト録画（いわゆる全録）を実装しています．機能の細かい説明は後回しにして，動かしてみましょう．</p>
 <p>まず，タイムシフト録画用のフォルダーとファイルを作成します．</p>
 <pre><code class="lang-console"><span class="hljs-meta">$</span><span class="bash"> mkdir timeshift</span>
-<span class="hljs-meta">$</span><span class="bash"> fallocate -l 1638400000 timeshift/nhk.timeshift.m2ts</span>
-<span class="hljs-meta">$</span><span class="bash"> fallocate -l 1638400000 timeshift/bs1.timeshift.m2ts</span>
+<span class="hljs-meta">$</span><span class="bash"> fallocate -l 1540096000 timeshift/nhk.timeshift.m2ts</span>
+<span class="hljs-meta">$</span><span class="bash"> fallocate -l 1540096000 timeshift/bs1.timeshift.m2ts</span>
 <span class="hljs-meta">$</span><span class="bash"> ls -lh timeshift</span>
 total 3.1G
--rw-r--r-- 1 pi pi 1.6G Mar 18 07:21 bs1.timeshift.m2ts
--rw-r--r-- 1 pi pi 1.6G Mar 18 07:19 nhk.timeshift.m2ts
+-rw-r--r-- 1 pi pi 1.5G Mar 18 07:21 bs1.timeshift.m2ts
+-rw-r--r-- 1 pi pi 1.5G Mar 18 07:19 nhk.timeshift.m2ts
 </code></pre>
 <p>ディスク容量が足りない場合，ファイル作成に失敗します．十分な空き容量を作ってから再チャレンジしてください．</p>
 <p>フォルダーとファイルの作成に成功したら，<code>docker-compose.yml</code>を修正し，これを<code>mirakc</code>コンテナーにマウントします．</p>
@@ -449,15 +446,23 @@ total 3.1G
 </code></pre>
 <p>NHK総合とBS1をタイムシフト録画するように<code>config.yml</code>を修正してみます．</p>
 <pre><code class="lang-yaml"><span class="hljs-comment"># 追加部分のみ抜粋</span>
+<span class="hljs-attr">jobs:</span>
+  <span class="hljs-comment"># 通常，タイムシフト録画では以下のジョブは不要</span>
+  <span class="hljs-comment"># 無効化すると`/api/programs`などが機能しなくなる</span>
+  <span class="hljs-attr">sync-clocks:</span>
+    <span class="hljs-attr">disabled:</span> <span class="hljs-literal">true</span>
+  <span class="hljs-attr">update-schdules:</span>
+    <span class="hljs-attr">disabled:</span> <span class="hljs-literal">true</span>
+
 <span class="hljs-attr">timeshift:</span>
   <span class="hljs-attr">recorders:</span>
     <span class="hljs-attr">nhk:</span>
-      <span class="hljs-attr">service-triple:</span> [<span class="hljs-number">32736</span>, <span class="hljs-number">32736</span>, <span class="hljs-number">1024</span>]
+      <span class="hljs-attr">service-id:</span> <span class="hljs-number">3273601024</span>
       <span class="hljs-attr">ts-file:</span> <span class="hljs-string">/var/lib/mirakc/timeshift/nhk.timeshift.m2ts</span>
       <span class="hljs-attr">data-file:</span> <span class="hljs-string">/var/lib/mirakc/timeshift/nhk.timeshift.json</span>
       <span class="hljs-attr">num-chunks:</span> <span class="hljs-number">10</span>
     <span class="hljs-attr">bs1:</span>
-      <span class="hljs-attr">service-triple:</span> [<span class="hljs-number">4</span>, <span class="hljs-number">16625</span>, <span class="hljs-number">101</span>]
+      <span class="hljs-attr">service-triple:</span> <span class="hljs-number">400101</span>
       <span class="hljs-attr">ts-file:</span> <span class="hljs-string">/var/lib/mirakc/timeshift/bs1.timeshift.m2ts</span>
       <span class="hljs-attr">data-file:</span> <span class="hljs-string">/var/lib/mirakc/timeshift/bs1.timeshift.json</span>
       <span class="hljs-attr">num-chunks:</span> <span class="hljs-number">10</span>
@@ -510,7 +515,7 @@ curl -sG http://raspberrypi.local:40772/api/timeshift/bs1/records/$ID/stream | f
 </li>
 <li>十分なディスク容量を用意する<ul>
 <li>容量が足りないと書き込みエラーが発生して機能しないため，予め<code>fallocate</code>などで<code>ts-file</code>を最大サイズで確保しておくことが望ましいです</li>
-<li><code>ts-file</code>の最大ファイルサイズは，チャンクサイズ（既定値は<code>163840000</code>で約160MB）に<code>num-chunks</code>
+<li><code>ts-file</code>の最大ファイルサイズは，チャンクサイズ（既定値は<code>154009600</code>で約154MB）に<code>num-chunks</code>
 を掛けた数</li>
 <li><code>data-file</code>の最大ファイルサイズは計算不可能ですが，多くても数MB程度</li>
 </ul>
@@ -526,7 +531,7 @@ curl -sG http://raspberrypi.local:40772/api/timeshift/bs1/records/$ID/stream | f
 <code>num-chunks</code>）で決まります．</p>
 <pre><code>ts-file-max-size = chunk-size * num-chunks
 </code></pre><p>タイムシフト録画に使用するディスクサイズが既に決まっている場合には，それを超えないようにチャンク数を決めることになります．例えば，既定値のチャンクサイズで１チャンネルを最大1TBだけタイムシフト録画したい場合は，</p>
-<pre><code>num-chunks = ts-file-max-size / chunk-size = 1000000000000 / 163840000 = 6103
+<pre><code>num-chunks = ts-file-max-size / chunk-size = 1000000000000 / 154009600 = 6493
 </code></pre><p>となります．</p>
 <p>録画期間からチャンク数を計算する場合は，少し面倒な計算が必要です．例えば，BS1を一週間分タイムシフト録画しようと考えた場合，</p>
 <ul>
@@ -538,8 +543,8 @@ curl -sG http://raspberrypi.local:40772/api/timeshift/bs1/records/$ID/stream | f
 <li><code>150 * 60 * 24 * 7 = 1512000</code>で約1.5TB</li>
 </ul>
 <p>となります．これらを計算式に当てはめると，</p>
-<pre><code>num-chunks = 1512000000000 / 163840000 = 9228
-</code></pre><p>となるため，<code>num-chunks</code>に<code>10000</code>を指定しておけば，余裕を持って一週間分タイムシフト録画できると期待できます．この場合の<code>ts-file</code>の最大ファイルサイズは，<code>1638400000000</code>（約1.6TB）です．</p>
+<pre><code>num-chunks = 1512000000000 / 154009600 = 9817
+</code></pre><p>となるため，<code>num-chunks</code>に<code>10000</code>を指定しておけば，余裕を持って一週間分タイムシフト録画できると期待できます．この場合の<code>ts-file</code>の最大ファイルサイズは，<code>1540096000000</code>（約1.5TB）です．</p>
 <p>TSストリームのビットレートはサービスごとに異なるため，タイムシフト録画の期間を決めてからチャンク数を求めたい場合には，サービスごとにビットレートを計測する必要があります．また，ビットレートは固定ではなく時間変動するため，上記計算は目安程度と考えてください．</p>
 <p>以下は実績値です．参考にしてください．</p>
 <table>
@@ -554,26 +559,26 @@ curl -sG http://raspberrypi.local:40772/api/timeshift/bs1/records/$ID/stream | f
 <tbody>
 <tr>
 <td>ＮＨＫ総合１・東京</td>
-<td>163840000（既定値）</td>
-<td>12000</td>
+<td>154009600（既定値）</td>
+<td>14000</td>
 <td>二週間程度</td>
 </tr>
 <tr>
 <td>ＮＨＫＥテレ１東京</td>
-<td>163840000（既定値）</td>
-<td>12000</td>
+<td>154009600（既定値）</td>
+<td>14000</td>
 <td>二週間程度</td>
 </tr>
 <tr>
 <td>ＮＨＫＢＳ１</td>
-<td>163840000（既定値）</td>
-<td>15000</td>
+<td>154009600（既定値）</td>
+<td>18000</td>
 <td>二週間程度</td>
 </tr>
 <tr>
 <td>ＮＨＫＢＳプレミアム</td>
-<td>163840000（既定値）</td>
-<td>15000</td>
+<td>154009600（既定値）</td>
+<td>18000</td>
 <td>二週間程度</td>
 </tr>
 </tbody>
@@ -709,6 +714,23 @@ curl -sG &quot;$STREAM?post-filters[]=split-dual-mono&quot; | ffprobe
       cpb: bitrate max/min/avg: 20000000/0/0 buffer size: 9781248 vbv_delay: N/A
 </code></pre>
 <p>欠点として，post-filterでストリームを変換した場合，シークできなくなります．変換によりストリームが動的に生成されるため，HTTPレスポンスは<code>Content-Length</code>ヘッダーを含まず，HTTPレスポンス・ボディにはチャンク・エンコーディングが適用されるためです．</p>
+<h2 id="タイムシフト録画の再実行">タイムシフト録画の再実行</h2>
+<p>タイムシフト録画が何らかの理由で停止した場合，自動でタイムシフト録画の再実行を試みます．</p>
+<pre><code>INFO mirakc_core::timeshift: Recording stopped recorder.name=&quot;nhk&quot;
+WARN mirakc_core::timeshift: Recording pipeline broken, reactivate recorder.name=&quot;nhk&quot;
+INFO mirakc_core::timeshift: Deactivated recorder.name=&quot;nhk&quot;
+WARN mirakc_core::timeshift: Recording stopped due to some accident, \
+  activate again recorder.name=&quot;nhk&quot;
+</code></pre><p>再実行を何度か繰り返しても失敗し続ける場合，タイムシフト録画は停止します．</p>
+<pre><code>ERROR mirakc_core::timeshift: Recording stopped due to some accident, \
+  reactivation count reached the maximum number recorder.name=&quot;nhk&quot;
+</code></pre><p>この状態でも，<code>config.jobs.scan-services</code>ジョブが再実行され，停止中のサービスが見つかると，自動で再実行されます．</p>
+<pre><code>INFO mirakc_core::timeshift: Service is available, activate recorder.name=&quot;nhk&quot; ...
+INFO mirakc_core::timeshift: Recording started recorder.name=&quot;nhk&quot;
+</code></pre><p>このような状況が放送休止中に発生することをユーザーが報告しています．</p>
+<ul>
+<li><a href="https://github.com/mirakc/mirakc/issues/693" target="_blank">https://github.com/mirakc/mirakc/issues/693</a></li>
+</ul>
 
                                 
                                 </section>
@@ -752,7 +774,7 @@ curl -sG &quot;$STREAM?post-filters[]=split-dual-mono&quot; | ffprobe
     <script>
         var gitbook = gitbook || [];
         gitbook.push(function() {
-            gitbook.page.hasChanged({"page":{"title":"タイムシフト録画","level":"1.4.7","depth":2,"next":{"title":"イベント通知","level":"1.4.8","depth":2,"path":"config/events.md","ref":"./config/events.md","articles":[]},"previous":{"title":"録画予約","level":"1.4.6","depth":2,"path":"config/recording.md","ref":"./config/recording.md","articles":[]},"dir":"ltr"},"config":{"plugins":["gitbook-plugin-japanese-support"],"root":"./src","styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"pluginsConfig":{"gitbook-plugin-japanese-support":{},"highlight":{},"search":{},"lunr":{"maxIndexSize":1000000,"ignoreSpecialCharacters":false},"fontsettings":{"theme":"white","family":"sans","size":2},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false}},"theme":"default","author":"masnagam","pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56},"embedFonts":false},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"variables":{},"title":"できるmirakc","language":"ja","gitbook":"*"},"file":{"path":"config/timeshift.md","mtime":"2023-01-10T08:23:17.907Z","type":"markdown"},"gitbook":{"version":"4.0.4","time":"2023-01-10T08:23:26.183Z"},"basePath":"..","book":{"language":""}});
+            gitbook.page.hasChanged({"page":{"title":"タイムシフト録画","level":"1.4.7","depth":2,"next":{"title":"イベント通知","level":"1.4.8","depth":2,"path":"config/events.md","ref":"./config/events.md","articles":[]},"previous":{"title":"録画予約","level":"1.4.6","depth":2,"path":"config/recording.md","ref":"./config/recording.md","articles":[]},"dir":"ltr"},"config":{"plugins":["gitbook-plugin-japanese-support"],"root":"./src","styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"pluginsConfig":{"gitbook-plugin-japanese-support":{},"highlight":{},"search":{},"lunr":{"maxIndexSize":1000000,"ignoreSpecialCharacters":false},"fontsettings":{"theme":"white","family":"sans","size":2},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false}},"theme":"default","author":"masnagam","pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56},"embedFonts":false},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"variables":{},"title":"できるmirakc","language":"ja","gitbook":"*"},"file":{"path":"config/timeshift.md","mtime":"2023-01-20T07:32:58.207Z","type":"markdown"},"gitbook":{"version":"4.0.4","time":"2023-01-20T07:33:04.796Z"},"basePath":"..","book":{"language":""}});
         });
     </script>
 </div>
