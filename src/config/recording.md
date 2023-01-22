@@ -73,7 +73,7 @@ $ ls recording
 schedules.json  videos
 
 $ ls recording/videos
-'<datetime>_<title>.m2ts'  # <datetime>および<title>は実際の値に読み替えること
+'<datetime>_<program-id>.m2ts'  # <datetime>および<program-id>は実際の値に読み替えること
 ```
 
 このように，`options.contentPath`に存在しないディレクトリーが含まれている場合，
@@ -95,7 +95,7 @@ $ curl http://localhost:40772/api/recording/recorders -sG
 
 ```console
 $ ls recording/videos
-'<datetime>_<title>.m2ts'
+'<datetime>_<program-id>.m2ts'
 ```
 
 基本的に録画予約は，番組表に記載されている時刻に録画を開始します．多くの場合，こ
@@ -300,18 +300,12 @@ error() {
 add() {
   PROGRAM_ID=$1
   PROGRAM=$(curl $BASEURL/api/programs/$PROGRAM_ID -sG)
-  # TODO
-  # ----
-  # Sanitize a string if you want to use it in the contentPath.
-  # mirakc doesn't sanitize its value.
-  TITLE=$(echo "$PROGRAM" | jq -Mr '.name')
-  START_AT=$(echo "$PROGRAM" | jq -Mr '.startAt')
-  DATE=$(date --date="@$(expr $START_AT / 1000)" +%Y%m%d%H%M)
+  DATE=$(echo "$PROGRAM" | jq -Mr '.startAt / 1000 | strflocaltime("%Y%m%d%H%M")')
   JSON=$(cat <<EOF | jq -Mc '.'
 {
   "programId": $PROGRAM_ID,
   "options": {
-    "contentPath": "videos/${DATE}_${TITLE}.m2ts"
+    "contentPath": "videos/${DATE}_${PROGRAM_ID}.m2ts"
   },
   "tags": ["manual"]
 }
