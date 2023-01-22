@@ -426,111 +426,63 @@
                                 <section class="normal markdown-section">
                                 
                                 <h1 id="イベント通知">イベント通知</h1>
-<p><code>config.yml</code>の<code>events</code>の各プロパティにコマンドを指定することで，特定のイベントが発生したときに指定したコマンドを実行することができます．</p>
-<p>ここでは，<code>events.epg.programs-updated</code>を使って，簡単なルール・ベースの自動録画予約機能を実装してみます．</p>
-<p><code>config.yml</code></p>
-<pre><code class="lang-yaml"><span class="hljs-attr">events:</span>
-  <span class="hljs-attr">epg:</span>
-    <span class="hljs-attr">programs-updated:</span> <span class="hljs-string">&gt;-
-      sh /var/lib/mirakc/scripts/epg-programs-updated.sh
-</span></code></pre>
+<p>mirakcはServer-Sent Events (<a href="https://developer.mozilla.org/en-US/docs/Web/API/Server-sent_events" target="_blank">SSE</a>) によるイベント通知をサポートしています．これを利用することで，特定のイベントが発生したときにスクリプトを実行できます．</p>
+<p>すでにmirakcが起動している場合，以下のコマンドを実行してみてください．通知されたイベントが表示されるはずです．番組情報の取得が完了していない場合は表示されません．番組情報の取得が完了するまで待ちましょう．</p>
+<pre><code class="lang-console"><span class="hljs-meta">$</span><span class="bash"> curl http://localhost:40772/events -sG</span>
+event:epg.programs-updated
+data:{&quot;serviceId&quot;:400101}
+
+event:epg.programs-updated
+data:{&quot;serviceId&quot;:3273601025}
+
+event:epg.programs-updated
+data:{&quot;serviceId&quot;:3273601024}
+</code></pre>
+<p>それでは，<code>events.epg.programs-updated</code>イベントを使って，簡単なルール・ベースの自動録画予約機能を動かしてみます．</p>
 <p><code>docker-compose.yml</code></p>
 <pre><code class="lang-yaml"><span class="hljs-attr">services:</span>
-  <span class="hljs-attr">mirakc:</span>
-    <span class="hljs-string">...</span>
-    <span class="hljs-attr">volumes:</span>
-      <span class="hljs-string">...</span>
-      <span class="hljs-bullet">-</span> <span class="hljs-string">./scripts:/var/lib/mirakc/scripts:ro</span>
-    <span class="hljs-attr">environment:</span>
-      <span class="hljs-comment"># スクリプトの動作確認のため</span>
-      <span class="hljs-attr">RUST_LOG:</span> <span class="hljs-string">&apos;info,mirakc=debug&apos;</span>
-      <span class="hljs-attr">MIRAKC_DEBUG_CHILD_PROCESS:</span> <span class="hljs-number">1</span>
+  <span class="hljs-attr">recman:</span>
+    <span class="hljs-attr">container_name:</span> <span class="hljs-string">recman</span>
+    <span class="hljs-comment"># arm32環境ではlukechannings/denoは動作しない</span>
+    <span class="hljs-comment"># arm32環境では別のイメージを使うこと</span>
+    <span class="hljs-attr">image:</span> <span class="hljs-string">lukechannings/deno</span>
+    <span class="hljs-attr">init:</span> <span class="hljs-literal">true</span>
+    <span class="hljs-attr">restart:</span> <span class="hljs-string">unless-stopped</span>
+    <span class="hljs-attr">command:</span> <span class="hljs-string">&gt;-
+      run --allow-net=mirakc
+      https://raw.githubusercontent.com/mirakc/contrib/main/recording/simple-rules.js
+      -b http://mirakc:40772 --folder videos
+</span>    <span class="hljs-attr">environment:</span>
+      <span class="hljs-attr">TZ:</span> <span class="hljs-string">Asia/Tokyo</span>
+    <span class="hljs-attr">depends_on:</span>
+      <span class="hljs-bullet">-</span> <span class="hljs-string">mirakc</span>
 </code></pre>
-<p><code>scripts/epg-programs-updated.sh</code></p>
-<pre><code class="lang-sh"><span class="hljs-function"><span class="hljs-title">log</span></span>() {
-  <span class="hljs-built_in">echo</span> <span class="hljs-string">&quot;<span class="hljs-variable">$1</span>&quot;</span> &gt;&amp;2
-}
-
-<span class="hljs-function"><span class="hljs-title">error</span></span>() {
-  <span class="hljs-built_in">log</span> <span class="hljs-string">&quot;ERROR: <span class="hljs-variable">$1</span>&quot;</span>
-  <span class="hljs-built_in">exit</span> 1
-}
-
-BASE_URL=http://localhost:40772
-TAG=<span class="hljs-string">&apos;rule-nhk&apos;</span>
-
-<span class="hljs-comment"># Service IDの取得</span>
-SERVICE_ID=$(cat | jq -Mr <span class="hljs-string">&apos;.serviceId&apos;</span>)
-
-<span class="hljs-keyword">if</span> [ <span class="hljs-variable">$SERVICE_ID</span> != 3273601024 ]
-<span class="hljs-keyword">then</span>
-  <span class="hljs-built_in">log</span> <span class="hljs-string">&quot;No rule is defined for <span class="hljs-variable">$SERVICE_ID</span>&quot;</span>
-  <span class="hljs-built_in">exit</span> 0
-<span class="hljs-keyword">fi</span>
-
-<span class="hljs-comment"># `/api/services/{id}/programs`は終了した番組も含んでいるので，それらを排除</span>
-BASE_FILTER=<span class="hljs-string">&apos;select(.startAt &gt;= (now + 10000))&apos;</span>  <span class="hljs-comment"># now +10s</span>
-
-<span class="hljs-comment"># ルールをここに記述</span>
-RULE_FILTER=<span class="hljs-string">&apos;select(.name | test(&quot;ＮＨＫニュース７&quot;))&apos;</span>
-
-COLLECTED=$(curl <span class="hljs-variable">$BASE_URL</span>/api/services/<span class="hljs-variable">$SERVICE_ID</span>/programs -sG | \
-             jq -Mc <span class="hljs-string">&quot;.[] | <span class="hljs-variable">$BASE_FILTER</span> | <span class="hljs-variable">$RULE_FILTER</span> | .&quot;</span>)
-
-<span class="hljs-comment"># 以前自動登録した録画予約を削除</span>
-<span class="hljs-comment">#</span>
-<span class="hljs-comment"># 対象番組を集める前に削除しないこと</span>
-<span class="hljs-comment"># そうしてしまうと，登録できない番組が出てきてしまう</span>
-<span class="hljs-built_in">log</span> <span class="hljs-string">&quot;Removing scheduled tagged with <span class="hljs-variable">$TAG</span>...&quot;</span>
-TARGET=$(<span class="hljs-built_in">echo</span> <span class="hljs-string">&quot;<span class="hljs-variable">$TAG</span>&quot;</span> | jq -Rr @uri)  <span class="hljs-comment"># percent-encoding</span>
-curl <span class="hljs-string">&quot;<span class="hljs-variable">$BASE_URL</span>/api/recording/schedules?target=<span class="hljs-variable">$TARGET</span>&quot;</span> -s -X DELETE
-
-<span class="hljs-keyword">for</span> PROGRAM_JSON <span class="hljs-keyword">in</span> <span class="hljs-variable">$COLLECTED</span>
-<span class="hljs-keyword">do</span>
-  PROGRAM_ID=$(<span class="hljs-built_in">echo</span> <span class="hljs-string">&quot;<span class="hljs-variable">$PROGRAM_JSON</span>&quot;</span> | jq -Mr <span class="hljs-string">&apos;.id&apos;</span>)
-  <span class="hljs-comment"># <span class="hljs-doctag">TODO:</span> ここで&apos;/&apos;などファイル名で使用できない文字を除去したりする必要がある</span>
-  TITLE=$(<span class="hljs-built_in">echo</span> <span class="hljs-string">&quot;<span class="hljs-variable">$PROGRAM_JSON</span>&quot;</span> | jq -Mr <span class="hljs-string">&quot;.name&quot;</span>)
-  START_AT=$(<span class="hljs-built_in">echo</span> <span class="hljs-string">&quot;<span class="hljs-variable">$PROGRAM_JSON</span>&quot;</span> | jq -Mr <span class="hljs-string">&apos;.startAt&apos;</span>)
-  DATE=$(date --date=<span class="hljs-string">&quot;@<span class="hljs-subst">$(expr $START_AT / 1000)</span>&quot;</span> +%Y%m%d%H%M)
-  SCHEDULE_JSON=$(cat &lt;&lt;<span class="hljs-string">EOF | jq -Mc &apos;.&apos;
-{
-  &quot;programId&quot;: $PROGRAM_ID,
-  &quot;options&quot;: {
-    &quot;contentPath&quot;: &quot;${DATE}_${TITLE}.m2ts&quot;
-  },
-  &quot;tags&quot;: [&quot;$TAG&quot;]
-}
-EOF</span>
-)
-  <span class="hljs-built_in">log</span> <span class="hljs-string">&quot;Adding <span class="hljs-variable">$SCHEDULE_JSON</span>...&quot;</span>
-  curl <span class="hljs-variable">$BASE_URL</span>/api/recording/schedules -s \
-    -X POST \
-    -H <span class="hljs-string">&apos;Content-Type: application/json&apos;</span> \
-    -d <span class="hljs-string">&quot;<span class="hljs-variable">$SCHEDULE_JSON</span>&quot;</span>
-<span class="hljs-keyword">done</span>
+<p><code>recman</code>コンテナーを起動しログを確認します．</p>
+<pre><code class="lang-console"><span class="hljs-meta">$</span><span class="bash"> docker logs -f recman</span>
+...
+Connect to http://mirakc:40772/events...
+EPG programs updated: ＮＨＫ総合１・東京: 3273601024
+EPG programs updated: ＮＨＫ総合２・東京: 3273601025
+EPG programs updated: ＮＨＫＢＳ１: 400101
+Added: scheduled: ＮＨＫ総合１・東京: 327360102422829: ...
+...
 </code></pre>
 <p>スクリプトの実行完了をしばらく待って以下を実行すると，録画予約が自動登録されていることを確認できます．</p>
-<pre><code class="lang-console"><span class="hljs-meta">$</span><span class="bash"> curl http://localhost:40772/api/recording/schedules -sG | jq <span class="hljs-string">&apos;.[].programId&apos;</span></span>
-327360102407088
-327360102407531
-327360102407957
-327360102408432
-327360102408944
-327360102409528
-327360102410344
-327360102410933
+<pre><code class="lang-console"><span class="hljs-meta">$</span><span class="bash"> curl http://localhost:40772/api/recording/schedules -sG | jq <span class="hljs-string">&apos;.[].program.id&apos;</span></span>
+327360102422829
+327360102423293
+327360102423762
+327360102424202
+327360102424706
+327360102425360
+327360102426083
 <span class="hljs-meta">
-$</span><span class="bash"> curl http://localhost:40772/api/programs/327360102407088 -sG | \
+$</span><span class="bash"> curl http://localhost:40772/api/programs/327360102422829 -sG | \
     jq -r <span class="hljs-string">&apos;.name | test(&quot;ＮＨＫニュース７&quot;)&apos;</span></span>
 true
 </code></pre>
-<p>イベント・スクリプトのプロトコルの詳細については，<a href="https://github.com/mirakc/mirakc/blob/main/docs/config.md" target="_blank">mirakc/docs/config.md</a>を参照してください．</p>
-<h2 id="server-sent-event-sse">Server-Sent Event (SSE)</h2>
-<p>mirakcは，イベント通知のためのWebエンドポイントを提供しています．通知にはSSEを使用しているため，これをサポートしているウェブ・ブラウザウーで以下のURLを開くだけで動作確認が可能です．</p>
-<ul>
-<li><code>http://$HOST:$PORT/events</code></li>
-</ul>
-<p>これを利用すれば，ルール・ベースの自動録画予約機能などをウェブ・アプリケーション側で実装することが可能です．</p>
+<p>上記のスクリプトでは<code>epg.programs-updated</code>イベントのみを使っていますが，放送中の番組の追跡機能を有効化した場合に通知される<code>onair.program-changed</code>イベントを使えば，放送中の番組（及び次に放送される番組）に対しても同様の自動録画ルールを適用できます．</p>
+<p>通知されるイベントの詳細については，<a href="https://github.com/mirakc/mirakc/blob/main/docs/events.md" target="_blank">mirakc/docs/events.md</a>を参照してください．</p>
 
                                 
                                 </section>
@@ -574,7 +526,7 @@ true
     <script>
         var gitbook = gitbook || [];
         gitbook.push(function() {
-            gitbook.page.hasChanged({"page":{"title":"イベント通知","level":"1.4.8","depth":2,"next":{"title":"フロントエンドアプリケーションとの連携","level":"1.5","depth":1,"path":"frontend_applications.md","ref":"./frontend_applications.md","articles":[]},"previous":{"title":"タイムシフト録画","level":"1.4.7","depth":2,"path":"config/timeshift.md","ref":"./config/timeshift.md","articles":[]},"dir":"ltr"},"config":{"plugins":["gitbook-plugin-japanese-support"],"root":"./src","styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"pluginsConfig":{"gitbook-plugin-japanese-support":{},"highlight":{},"search":{},"lunr":{"maxIndexSize":1000000,"ignoreSpecialCharacters":false},"fontsettings":{"theme":"white","family":"sans","size":2},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false}},"theme":"default","author":"masnagam","pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56},"embedFonts":false},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"variables":{},"title":"できるmirakc","language":"ja","gitbook":"*"},"file":{"path":"config/events.md","mtime":"2023-01-20T07:32:58.207Z","type":"markdown"},"gitbook":{"version":"4.0.4","time":"2023-01-20T07:33:04.796Z"},"basePath":"..","book":{"language":""}});
+            gitbook.page.hasChanged({"page":{"title":"イベント通知","level":"1.4.8","depth":2,"next":{"title":"フロントエンドアプリケーションとの連携","level":"1.5","depth":1,"path":"frontend_applications.md","ref":"./frontend_applications.md","articles":[]},"previous":{"title":"タイムシフト録画","level":"1.4.7","depth":2,"path":"config/timeshift.md","ref":"./config/timeshift.md","articles":[]},"dir":"ltr"},"config":{"plugins":["gitbook-plugin-japanese-support"],"root":"./src","styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"pluginsConfig":{"gitbook-plugin-japanese-support":{},"highlight":{},"search":{},"lunr":{"maxIndexSize":1000000,"ignoreSpecialCharacters":false},"fontsettings":{"theme":"white","family":"sans","size":2},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false}},"theme":"default","author":"masnagam","pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56},"embedFonts":false},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"variables":{},"title":"できるmirakc","language":"ja","gitbook":"*"},"file":{"path":"config/events.md","mtime":"2023-01-22T12:25:08.624Z","type":"markdown"},"gitbook":{"version":"4.0.4","time":"2023-01-22T12:25:19.305Z"},"basePath":"..","book":{"language":""}});
         });
     </script>
 </div>

@@ -474,7 +474,7 @@
 schedules.json  videos
 <span class="hljs-meta">
 $</span><span class="bash"> ls recording/videos</span>
-&apos;&lt;datetime&gt;_&lt;title&gt;.m2ts&apos;  # &lt;datetime&gt;および&lt;title&gt;は実際の値に読み替えること
+&apos;&lt;datetime&gt;_&lt;program-id&gt;.m2ts&apos;  # &lt;datetime&gt;および&lt;program-id&gt;は実際の値に読み替えること
 </code></pre>
 <p>このように，<code>options.contentPath</code>に存在しないディレクトリーが含まれている場合，録画時に自動でディレクトリーが作成されます．</p>
 <p>録画予約を削除すれば，録画も停止します．</p>
@@ -488,7 +488,7 @@ $</span><span class="bash"> curl http://localhost:40772/api/recording/recorders 
 </code></pre>
 <p>録画予約を削除しても録画データは消えません．</p>
 <pre><code class="lang-console"><span class="hljs-meta">$</span><span class="bash"> ls recording/videos</span>
-&apos;&lt;datetime&gt;_&lt;title&gt;.m2ts&apos;
+&apos;&lt;datetime&gt;_&lt;program-id&gt;.m2ts&apos;
 </code></pre>
 <p>基本的に録画予約は，番組表に記載されている時刻に録画を開始します．多くの場合，これでも問題はないのですが，ごく稀に，前番組の放送延長などが原因で録画予約した番組の放送時間が変更されることがあります．このような場合，番組表に記載された時刻には番組は開始されないため，当然の結果として番組全体を正しく録画することはできません．</p>
 <p>mirakcは，録画予約した番組の放送時間の変更を追跡する機能を実装しています．</p>
@@ -613,18 +613,12 @@ $</span><span class="bash"> sh recording.sh add 327360102415795 | jq <span class
 <span class="hljs-function"><span class="hljs-title">add</span></span>() {
   PROGRAM_ID=<span class="hljs-variable">$1</span>
   PROGRAM=$(curl <span class="hljs-variable">$BASEURL</span>/api/programs/<span class="hljs-variable">$PROGRAM_ID</span> -sG)
-  <span class="hljs-comment"># TODO</span>
-  <span class="hljs-comment"># ----</span>
-  <span class="hljs-comment"># Sanitize a string if you want to use it in the contentPath.</span>
-  <span class="hljs-comment"># mirakc doesn&apos;t sanitize its value.</span>
-  TITLE=$(<span class="hljs-built_in">echo</span> <span class="hljs-string">&quot;<span class="hljs-variable">$PROGRAM</span>&quot;</span> | jq -Mr <span class="hljs-string">&apos;.name&apos;</span>)
-  START_AT=$(<span class="hljs-built_in">echo</span> <span class="hljs-string">&quot;<span class="hljs-variable">$PROGRAM</span>&quot;</span> | jq -Mr <span class="hljs-string">&apos;.startAt&apos;</span>)
-  DATE=$(date --date=<span class="hljs-string">&quot;@<span class="hljs-subst">$(expr $START_AT / 1000)</span>&quot;</span> +%Y%m%d%H%M)
+  DATE=$(<span class="hljs-built_in">echo</span> <span class="hljs-string">&quot;<span class="hljs-variable">$PROGRAM</span>&quot;</span> | jq -Mr <span class="hljs-string">&apos;.startAt / 1000 | strflocaltime(&quot;%Y%m%d%H%M&quot;)&apos;</span>)
   JSON=$(cat &lt;&lt;<span class="hljs-string">EOF | jq -Mc &apos;.&apos;
 {
   &quot;programId&quot;: $PROGRAM_ID,
   &quot;options&quot;: {
-    &quot;contentPath&quot;: &quot;videos/${DATE}_${TITLE}.m2ts&quot;
+    &quot;contentPath&quot;: &quot;videos/${DATE}_${PROGRAM_ID}.m2ts&quot;
   },
   &quot;tags&quot;: [&quot;manual&quot;]
 }
@@ -722,7 +716,7 @@ EOF</span>
     <script>
         var gitbook = gitbook || [];
         gitbook.push(function() {
-            gitbook.page.hasChanged({"page":{"title":"録画予約","level":"1.4.6","depth":2,"next":{"title":"タイムシフト録画","level":"1.4.7","depth":2,"path":"config/timeshift.md","ref":"./config/timeshift.md","articles":[]},"previous":{"title":"局ロゴの表示","level":"1.4.5","depth":2,"path":"config/logos.md","ref":"./config/logos.md","articles":[]},"dir":"ltr"},"config":{"plugins":["gitbook-plugin-japanese-support"],"root":"./src","styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"pluginsConfig":{"gitbook-plugin-japanese-support":{},"highlight":{},"search":{},"lunr":{"maxIndexSize":1000000,"ignoreSpecialCharacters":false},"fontsettings":{"theme":"white","family":"sans","size":2},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false}},"theme":"default","author":"masnagam","pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56},"embedFonts":false},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"variables":{},"title":"できるmirakc","language":"ja","gitbook":"*"},"file":{"path":"config/recording.md","mtime":"2023-01-20T07:32:58.207Z","type":"markdown"},"gitbook":{"version":"4.0.4","time":"2023-01-20T07:33:04.796Z"},"basePath":"..","book":{"language":""}});
+            gitbook.page.hasChanged({"page":{"title":"録画予約","level":"1.4.6","depth":2,"next":{"title":"タイムシフト録画","level":"1.4.7","depth":2,"path":"config/timeshift.md","ref":"./config/timeshift.md","articles":[]},"previous":{"title":"局ロゴの表示","level":"1.4.5","depth":2,"path":"config/logos.md","ref":"./config/logos.md","articles":[]},"dir":"ltr"},"config":{"plugins":["gitbook-plugin-japanese-support"],"root":"./src","styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"pluginsConfig":{"gitbook-plugin-japanese-support":{},"highlight":{},"search":{},"lunr":{"maxIndexSize":1000000,"ignoreSpecialCharacters":false},"fontsettings":{"theme":"white","family":"sans","size":2},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false}},"theme":"default","author":"masnagam","pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56},"embedFonts":false},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"variables":{},"title":"できるmirakc","language":"ja","gitbook":"*"},"file":{"path":"config/recording.md","mtime":"2023-01-22T12:25:08.624Z","type":"markdown"},"gitbook":{"version":"4.0.4","time":"2023-01-22T12:25:19.305Z"},"basePath":"..","book":{"language":""}});
         });
     </script>
 </div>
