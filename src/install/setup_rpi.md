@@ -9,7 +9,7 @@ Raspberry Piのセットアップ手順については，「Raspberry Pi 4で構
 * Raspberry Pi OS Lite (64-bit)
 * PX-Q3U4 + [nns779/px4_drv]
 
-で動作確認をしましたが，以下のような環境でも動作します．
+で動作確認をしましたが，以下のような環境でもmirakcは動作します．
 
 * Raspberry Pi 2B以上 + Raspberry Pi OS Lite (32-bit)
 * ZeroPi + [Armbian] (arm32v7)
