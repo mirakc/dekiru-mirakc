@@ -1,132 +1,85 @@
 # イベント通知
 
-`config.yml`の`events`の各プロパティにコマンドを指定することで，特定のイベントが
-発生したときに指定したコマンドを実行することができます．
+mirakcはServer-Sent Events ([SSE]) によるイベント通知をサポートしています．これを
+利用することで，特定のイベントが発生したときにスクリプトを実行できます．
 
-ここでは，`events.epg.programs-updated`を使って，簡単なルール・ベースの自動録画
-予約機能を実装してみます．
+すでにmirakcが起動している場合，以下のコマンドを実行してみてください．通知された
+イベントが表示されるはずです．番組情報の取得が完了していない場合は表示されません．
+番組情報の取得が完了するまで待ちましょう．
 
-`config.yml`
+```console
+$ curl http://localhost:40772/events -sG
+event:epg.programs-updated
+data:{"serviceId":400101}
 
-```yaml
-events:
-  epg:
-    programs-updated: >-
-      sh /var/lib/mirakc/scripts/epg-programs-updated.sh
+event:epg.programs-updated
+data:{"serviceId":3273601025}
+
+event:epg.programs-updated
+data:{"serviceId":3273601024}
 ```
+
+それでは，`events.epg.programs-updated`イベントを使って，簡単なルール・ベースの
+自動録画予約機能を動かしてみます．
 
 `docker-compose.yml`
 
 ```yaml
 services:
-  mirakc:
-    ...
-    volumes:
-      ...
-      - ./scripts:/var/lib/mirakc/scripts:ro
+  recman:
+    container_name: recman
+    # arm32環境ではlukechannings/denoは動作しない
+    # arm32環境では別のイメージを使うこと
+    image: lukechannings/deno
+    init: true
+    restart: unless-stopped
+    command: >-
+      run --allow-net=mirakc
+      https://raw.githubusercontent.com/mirakc/contrib/main/recording/simple-rules.js
+      -b http://mirakc:40772 --folder videos
     environment:
-      # スクリプトの動作確認のため
-      RUST_LOG: 'info,mirakc=debug'
-      MIRAKC_DEBUG_CHILD_PROCESS: 1
+      TZ: Asia/Tokyo
+    depends_on:
+      - mirakc
 ```
 
-`scripts/epg-programs-updated.sh`
+`recman`コンテナーを起動しログを確認します．
 
-```sh
-log() {
-  echo "$1" >&2
-}
-
-error() {
-  log "ERROR: $1"
-  exit 1
-}
-
-BASE_URL=http://localhost:40772
-TAG='rule-nhk'
-
-# Service IDの取得
-SERVICE_ID=$(cat | jq -Mr '.serviceId')
-
-if [ $SERVICE_ID != 3273601024 ]
-then
-  log "No rule is defined for $SERVICE_ID"
-  exit 0
-fi
-
-# `/api/services/{id}/programs`は終了した番組も含んでいるので，それらを排除
-BASE_FILTER='select(.startAt >= (now + 10000))'  # now +10s
-
-# ルールをここに記述
-RULE_FILTER='select(.name | test("ＮＨＫニュース７"))'
-
-COLLECTED=$(curl $BASE_URL/api/services/$SERVICE_ID/programs -sG | \
-             jq -Mc ".[] | $BASE_FILTER | $RULE_FILTER | .")
-
-# 以前自動登録した録画予約を削除
-#
-# 対象番組を集める前に削除しないこと
-# そうしてしまうと，登録できない番組が出てきてしまう
-log "Removing scheduled tagged with $TAG..."
-TARGET=$(echo "$TAG" | jq -Rr @uri)  # percent-encoding
-curl "$BASE_URL/api/recording/schedules?target=$TARGET" -s -X DELETE
-
-for PROGRAM_JSON in $COLLECTED
-do
-  PROGRAM_ID=$(echo "$PROGRAM_JSON" | jq -Mr '.id')
-  # TODO: ここで'/'などファイル名で使用できない文字を除去したりする必要がある
-  TITLE=$(echo "$PROGRAM_JSON" | jq -Mr ".name")
-  START_AT=$(echo "$PROGRAM_JSON" | jq -Mr '.startAt')
-  DATE=$(date --date="@$(expr $START_AT / 1000)" +%Y%m%d%H%M)
-  SCHEDULE_JSON=$(cat <<EOF | jq -Mc '.'
-{
-  "programId": $PROGRAM_ID,
-  "options": {
-    "contentPath": "${DATE}_${TITLE}.m2ts"
-  },
-  "tags": ["$TAG"]
-}
-EOF
-)
-  log "Adding $SCHEDULE_JSON..."
-  curl $BASE_URL/api/recording/schedules -s \
-    -X POST \
-    -H 'Content-Type: application/json' \
-    -d "$SCHEDULE_JSON"
-done
+```console
+$ docker logs -f recman
+...
+Connect to http://mirakc:40772/events...
+EPG programs updated: ＮＨＫ総合１・東京: 3273601024
+EPG programs updated: ＮＨＫ総合２・東京: 3273601025
+EPG programs updated: ＮＨＫＢＳ１: 400101
+Added: scheduled: ＮＨＫ総合１・東京: 327360102422829: ...
+...
 ```
 
 スクリプトの実行完了をしばらく待って以下を実行すると，録画予約が自動登録されてい
 ることを確認できます．
 
 ```console
-$ curl http://localhost:40772/api/recording/schedules -sG | jq '.[].programId'
-327360102407088
-327360102407531
-327360102407957
-327360102408432
-327360102408944
-327360102409528
-327360102410344
-327360102410933
+$ curl http://localhost:40772/api/recording/schedules -sG | jq '.[].program.id'
+327360102422829
+327360102423293
+327360102423762
+327360102424202
+327360102424706
+327360102425360
+327360102426083
 
-$ curl http://localhost:40772/api/programs/327360102407088 -sG | \
+$ curl http://localhost:40772/api/programs/327360102422829 -sG | \
     jq -r '.name | test("ＮＨＫニュース７")'
 true
 ```
 
-イベント・スクリプトのプロトコルの詳細については，[mirakc/docs/config.md]を参照
-してください．
+上記のスクリプトでは`epg.programs-updated`イベントのみを使っていますが，
+放送中の番組の追跡機能を有効化した場合に通知される`onair.program-changed`イベン
+トを使えば，放送中の番組（及び次に放送される番組）に対しても同様の自動録画ルール
+を適用できます．
 
-## Server-Sent Event (SSE)
+通知されるイベントの詳細については，[mirakc/docs/events.md]を参照してください．
 
-mirakcは，イベント通知のためのWebエンドポイントを提供しています．通知にはSSEを使
-用しているため，これをサポートしているウェブ・ブラウザウーで以下のURLを開くだけ
-で動作確認が可能です．
-
-* `http://$HOST:$PORT/events`
-
-これを利用すれば，ルール・ベースの自動録画予約機能などをウェブ・アプリケーション
-側で実装することが可能です．
-
-[mirakc/docs/config.md]: https://github.com/mirakc/mirakc/blob/main/docs/config.md
+[SSE]: https://developer.mozilla.org/en-US/docs/Web/API/Server-sent_events
+[mirakc/docs/events.md]: https://github.com/mirakc/mirakc/blob/main/docs/events.md
