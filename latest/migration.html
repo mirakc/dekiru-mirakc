@@ -3,7 +3,7 @@
 <html lang="ja" >
     <head>
         <meta charset="UTF-8">
-        <title>mirakcって何ですか？ · できるmirakc</title>
+        <title>v1からv2への移行 · できるmirakc</title>
         <meta http-equiv="X-UA-Compatible" content="IE=edge" />
         <meta name="description" content="">
         <meta name="generator" content="HonKit 4.0.4">
@@ -56,10 +56,10 @@
     <link rel="shortcut icon" href="gitbook/images/favicon.ico" type="image/x-icon">
 
     
-    <link rel="next" href="install/" />
+    <link rel="next" href="older_versions.html" />
     
     
-    <link rel="prev" href="./" />
+    <link rel="prev" href="tsd_server.html" />
     
 
     </head>
@@ -101,7 +101,7 @@
             
         </li>
     
-        <li class="chapter active" data-level="1.2" data-path="what.html">
+        <li class="chapter " data-level="1.2" data-path="what.html">
             
                 <a href="what.html">
             
@@ -367,7 +367,7 @@
             
         </li>
     
-        <li class="chapter " data-level="2.2" data-path="migration.html">
+        <li class="chapter active" data-level="2.2" data-path="migration.html">
             
                 <a href="migration.html">
             
@@ -423,7 +423,7 @@
     <!-- Title -->
     <h1>
         <i class="fa fa-circle-o-notch fa-spin"></i>
-        <a href="." >mirakcって何ですか？</a>
+        <a href="." >v1からv2への移行</a>
     </h1>
 </div>
 
@@ -438,32 +438,81 @@
     
                                 <section class="normal markdown-section">
                                 
-                                <h1 id="mirakcって何ですか？">mirakcって何ですか？</h1>
-<p>初めて名前を目にした人もいると思うので，簡単に説明しておきます．</p>
-<p>mirakcは，Raspberry Piのような<a href="https://ja.wikipedia.org/wiki/%E3%82%B7%E3%83%B3%E3%82%B0%E3%83%AB%E3%83%9C%E3%83%BC%E3%83%89%E3%82%B3%E3%83%B3%E3%83%94%E3%83%A5%E3%83%BC%E3%82%BF" target="_blank">シングルボードコンピュータ</a>（SBC）をターゲットデバイスとして，Rust言語で記述されたMirakurunクローンです．</p>
-<p>大きな改善点として，CPU使用率及びメモリー使用量の改善が挙げられます．例えば，８チャンネル同時ストリーミング時のリソース使用効率が，Mirakurunと比べて以下のように向上しています．</p>
+                                <h1 id="v1からv2への移行">v1からv2への移行</h1>
+<p>ここでは，v1からv2への移行について説明します．</p>
+<h2 id="configyml">config.yml</h2>
+<p><a href="https://github.com/dtolnay/serde-yaml/releases/tag/0.9.0" target="_blank">serde_yamlでの列挙型の扱いが変わったため</a>，
+<code>server.addrs</code>を書き換える必要があります．</p>
+<pre><code class="lang-yaml"><span class="hljs-comment"># v1</span>
+<span class="hljs-attr">server:</span>
+  <span class="hljs-attr">addrs:</span>
+    <span class="hljs-bullet">-</span> <span class="hljs-attr">http:</span> <span class="hljs-string">&apos;0.0.0.0:40772&apos;</span>
+    <span class="hljs-bullet">-</span> <span class="hljs-attr">unix:</span> <span class="hljs-string">/tmp/mirakc.sock</span>
+
+<span class="hljs-comment"># v2</span>
+<span class="hljs-attr">server:</span>
+  <span class="hljs-attr">addrs:</span>
+    <span class="hljs-bullet">-</span> <span class="hljs-type">!http</span> <span class="hljs-string">&apos;0.0.0.0:40772&apos;</span>
+    <span class="hljs-bullet">-</span> <span class="hljs-type">!unix</span> <span class="hljs-string">/tmp/mirakc.sock</span>
+</code></pre>
+<p><a href="https://github.com/mirakc/mirakc/issues/690" target="_blank">mirakc内部のサービスID及び番組IDからTSIDを削除したことに伴い</a>，
+<code>timeshift.recorders[].service-triple</code>が<code>timeshift.recorders[].service-id</code>に変更されました．</p>
+<pre><code class="lang-yaml"><span class="hljs-comment"># v1</span>
+<span class="hljs-attr">timeshift:</span>
+  <span class="hljs-attr">recorders:</span>
+    <span class="hljs-attr">bs1:</span>
+      <span class="hljs-attr">service-triple:</span> [<span class="hljs-number">4</span>, <span class="hljs-number">16625</span>, <span class="hljs-number">101</span>]
+
+<span class="hljs-comment"># v2</span>
+<span class="hljs-attr">timeshift:</span>
+  <span class="hljs-attr">recorders:</span>
+    <span class="hljs-attr">bs1:</span>
+      <span class="hljs-attr">service-id:</span> <span class="hljs-number">400101</span>  <span class="hljs-comment"># Mirakurun Service ID</span>
+</code></pre>
+<p><code>resource.logos[].service-triple</code> も同様です．</p>
+<pre><code class="lang-yaml"><span class="hljs-comment"># v1</span>
+<span class="hljs-attr">resource:</span>
+  <span class="hljs-attr">logos:</span>
+    <span class="hljs-bullet">-</span> <span class="hljs-attr">service-triple:</span> [<span class="hljs-number">4</span>, <span class="hljs-number">16625</span>, <span class="hljs-number">101</span>]
+
+<span class="hljs-comment"># v2</span>
+<span class="hljs-string">resource</span>
+  <span class="hljs-attr">logos:</span>
+    <span class="hljs-bullet">-</span> <span class="hljs-attr">service-id:</span> <span class="hljs-number">400101</span>  <span class="hljs-comment"># Mirakurun Service ID</span>
+</code></pre>
+<p><a href="https://github.com/mirakc/mirakc/issues/623" target="_blank">mirakc内部でopenapi.jsonを生成するようになったため</a>，<code>mirakurun.openapi-json</code>は削除されました．</p>
+<pre><code class="lang-yaml"><span class="hljs-comment"># v1</span>
+<span class="hljs-attr">mirakurun:</span>
+  <span class="hljs-attr">openapi-json:</span> <span class="hljs-string">/path/to/mirakurun.openapi.json</span>
+
+<span class="hljs-comment"># v2: Removed</span>
+</code></pre>
+<h2 id="タイムシフト録画">タイムシフト録画</h2>
+<p>チャンクサイズの既定値が変更されました．</p>
 <ul>
-<li>CPU使用率は同程度（もしくは低い）</li>
-<li>メモリー使用量は1/40</li>
+<li>v1<ul>
+<li>163840000</li>
+<li><code>8192</code>の倍数でなければならない</li>
 </ul>
-<p>また，GCを使用しない実装となっていることから（一部，参照カウント方式のメモリー管理を行っています），CPU使用率・メモリー使用量共に安定的に推移します．</p>
-<p>mirakcは，Mirakurunの完全クローンには至っておらず，EPGStationを動作させるために必要な<a href="https://github.com/mirakc/mirakc/blob/main/docs/web-api.md" target="_blank">Web API</a>のみを実装しています．そのため，残念ながらChinachuでは使えません（もちろん，不足しているWeb APIを実装すれば動くとは思います）．</p>
-<h2 id="開発を始めるまでの経緯">開発を始めるまでの経緯</h2>
-<p>一般的に，SBCは以下のような特徴を持っています．</p>
-<ul>
-<li>1GHz程度の低クロックCPU</li>
-<li>1GB程度のメモリー</li>
-<li>十数ワットの電力消費</li>
+</li>
+<li>v2<ul>
+<li>154009600</li>
+<li><code>8192 * 188</code>の倍数でなければならない</li>
 </ul>
-<p>一昔前のデスクトップPCよりも貧弱な環境です．動画をffmpegでソフトウェアエンコードするといった使い方には向いていません．しかし，２４時間稼働し続けるちょっとしたサービスの運用には最適です．</p>
-<p>ちょっとしたサービス．そう，録画サーバーに向いていると思いませんか？私もそう考えて，棚の上で埃を被っていたRaspberry Pi 3Bに手を伸ばしました．</p>
-<p>早速メルカリでPX-S1UDとカードリーダーを手に入れました．マイクロSDカードに
-Raspbianを書き込み，チューナーデバイスのファームウェアとMirakurunをインストールしました．</p>
-<p>Mirakurunは申し分ない速度で動作しました．CPU使用率も問題ありませんでした．心配していたメモリー使用量は150MB前後であり，予想よりも少ない消費量で動作しました．ちょっとした成功に高揚感を感じた私は，何を思ったのか<a href="https://wiki.pine64.org/index.php/ROCK64" target="_blank">ROCK64</a>とPX-Q3U4を購入していました．</p>
-<p>当時（２０１９年第１四半期），Raspberry Pi 3Bに搭載されているイーサネットの上限が100Mbpsであるため，Mirakurunで４つのTSストリームを同時に送信することは困難であることが知られていました（Qiitaの記事だったと記憶していますが，その記事はすでに削除されてしまっているようです）．そこで，ROCK64の登場です．今ならRaspberry Pi 4
-を購入する場面ですが，その当時，1Gbpsイーサネット搭載で扱いやすそうなSBCの１つが
-ROCK64でした．価格も手頃だったので悩むことなく購入しました．</p>
-<p>準備を整え，８つのTSストリームの同時送信を試したところ，メモリーが枯渇しました．後で分かったことですが，Mirakurunでも2GBあれば８つのTSストリームを同時送信可能です．当時私が使用していたROCK64に搭載されていたメモリーは1GB．ROCK64のメモリーのラインナップは1/2/4GB．数千円をケチって安いのを買ったことがmirakc開発の始まりとなりました．</p>
+</li>
+</ul>
+<p><code>ts-file</code>のサイズも変わるため，再計算してください．</p>
+<p><code>data-file</code>のJSON形式も変更されたため，mirakcを実行すると以下のようなエラーが表示され，タイムシフト録画は開始されません．</p>
+<pre><code>ERROR mirakc_core::timeshift: Failed to load records err=JSON \
+  error: missing field `id` at line 1 column 233 recorder.name=&quot;nhk&quot;
+ERROR mirakc_core::timeshift: Recover or simply remove &lt;data-file&gt; recorder.name=&quot;nhk&quot;
+</code></pre><p>エラーメッセージで提案されているように，以下のどちらかを実行してください．</p>
+<ol>
+<li><code>mirakc rebuild-timeshift</code>を実行し，タイムシフト録画ファイルを再構築する</li>
+<li><code>data-file</code>を削除する</li>
+</ol>
+<p><code>mirakc rebuild-timeshift</code>によるタイムシフト録画ファイルの再構築には時間がかかります（詳細は<a href="https://github.com/mirakc/mirakc/issues/690#issuecomment-1384949952" target="_blank">こちら</a>）．当然，再構築が完了するまでタイムシフト録画を実行することは不可能なので，この方法はお勧めしません．mirakc (v1)を起動し，必要なレコードのみを別ファイルに保存．その後，<code>data-file</code>を削除することを推奨します．</p>
+<p>レコードの保存は，<code>mirakc-timesift-fs</code>を利用しているならファイルをコピーすれば良いだけです．<code>curl</code>とWeb APIを使っても保存できますが，説明は省略します．</p>
 
                                 
                                 </section>
@@ -491,12 +540,12 @@ ROCK64でした．価格も手頃だったので悩むことなく購入しま�
 
             
                 
-                <a href="./" class="navigation navigation-prev " aria-label="Previous page: できるmirakc">
+                <a href="tsd_server.html" class="navigation navigation-prev " aria-label="Previous page: tsdサーバーの詳しい話">
                     <i class="fa fa-angle-left"></i>
                 </a>
                 
                 
-                <a href="install/" class="navigation navigation-next " aria-label="Next page: Dockerを使ったインストール">
+                <a href="older_versions.html" class="navigation navigation-next " aria-label="Next page: 旧バージョンのドキュメント">
                     <i class="fa fa-angle-right"></i>
                 </a>
                 
@@ -507,7 +556,7 @@ ROCK64でした．価格も手頃だったので悩むことなく購入しま�
     <script>
         var gitbook = gitbook || [];
         gitbook.push(function() {
-            gitbook.page.hasChanged({"page":{"title":"mirakcって何ですか？","level":"1.2","depth":1,"next":{"title":"Dockerを使ったインストール","level":"1.3","depth":1,"path":"install/README.md","ref":"./install/README.md","articles":[{"title":"Raspberry Piのセットアップ","level":"1.3.1","depth":2,"path":"install/setup_rpi.md","ref":"./install/setup_rpi.md","articles":[]},{"title":"Dockerのインストール","level":"1.3.2","depth":2,"path":"install/docker.md","ref":"./install/docker.md","articles":[]},{"title":"mirakcのインストール","level":"1.3.3","depth":2,"path":"install/mirakc.md","ref":"./install/mirakc.md","articles":[]},{"title":"Dockerイメージ","level":"1.3.4","depth":2,"path":"install/image.md","ref":"./install/image.md","articles":[]}]},"previous":{"title":"できるmirakc","level":"1.1","depth":1,"path":"README.md","ref":"README.md","articles":[]},"dir":"ltr"},"config":{"plugins":["gitbook-plugin-japanese-support"],"root":"./src","styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"pluginsConfig":{"gitbook-plugin-japanese-support":{},"highlight":{},"search":{},"lunr":{"maxIndexSize":1000000,"ignoreSpecialCharacters":false},"fontsettings":{"theme":"white","family":"sans","size":2},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false}},"theme":"default","author":"masnagam","pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56},"embedFonts":false},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"variables":{},"title":"できるmirakc","language":"ja","gitbook":"*"},"file":{"path":"what.md","mtime":"2023-01-23T04:14:22.227Z","type":"markdown"},"gitbook":{"version":"4.0.4","time":"2023-01-23T04:14:28.088Z"},"basePath":".","book":{"language":""}});
+            gitbook.page.hasChanged({"page":{"title":"v1からv2への移行","level":"2.2","depth":1,"next":{"title":"旧バージョンのドキュメント","level":"2.3","depth":1,"path":"older_versions.md","ref":"./older_versions.md","articles":[]},"previous":{"title":"tsdサーバーの詳しい話","level":"2.1","depth":1,"path":"tsd_server.md","ref":"./tsd_server.md","articles":[]},"dir":"ltr"},"config":{"plugins":["gitbook-plugin-japanese-support"],"root":"./src","styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"pluginsConfig":{"gitbook-plugin-japanese-support":{},"highlight":{},"search":{},"lunr":{"maxIndexSize":1000000,"ignoreSpecialCharacters":false},"fontsettings":{"theme":"white","family":"sans","size":2},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false}},"theme":"default","author":"masnagam","pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56},"embedFonts":false},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"variables":{},"title":"できるmirakc","language":"ja","gitbook":"*"},"file":{"path":"migration.md","mtime":"2023-01-23T04:14:22.227Z","type":"markdown"},"gitbook":{"version":"4.0.4","time":"2023-01-23T04:14:28.088Z"},"basePath":".","book":{"language":""}});
         });
     </script>
 </div>
