@@ -15,7 +15,7 @@
   * [局ロゴの表示](./config/logos.md)
   * [録画予約](./config/recording.md)
   * [タイムシフト録画](./config/timeshift.md)
-  * [イベント通知](./config/events.md)
+* [イベント通知](./events.md)
 * [フロントエンドアプリケーションとの連携](./frontend_applications.md)
 * [カスタムイメージの作成](./custom_image.md)
 * [トラブルシューティング](./troubleshooting.md)
