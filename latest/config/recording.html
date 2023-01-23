@@ -290,9 +290,14 @@
             
         </li>
     
-        <li class="chapter " data-level="1.4.8" data-path="events.html">
+
+            </ul>
             
-                <a href="events.html">
+        </li>
+    
+        <li class="chapter " data-level="1.5" data-path="../events.html">
+            
+                <a href="../events.html">
             
                     
                     イベント通知
@@ -303,12 +308,7 @@
             
         </li>
     
-
-            </ul>
-            
-        </li>
-    
-        <li class="chapter " data-level="1.5" data-path="../frontend_applications.html">
+        <li class="chapter " data-level="1.6" data-path="../frontend_applications.html">
             
                 <a href="../frontend_applications.html">
             
@@ -321,7 +321,7 @@
             
         </li>
     
-        <li class="chapter " data-level="1.6" data-path="../custom_image.html">
+        <li class="chapter " data-level="1.7" data-path="../custom_image.html">
             
                 <a href="../custom_image.html">
             
@@ -334,7 +334,7 @@
             
         </li>
     
-        <li class="chapter " data-level="1.7" data-path="../troubleshooting.html">
+        <li class="chapter " data-level="1.8" data-path="../troubleshooting.html">
             
                 <a href="../troubleshooting.html">
             
@@ -445,7 +445,7 @@
 <span class="hljs-meta">$</span><span class="bash"> curl http://localhost:40772/api/recording/schedules -sG</span>
 []
 </code></pre>
-<p>以降の説明では<code>recording.sh</code>というシェル・スクリプトを使用しています．詳細については，<a href="#recordingsh">recording.sh</a>を確認してください．</p>
+<p>以降の説明では<a href="https://github.com/mirakc/contrib/blob/main/recording/recording.sh" target="_blank"><code>recording.sh</code></a>というシェル・スクリプトを使用しています．</p>
 <h2 id="録画予約の登録・削除">録画予約の登録・削除</h2>
 <p>試しに，現在放送中の番組を録画予約してみましょう．</p>
 <pre><code class="lang-console"><span class="hljs-meta">#</span><span class="bash"> ＮＨＫ総合１・東京の番組表から，現在放送中の番組のProgram IDを取得</span>
@@ -596,83 +596,7 @@ $</span><span class="bash"> sh recording.sh add 327360102415795 | jq <span class
 <p>ブラウザーで<code>http://localhost:40772/videos/</code>を読み込むと，録画したファイルの一覧が表示されます．</p>
 <h2 id="ルール・ベースの自動録画予約">ルール・ベースの自動録画予約</h2>
 <p>mirakc自体は，EPGStationなどがサポートしているようなルール・ベースの自動録画予約機能を提供していません．しかし，後述するイベント通知機能を利用することで，番組表更新時にルール・ベースの自動録画予約を行うことが可能です．詳細については
-<a href="events.html">イベント通知</a>を参照してください．</p>
-<h2 id="recordingsh">recording.sh</h2>
-<p>説明で使用した<code>recording.sh</code>の内容を以下に記載します．</p>
-<pre><code class="lang-sh">BASEURL=http://localhost:40772
-
-<span class="hljs-function"><span class="hljs-title">log</span></span>() {
-  <span class="hljs-built_in">echo</span> <span class="hljs-string">&quot;<span class="hljs-variable">$1</span>&quot;</span> &gt;&amp;2
-}
-
-<span class="hljs-function"><span class="hljs-title">error</span></span>() {
-  <span class="hljs-built_in">log</span> <span class="hljs-string">&quot;ERROR: <span class="hljs-variable">$1</span>&quot;</span>
-  <span class="hljs-built_in">exit</span> 1
-}
-
-<span class="hljs-function"><span class="hljs-title">add</span></span>() {
-  PROGRAM_ID=<span class="hljs-variable">$1</span>
-  PROGRAM=$(curl <span class="hljs-variable">$BASEURL</span>/api/programs/<span class="hljs-variable">$PROGRAM_ID</span> -sG)
-  DATE=$(<span class="hljs-built_in">echo</span> <span class="hljs-string">&quot;<span class="hljs-variable">$PROGRAM</span>&quot;</span> | jq -Mr <span class="hljs-string">&apos;.startAt / 1000 | strflocaltime(&quot;%Y%m%d%H%M&quot;)&apos;</span>)
-  JSON=$(cat &lt;&lt;<span class="hljs-string">EOF | jq -Mc &apos;.&apos;
-{
-  &quot;programId&quot;: $PROGRAM_ID,
-  &quot;options&quot;: {
-    &quot;contentPath&quot;: &quot;videos/${DATE}_${PROGRAM_ID}.m2ts&quot;
-  },
-  &quot;tags&quot;: [&quot;manual&quot;]
-}
-EOF</span>
-)
-  curl <span class="hljs-variable">$BASEURL</span>/api/recording/schedules -s \
-    -X POST \
-    -H <span class="hljs-string">&apos;Content-Type: application/json&apos;</span> \
-    -d <span class="hljs-string">&quot;<span class="hljs-variable">$JSON</span>&quot;</span>
-}
-
-<span class="hljs-function"><span class="hljs-title">delete</span></span>() {
-  curl <span class="hljs-variable">$BASEURL</span>/api/recording/schedules/<span class="hljs-variable">$1</span> -s \
-    -X DELETE \
-    -H <span class="hljs-string">&apos;Content-Type: application/json&apos;</span>
-}
-
-<span class="hljs-function"><span class="hljs-title">list</span></span>() {
-  curl <span class="hljs-variable">$BASEURL</span>/api/recording/schedules -sG
-}
-
-<span class="hljs-function"><span class="hljs-title">clear</span></span>() {
-  curl <span class="hljs-variable">$BASEURL</span>/api/recording/schedules -s -X DELETE
-}
-
-<span class="hljs-keyword">while</span> [ <span class="hljs-variable">$#</span> -gt 0 ]
-<span class="hljs-keyword">do</span>
-  <span class="hljs-keyword">case</span> <span class="hljs-string">&quot;<span class="hljs-variable">$1</span>&quot;</span> <span class="hljs-keyword">in</span>
-    <span class="hljs-string">&apos;add&apos;</span>)
-      add <span class="hljs-variable">$2</span>
-      <span class="hljs-built_in">shift</span> 2
-      ;;
-    <span class="hljs-string">&apos;delete&apos;</span>)
-      delete <span class="hljs-variable">$2</span>
-      <span class="hljs-built_in">shift</span> 2
-      ;;
-    <span class="hljs-string">&apos;list&apos;</span>)
-      list
-      <span class="hljs-built_in">shift</span>
-      ;;
-    <span class="hljs-string">&apos;clear&apos;</span>)
-      clear
-      <span class="hljs-built_in">shift</span>
-      ;;
-    <span class="hljs-string">&apos;-b&apos;</span> | <span class="hljs-string">&apos;--base-url&apos;</span>)
-      BASEURL=<span class="hljs-string">&quot;<span class="hljs-variable">$2</span>&quot;</span>
-      <span class="hljs-built_in">shift</span> 2
-      ;;
-    *)
-      <span class="hljs-built_in">break</span>
-      ;;
-  <span class="hljs-keyword">esac</span>
-<span class="hljs-keyword">done</span>
-</code></pre>
+<a href="../events.html">イベント通知</a>を参照してください．</p>
 
                                 
                                 </section>
@@ -716,7 +640,7 @@ EOF</span>
     <script>
         var gitbook = gitbook || [];
         gitbook.push(function() {
-            gitbook.page.hasChanged({"page":{"title":"録画予約","level":"1.4.6","depth":2,"next":{"title":"タイムシフト録画","level":"1.4.7","depth":2,"path":"config/timeshift.md","ref":"./config/timeshift.md","articles":[]},"previous":{"title":"局ロゴの表示","level":"1.4.5","depth":2,"path":"config/logos.md","ref":"./config/logos.md","articles":[]},"dir":"ltr"},"config":{"plugins":["gitbook-plugin-japanese-support"],"root":"./src","styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"pluginsConfig":{"gitbook-plugin-japanese-support":{},"highlight":{},"search":{},"lunr":{"maxIndexSize":1000000,"ignoreSpecialCharacters":false},"fontsettings":{"theme":"white","family":"sans","size":2},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false}},"theme":"default","author":"masnagam","pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56},"embedFonts":false},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"variables":{},"title":"できるmirakc","language":"ja","gitbook":"*"},"file":{"path":"config/recording.md","mtime":"2023-01-22T12:25:08.624Z","type":"markdown"},"gitbook":{"version":"4.0.4","time":"2023-01-22T12:25:19.305Z"},"basePath":"..","book":{"language":""}});
+            gitbook.page.hasChanged({"page":{"title":"録画予約","level":"1.4.6","depth":2,"next":{"title":"タイムシフト録画","level":"1.4.7","depth":2,"path":"config/timeshift.md","ref":"./config/timeshift.md","articles":[]},"previous":{"title":"局ロゴの表示","level":"1.4.5","depth":2,"path":"config/logos.md","ref":"./config/logos.md","articles":[]},"dir":"ltr"},"config":{"plugins":["gitbook-plugin-japanese-support"],"root":"./src","styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"pluginsConfig":{"gitbook-plugin-japanese-support":{},"highlight":{},"search":{},"lunr":{"maxIndexSize":1000000,"ignoreSpecialCharacters":false},"fontsettings":{"theme":"white","family":"sans","size":2},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false}},"theme":"default","author":"masnagam","pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56},"embedFonts":false},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"variables":{},"title":"できるmirakc","language":"ja","gitbook":"*"},"file":{"path":"config/recording.md","mtime":"2023-01-23T01:34:47.328Z","type":"markdown"},"gitbook":{"version":"4.0.4","time":"2023-01-23T01:34:51.948Z"},"basePath":"..","book":{"language":""}});
         });
     </script>
 </div>
