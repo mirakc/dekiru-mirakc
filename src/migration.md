@@ -53,6 +53,9 @@ resource
     - service-id: 400101  # Mirakurun Service ID
 ```
 
+これに伴い，Web APIのいくつかのJSON形式が変更されましたが，本文書の説明対象外な
+ので，詳細は省略します．
+
 [mirakc内部でopenapi.jsonを生成するようになったため](https://github.com/mirakc/mirakc/issues/623)，`mirakurun.openapi-json`は削除されました．
 
 ```yaml
