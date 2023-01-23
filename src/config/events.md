@@ -43,6 +43,8 @@ services:
       - mirakc
 ```
 
+`sample-rules.js`の実行には[`deno`]を使用します．`node`ではないので注意してください．
+
 `recman`コンテナーを起動しログを確認します．
 
 ```console
@@ -79,7 +81,13 @@ true
 トを使えば，放送中の番組（及び次に放送される番組）に対しても同様の自動録画ルール
 を適用できます．
 
+今回の`docker-compose.yml`の例では，GitHub上のスクリプトを直接指定していますが，
+通常はローカルのスクリプトを実行します．`deno`には`--watch`オプションがあります．
+このオプションを指定すると，`deno`は実行中のスクリプトの変更を監視し，自動で再起
+動します．ルールを書き換えた場合に自動で反映されるようになり，利便性が増します．
+
 通知されるイベントの詳細については，[mirakc/docs/events.md]を参照してください．
 
 [SSE]: https://developer.mozilla.org/en-US/docs/Web/API/Server-sent_events
+[`deno`]: https://deno.land/
 [mirakc/docs/events.md]: https://github.com/mirakc/mirakc/blob/main/docs/events.md
