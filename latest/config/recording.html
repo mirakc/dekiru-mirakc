@@ -456,12 +456,12 @@
 <span class="hljs-meta">
 #</span><span class="bash"> 録画予約を登録</span>
 <span class="hljs-meta">#</span><span class="bash"> もうすぐ終了する番組でなければ，登録に成功します</span>
-<span class="hljs-meta">$</span><span class="bash"> sh recording.sh add 327360102407046 | jq <span class="hljs-string">&apos;.program.id&apos;</span></span>
+<span class="hljs-meta">$</span><span class="bash"> sh recording.sh -r add 327360102407046 | jq <span class="hljs-string">&apos;.program.id&apos;</span></span>
 327360102407046
 </code></pre>
 <p>録画予約の登録に成功しました．放送中の番組を録画予約したので，録画はすぐに開始されます．</p>
 <pre><code class="lang-console"><span class="hljs-meta">#</span><span class="bash"> すぐに録画が開始されるので，空のリストが返されます</span>
-<span class="hljs-meta">$</span><span class="bash"> sh recording.sh list | jq <span class="hljs-string">&apos;.[] | .program.id, .state&apos;</span></span>
+<span class="hljs-meta">$</span><span class="bash"> sh recording.sh -r list | jq <span class="hljs-string">&apos;.[] | .program.id, .state&apos;</span></span>
 327360102407046
 &quot;recording&quot;
 <span class="hljs-meta">
@@ -480,7 +480,7 @@ $</span><span class="bash"> ls recording/videos</span>
 <p>録画予約を削除すれば，録画も停止します．</p>
 <pre><code class="lang-console"><span class="hljs-meta">$</span><span class="bash"> sh recording.sh delete 327360102407046</span>
 <span class="hljs-meta">
-$</span><span class="bash"> sh recording.sh list</span>
+$</span><span class="bash"> sh recording.sh -r list</span>
 []
 <span class="hljs-meta">
 $</span><span class="bash"> curl http://localhost:40772/api/recording/recorders -sG</span>
@@ -539,12 +539,12 @@ $</span><span class="bash"> curl http://localhost:40772/api/recording/recorders 
 327360102415795  # その次の番組
 </code></pre>
 <p>まず，番組表で次の次に始まる番組予定を予約します．</p>
-<pre><code class="lang-console"><span class="hljs-meta">$</span><span class="bash"> sh recording.sh add 327360102415795 | jq <span class="hljs-string">&apos;.program.id, .state&apos;</span></span>
+<pre><code class="lang-console"><span class="hljs-meta">$</span><span class="bash"> sh recording.sh -r add 327360102415795 | jq <span class="hljs-string">&apos;.program.id, .state&apos;</span></span>
 327360102415795
 &quot;scheduled&quot;
 </code></pre>
 <p>状態<code>scheduled</code>とは，番組表の情報を元に録画予約された状態です．録画予約された番組が次に放送予定の番組（または現在放送中の番組）になると，状態が<code>tracking</code>へと変わります．これを確認するために，番組表で次に始まる予定の番組を録画予約します．</p>
-<pre><code class="lang-console"><span class="hljs-meta">$</span><span class="bash"> sh recording.sh add 327360102415793 | jq <span class="hljs-string">&apos;.program.id, .state&apos;</span></span>
+<pre><code class="lang-console"><span class="hljs-meta">$</span><span class="bash"> sh recording.sh -r add 327360102415793 | jq <span class="hljs-string">&apos;.program.id, .state&apos;</span></span>
 327360102415793
 &quot;tracking&quot;
 </code></pre>
@@ -564,7 +564,7 @@ $</span><span class="bash"> curl http://localhost:40772/api/recording/recorders 
 327360102415795  # 番組表上，終了している番組
 327360102415796  # 番組表上，現在放送中の番組
 <span class="hljs-meta">
-$</span><span class="bash"> sh recording.sh add 327360102415795 | jq <span class="hljs-string">&apos;.program.id, .state&apos;</span></span>
+$</span><span class="bash"> sh recording.sh -r add 327360102415795 | jq <span class="hljs-string">&apos;.program.id, .state&apos;</span></span>
 327360102415795
 &quot;scheduled&quot;
 </code></pre>
@@ -573,7 +573,7 @@ $</span><span class="bash"> sh recording.sh add 327360102415795 | jq <span class
 ...  WARN ... Need rescheduling schedule.program.quad=7FE07FE004003DB3
 </code></pre>
 <p>その後，録画予約は<code>rescheduling</code>状態に．</p>
-<pre><code class="lang-console"><span class="hljs-meta">$</span><span class="bash"> sh recording.sh list | jq <span class="hljs-string">&apos;.[] | .program.id, .state&apos;</span></span>
+<pre><code class="lang-console"><span class="hljs-meta">$</span><span class="bash"> sh recording.sh -r list | jq <span class="hljs-string">&apos;.[] | .program.id, .state&apos;</span></span>
 327360102415795
 &quot;rescheduling&quot;
 </code></pre>
@@ -640,7 +640,7 @@ $</span><span class="bash"> sh recording.sh add 327360102415795 | jq <span class
     <script>
         var gitbook = gitbook || [];
         gitbook.push(function() {
-            gitbook.page.hasChanged({"page":{"title":"録画予約","level":"1.4.6","depth":2,"next":{"title":"タイムシフト録画","level":"1.4.7","depth":2,"path":"config/timeshift.md","ref":"./config/timeshift.md","articles":[]},"previous":{"title":"局ロゴの表示","level":"1.4.5","depth":2,"path":"config/logos.md","ref":"./config/logos.md","articles":[]},"dir":"ltr"},"config":{"plugins":["gitbook-plugin-japanese-support"],"root":"./src","styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"pluginsConfig":{"gitbook-plugin-japanese-support":{},"highlight":{},"search":{},"lunr":{"maxIndexSize":1000000,"ignoreSpecialCharacters":false},"fontsettings":{"theme":"white","family":"sans","size":2},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false}},"theme":"default","author":"masnagam","pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56},"embedFonts":false},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"variables":{},"title":"できるmirakc","language":"ja","gitbook":"*"},"file":{"path":"config/recording.md","mtime":"2023-01-23T01:34:47.328Z","type":"markdown"},"gitbook":{"version":"4.0.4","time":"2023-01-23T01:34:51.948Z"},"basePath":"..","book":{"language":""}});
+            gitbook.page.hasChanged({"page":{"title":"録画予約","level":"1.4.6","depth":2,"next":{"title":"タイムシフト録画","level":"1.4.7","depth":2,"path":"config/timeshift.md","ref":"./config/timeshift.md","articles":[]},"previous":{"title":"局ロゴの表示","level":"1.4.5","depth":2,"path":"config/logos.md","ref":"./config/logos.md","articles":[]},"dir":"ltr"},"config":{"plugins":["gitbook-plugin-japanese-support"],"root":"./src","styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"pluginsConfig":{"gitbook-plugin-japanese-support":{},"highlight":{},"search":{},"lunr":{"maxIndexSize":1000000,"ignoreSpecialCharacters":false},"fontsettings":{"theme":"white","family":"sans","size":2},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false}},"theme":"default","author":"masnagam","pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56},"embedFonts":false},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"variables":{},"title":"できるmirakc","language":"ja","gitbook":"*"},"file":{"path":"config/recording.md","mtime":"2023-01-23T03:01:20.595Z","type":"markdown"},"gitbook":{"version":"4.0.4","time":"2023-01-23T03:01:25.829Z"},"basePath":"..","book":{"language":""}});
         });
     </script>
 </div>
