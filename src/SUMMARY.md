@@ -22,4 +22,5 @@
 
 ---
 * [tsdサーバーの詳しい話](./tsd_server.md)
+* [v1からv2への移行](./migration.md)
 * [旧バージョンのドキュメント](./older_versions.md)
