@@ -47,7 +47,7 @@ $ curl http://localhost:40772/api/services/3273601024/programs -sG | \
 
 # 録画予約を登録
 # もうすぐ終了する番組でなければ，登録に成功します
-$ sh recording.sh add 327360102407046 | jq '.program.id'
+$ sh recording.sh -r add 327360102407046 | jq '.program.id'
 327360102407046
 ```
 
@@ -55,7 +55,7 @@ $ sh recording.sh add 327360102407046 | jq '.program.id'
 
 ```console
 # すぐに録画が開始されるので，空のリストが返されます
-$ sh recording.sh list | jq '.[] | .program.id, .state'
+$ sh recording.sh -r list | jq '.[] | .program.id, .state'
 327360102407046
 "recording"
 
@@ -83,7 +83,7 @@ $ ls recording/videos
 ```console
 $ sh recording.sh delete 327360102407046
 
-$ sh recording.sh list
+$ sh recording.sh -r list
 []
 
 $ curl http://localhost:40772/api/recording/recorders -sG
@@ -181,7 +181,7 @@ $ curl http://localhost:40772/api/services/3273601024/programs -sG | \
 まず，番組表で次の次に始まる番組予定を予約します．
 
 ```console
-$ sh recording.sh add 327360102415795 | jq '.program.id, .state'
+$ sh recording.sh -r add 327360102415795 | jq '.program.id, .state'
 327360102415795
 "scheduled"
 ```
@@ -191,7 +191,7 @@ $ sh recording.sh add 327360102415795 | jq '.program.id, .state'
 わります．これを確認するために，番組表で次に始まる予定の番組を録画予約します．
 
 ```console
-$ sh recording.sh add 327360102415793 | jq '.program.id, .state'
+$ sh recording.sh -r add 327360102415793 | jq '.program.id, .state'
 327360102415793
 "tracking"
 ```
@@ -222,7 +222,7 @@ $ curl http://localhost:40772/api/services/3273601024/programs -sG | \
 327360102415795  # 番組表上，終了している番組
 327360102415796  # 番組表上，現在放送中の番組
 
-$ sh recording.sh add 327360102415795 | jq '.program.id, .state'
+$ sh recording.sh -r add 327360102415795 | jq '.program.id, .state'
 327360102415795
 "scheduled"
 ```
@@ -238,7 +238,7 @@ $ docker logs mirakc | grep WARN
 その後，録画予約は`rescheduling`状態に．
 
 ```console
-$ sh recording.sh list | jq '.[] | .program.id, .state'
+$ sh recording.sh -r list | jq '.[] | .program.id, .state'
 327360102415795
 "rescheduling"
 ```
