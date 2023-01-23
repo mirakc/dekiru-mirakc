@@ -32,8 +32,7 @@ $ curl http://localhost:40772/api/recording/schedules -sG
 []
 ```
 
-以降の説明では`recording.sh`というシェル・スクリプトを使用しています．詳細につい
-ては，[recording.sh](#recordingsh)を確認してください．
+以降の説明では[`recording.sh`]というシェル・スクリプトを使用しています．
 
 ## 録画予約の登録・削除
 
@@ -279,84 +278,6 @@ server:
 mirakc自体は，EPGStationなどがサポートしているようなルール・ベースの自動録画予約
 機能を提供していません．しかし，後述するイベント通知機能を利用することで，番組表
 更新時にルール・ベースの自動録画予約を行うことが可能です．詳細については
-[イベント通知](./events.md)を参照してください．
+[イベント通知](../events.md)を参照してください．
 
-## recording.sh
-
-説明で使用した`recording.sh`の内容を以下に記載します．
-
-```sh
-BASEURL=http://localhost:40772
-
-log() {
-  echo "$1" >&2
-}
-
-error() {
-  log "ERROR: $1"
-  exit 1
-}
-
-add() {
-  PROGRAM_ID=$1
-  PROGRAM=$(curl $BASEURL/api/programs/$PROGRAM_ID -sG)
-  DATE=$(echo "$PROGRAM" | jq -Mr '.startAt / 1000 | strflocaltime("%Y%m%d%H%M")')
-  JSON=$(cat <<EOF | jq -Mc '.'
-{
-  "programId": $PROGRAM_ID,
-  "options": {
-    "contentPath": "videos/${DATE}_${PROGRAM_ID}.m2ts"
-  },
-  "tags": ["manual"]
-}
-EOF
-)
-  curl $BASEURL/api/recording/schedules -s \
-    -X POST \
-    -H 'Content-Type: application/json' \
-    -d "$JSON"
-}
-
-delete() {
-  curl $BASEURL/api/recording/schedules/$1 -s \
-    -X DELETE \
-    -H 'Content-Type: application/json'
-}
-
-list() {
-  curl $BASEURL/api/recording/schedules -sG
-}
-
-clear() {
-  curl $BASEURL/api/recording/schedules -s -X DELETE
-}
-
-while [ $# -gt 0 ]
-do
-  case "$1" in
-    'add')
-      add $2
-      shift 2
-      ;;
-    'delete')
-      delete $2
-      shift 2
-      ;;
-    'list')
-      list
-      shift
-      ;;
-    'clear')
-      clear
-      shift
-      ;;
-    '-b' | '--base-url')
-      BASEURL="$2"
-      shift 2
-      ;;
-    *)
-      break
-      ;;
-  esac
-done
-```
+[`recording.sh`]: https://github.com/mirakc/contrib/blob/main/recording/recording.sh
