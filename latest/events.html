@@ -497,6 +497,13 @@ true
 </code></pre>
 <p>上記のスクリプトでは<code>epg.programs-updated</code>イベントのみを使っていますが，放送中の番組の追跡機能を有効化した場合に通知される<code>onair.program-changed</code>イベントを使えば，放送中の番組（及び次に放送される番組）に対しても同様の自動録画ルールを適用できます．</p>
 <p>今回の<code>docker-compose.yml</code>の例では，GitHub上のスクリプトを直接指定していますが，通常はローカルのスクリプトを実行します．<code>deno</code>には<code>--watch</code>オプションがあります．このオプションを指定すると，<code>deno</code>は実行中のスクリプトの変更を監視し，自動で再起動します．ルールを書き換えた場合に自動で反映されるようになり，利便性が増します．</p>
+<blockquote>
+<p><strong>Note</strong>
+外部の共有フォルダーに保存されているスクリプトをコンテナーにマウントしている場
+合，スクリプトを修正しても<code>deno</code>が変更を検出しない場合があります．そのような場
+合は<code>docker</code>を実行しているマシンにログインし，<code>touch</code>などでスクリプトのタイム
+スタンプを更新するか，コンテナーを再起動する必要があります．</p>
+</blockquote>
 <p>通知されるイベントの詳細については，<a href="https://github.com/mirakc/mirakc/blob/main/docs/events.md" target="_blank">mirakc/docs/events.md</a>を参照してください．</p>
 
                                 
@@ -541,7 +548,7 @@ true
     <script>
         var gitbook = gitbook || [];
         gitbook.push(function() {
-            gitbook.page.hasChanged({"page":{"title":"イベント通知","level":"1.5","depth":1,"next":{"title":"フロントエンドアプリケーションとの連携","level":"1.6","depth":1,"path":"frontend_applications.md","ref":"./frontend_applications.md","articles":[]},"previous":{"title":"タイムシフト録画","level":"1.4.7","depth":2,"path":"config/timeshift.md","ref":"./config/timeshift.md","articles":[]},"dir":"ltr"},"config":{"plugins":["gitbook-plugin-japanese-support"],"root":"./src","styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"pluginsConfig":{"gitbook-plugin-japanese-support":{},"highlight":{},"search":{},"lunr":{"maxIndexSize":1000000,"ignoreSpecialCharacters":false},"fontsettings":{"theme":"white","family":"sans","size":2},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false}},"theme":"default","author":"masnagam","pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56},"embedFonts":false},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"variables":{},"title":"できるmirakc","language":"ja","gitbook":"*"},"file":{"path":"events.md","mtime":"2023-01-23T04:20:12.958Z","type":"markdown"},"gitbook":{"version":"4.0.4","time":"2023-01-23T04:20:18.672Z"},"basePath":".","book":{"language":""}});
+            gitbook.page.hasChanged({"page":{"title":"イベント通知","level":"1.5","depth":1,"next":{"title":"フロントエンドアプリケーションとの連携","level":"1.6","depth":1,"path":"frontend_applications.md","ref":"./frontend_applications.md","articles":[]},"previous":{"title":"タイムシフト録画","level":"1.4.7","depth":2,"path":"config/timeshift.md","ref":"./config/timeshift.md","articles":[]},"dir":"ltr"},"config":{"plugins":["gitbook-plugin-japanese-support"],"root":"./src","styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"pluginsConfig":{"gitbook-plugin-japanese-support":{},"highlight":{},"search":{},"lunr":{"maxIndexSize":1000000,"ignoreSpecialCharacters":false},"fontsettings":{"theme":"white","family":"sans","size":2},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false}},"theme":"default","author":"masnagam","pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56},"embedFonts":false},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"variables":{},"title":"できるmirakc","language":"ja","gitbook":"*"},"file":{"path":"events.md","mtime":"2023-01-26T02:58:25.940Z","type":"markdown"},"gitbook":{"version":"4.0.4","time":"2023-01-26T02:58:30.572Z"},"basePath":".","book":{"language":""}});
         });
     </script>
 </div>
