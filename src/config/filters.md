@@ -70,8 +70,10 @@ filters:
   decode-filter:
     # 標準入力から入力されるTSストリームをリモートホストtsdのTCP 40773ポートに転
     # 送し，tsdから返されたTSストリームを標準出力に出力
+    #
+    # "Broken pipe"エラーを回避するため`cool-write`オプションを指定
     command: >-
-      socat - tcp-connect:tsd:40773
+      socat -,cool-write tcp-connect:tsd:40773
 ```
 
 [socat]は，配布している`mirakc/mirakc`イメージにも含まれているツールです．詳し
