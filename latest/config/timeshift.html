@@ -597,6 +597,13 @@ curl -sG http://raspberrypi.local:40772/api/timeshift/bs1/records/$ID/stream | f
 </tbody>
 </table>
 <p>上記各タイムシフト録画の<code>data-file</code>はどれも2MBを超えません．そのため，上記設定で４チャンネルのタイムシフト録画を10TBのHDDで行うことが可能です．</p>
+<p><code>config.yml</code>の設定値に基いて必要なサイズのファイルを確保するスクリプトを用意してあります．</p>
+<pre><code class="lang-console">deno run -A \
+  https://raw.githubusercontent.com/mirakc/contrib/main/timeshift/allocate-ts-file.js \
+  -c /path/to/config.yml
+</code></pre>
+<p>詳細については<code>-h</code>で表示されるヘルプを見るか，<a href="https://github.com/mirakc/contrib/blob/main/timeshift/allocate-ts-file.js" target="_blank">スクリプトファイル</a>
+の内容を直接確認してください．</p>
 <h2 id="データ管理方法">データ管理方法</h2>
 <p>mirakcのタイムシフト録画では，録画データ（TSパケット）ファイル（<code>ts-file</code>）をチャンクという塊で管理します．そのため，番組の録画が進んでもチャンクがいっぱいになるまで録画済みとは扱われません．</p>
 <pre><code>ts-file
@@ -728,19 +735,12 @@ curl -sG &quot;$STREAM?post-filters[]=split-dual-mono&quot; | ffprobe
 </code></pre>
 <p>欠点として，post-filterでストリームを変換した場合，シークできなくなります．変換によりストリームが動的に生成されるため，HTTPレスポンスは<code>Content-Length</code>ヘッダーを含まず，HTTPレスポンス・ボディにはチャンク・エンコーディングが適用されるためです．</p>
 <h2 id="タイムシフト録画の再実行">タイムシフト録画の再実行</h2>
-<p>タイムシフト録画が何らかの理由で停止した場合，自動でタイムシフト録画の再実行を試みます．</p>
+<p>タイムシフト録画が何らかの理由で停止した場合，自動でタイムシフト録画を再実行します．</p>
 <pre><code>INFO mirakc_core::timeshift: Recording stopped recorder.name=&quot;nhk&quot;
-WARN mirakc_core::timeshift: Recording pipeline broken, reactivate recorder.name=&quot;nhk&quot;
-INFO mirakc_core::timeshift: Deactivated recorder.name=&quot;nhk&quot;
-WARN mirakc_core::timeshift: Recording stopped due to some accident, \
-  activate again recorder.name=&quot;nhk&quot;
-</code></pre><p>再実行を何度か繰り返しても失敗し続ける場合，タイムシフト録画は停止します．</p>
-<pre><code>ERROR mirakc_core::timeshift: Recording stopped due to some accident, \
-  reactivation count reached the maximum number recorder.name=&quot;nhk&quot;
-</code></pre><p>この状態でも，<code>config.jobs.scan-services</code>ジョブが再実行され，停止中のサービスが見つかると，自動で再実行されます．</p>
-<pre><code>INFO mirakc_core::timeshift: Service is available, activate recorder.name=&quot;nhk&quot; ...
+...
 INFO mirakc_core::timeshift: Recording started recorder.name=&quot;nhk&quot;
-</code></pre><p>このような状況が放送休止中に発生することをユーザーが報告しています．</p>
+</code></pre><p>タイムシフト録画が停止している間も，録画データにアクセス可能です．</p>
+<p>放送休止中にタイムシフト録画が停止することをユーザーが報告しています．</p>
 <ul>
 <li><a href="https://github.com/mirakc/mirakc/issues/693" target="_blank">https://github.com/mirakc/mirakc/issues/693</a></li>
 </ul>
@@ -787,7 +787,7 @@ INFO mirakc_core::timeshift: Recording started recorder.name=&quot;nhk&quot;
     <script>
         var gitbook = gitbook || [];
         gitbook.push(function() {
-            gitbook.page.hasChanged({"page":{"title":"タイムシフト録画","level":"1.4.7","depth":2,"next":{"title":"イベント通知","level":"1.5","depth":1,"path":"events.md","ref":"./events.md","articles":[]},"previous":{"title":"録画予約","level":"1.4.6","depth":2,"path":"config/recording.md","ref":"./config/recording.md","articles":[]},"dir":"ltr"},"config":{"plugins":["gitbook-plugin-japanese-support"],"root":"./src","styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"pluginsConfig":{"gitbook-plugin-japanese-support":{},"highlight":{},"search":{},"lunr":{"maxIndexSize":1000000,"ignoreSpecialCharacters":false},"fontsettings":{"theme":"white","family":"sans","size":2},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false}},"theme":"default","author":"masnagam","pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56},"embedFonts":false},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"variables":{},"title":"できるmirakc","language":"ja","gitbook":"*"},"file":{"path":"config/timeshift.md","mtime":"2023-01-29T12:09:56.429Z","type":"markdown"},"gitbook":{"version":"4.0.4","time":"2023-01-29T12:10:09.927Z"},"basePath":"..","book":{"language":""}});
+            gitbook.page.hasChanged({"page":{"title":"タイムシフト録画","level":"1.4.7","depth":2,"next":{"title":"イベント通知","level":"1.5","depth":1,"path":"events.md","ref":"./events.md","articles":[]},"previous":{"title":"録画予約","level":"1.4.6","depth":2,"path":"config/recording.md","ref":"./config/recording.md","articles":[]},"dir":"ltr"},"config":{"plugins":["gitbook-plugin-japanese-support"],"root":"./src","styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"pluginsConfig":{"gitbook-plugin-japanese-support":{},"highlight":{},"search":{},"lunr":{"maxIndexSize":1000000,"ignoreSpecialCharacters":false},"fontsettings":{"theme":"white","family":"sans","size":2},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false}},"theme":"default","author":"masnagam","pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56},"embedFonts":false},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"variables":{},"title":"できるmirakc","language":"ja","gitbook":"*"},"file":{"path":"config/timeshift.md","mtime":"2023-01-29T12:39:06.909Z","type":"markdown"},"gitbook":{"version":"4.0.4","time":"2023-01-29T12:39:15.341Z"},"basePath":"..","book":{"language":""}});
         });
     </script>
 </div>
