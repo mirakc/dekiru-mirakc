@@ -189,6 +189,17 @@ TSストリームのビットレートはサービスごとに異なるため，
 上記各タイムシフト録画の`data-file`はどれも2MBを超えません．そのため，上記設定で４チャンネルのタイ
 ムシフト録画を10TBのHDDで行うことが可能です．
 
+`config.yml`の設定値に基いて必要なサイズのファイルを確保するスクリプトを用意してあります．
+
+```console
+deno run -A \
+  https://raw.githubusercontent.com/mirakc/contrib/main/timeshift/allocate-ts-file.js \
+  -c /path/to/config.yml
+```
+
+詳細については`-h`で表示されるヘルプを見るか，[スクリプトファイル](https://github.com/mirakc/contrib/blob/main/timeshift/allocate-ts-file.js)
+の内容を直接確認してください．
+
 ## データ管理方法
 
 mirakcのタイムシフト録画では，録画データ（TSパケット）ファイル（`ts-file`）をチャンクという塊で管理
