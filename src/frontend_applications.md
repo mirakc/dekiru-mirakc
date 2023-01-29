@@ -40,6 +40,14 @@ Mirakurunからの移行時に書き換える箇所は変わりません．
 mirakurunPath: http://raspberrypi.local:40772/
 ```
 
+## miraview
+
+[miraview]はmirakc用のWeb UIです．コンテナー利用者であれば，README.mdに書かれて
+いる手順で簡単に導入できます．
+
+`curl`と`jq`さえあれば何でもできるけど，さすがに番組表はGUIで見たいという人は利
+用を検討しましょう．
+
 ## TVTest
 
 原因はよく分かっていませんが，Mirakurun用の`BonDriver_Mirakurun`ではうまく動かな
@@ -108,6 +116,7 @@ DLNA/UPnPをサポートしているTVでタイムシフト録画を視聴可能
 
 使用方法については，[README.md](https://github.com/mirakc/docker-minidlna)を参照してください．
 
+[miraview]: https://github.com/maeda577/miraview
 [MiniDLNA]: https://sourceforge.net/projects/minidlna/
 [inotify]: https://ja.wikipedia.org/wiki/Inotify
 [mirakc/minidlna]: https://hub.docker.com/r/mirakc/minidlna
