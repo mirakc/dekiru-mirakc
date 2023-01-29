@@ -127,8 +127,9 @@ tuners:
     dedicated-for: tracker
 
 onair-program-trackers:
-  tracker: !local
-    channel-types: [GR, BS]
+  tracker:
+    local:
+      channel-types: [GR, BS]
 ```
 
 mirakcコンテナーを再起動してください．以下のようなログが毎分出力されるようになります．
@@ -154,16 +155,19 @@ $ docker logs -f mirakc | grep OnairProgramTracker
 
 ```yaml
 onair-program-trackers:
-  gr-tracker: !local
-    channel-types: [GR]
-  bs-tracker1: !local
-    channel-types: [BS]
-    # 期限内に処理が終了するように，対象サービスを制限
-    services: [...]
-  bs-tracker2: !local
-    channel-types: [BS]
-    # bs-tracker1で処理しないサービスを列挙
-    services: [...]
+  gr-tracker:
+    local:
+      channel-types: [GR]
+  bs-tracker1:
+    local:
+      channel-types: [BS]
+      # 期限内に処理が終了するように，対象サービスを制限
+      services: [...]
+  bs-tracker2:
+    local:
+      channel-types: [BS]
+      # bs-tracker1で処理しないサービスを列挙
+      services: [...]
 ```
 
 本機能がどのように動作するのか見るために，後続の２つの番組の録画予約を行ってみま

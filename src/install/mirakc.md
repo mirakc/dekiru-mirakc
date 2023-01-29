@@ -25,7 +25,7 @@ services:
 ```yaml
 server:
   addrs:
-    - !http '0.0.0.0:40772'
+    - http: '0.0.0.0:40772'
 ```
 
 最後に，mirakcを起動します．

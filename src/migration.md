@@ -4,23 +4,6 @@
 
 ## config.yml
 
-[serde_yamlでの列挙型の扱いが変わったため](https://github.com/dtolnay/serde-yaml/releases/tag/0.9.0)，
-`server.addrs`を書き換える必要があります．
-
-```yaml
-# v1
-server:
-  addrs:
-    - http: '0.0.0.0:40772'
-    - unix: /tmp/mirakc.sock
-
-# v2
-server:
-  addrs:
-    - !http '0.0.0.0:40772'
-    - !unix /tmp/mirakc.sock
-```
-
 [mirakc内部のサービスID及び番組IDからTSIDを削除したことに伴い](https://github.com/mirakc/mirakc/issues/690)，
 `timeshift.recorders[].service-triple`が`timeshift.recorders[].service-id`に変更
 されました．
