@@ -519,8 +519,9 @@ $</span><span class="bash"> curl http://localhost:40772/api/recording/recorders 
     <span class="hljs-attr">dedicated-for:</span> <span class="hljs-string">tracker</span>
 
 <span class="hljs-attr">onair-program-trackers:</span>
-  <span class="hljs-attr">tracker:</span> <span class="hljs-type">!local</span>
-    <span class="hljs-attr">channel-types:</span> [<span class="hljs-string">GR</span>, <span class="hljs-string">BS</span>]
+  <span class="hljs-attr">tracker:</span>
+    <span class="hljs-attr">local:</span>
+      <span class="hljs-attr">channel-types:</span> [<span class="hljs-string">GR</span>, <span class="hljs-string">BS</span>]
 </code></pre>
 <p>mirakcコンテナーを再起動してください．以下のようなログが毎分出力されるようになります．</p>
 <pre><code class="lang-console"><span class="hljs-meta">$</span><span class="bash"> docker logs -f mirakc | grep OnairProgramTracker</span>
@@ -533,16 +534,19 @@ $</span><span class="bash"> curl http://localhost:40772/api/recording/recorders 
 <p>注意点としては，毎分上記のようなログがサービスの数だけ出力されるため，場合によっては大量のログが出力されます．また，CPUやメモリー使用量も当然増えるため，すでにリソースが逼迫している環境での使用は困難です．</p>
 <p>本文書の例ではチャンネル数（サービス数）が少ないので問題ありませんが，多くのチャンネル（サービス）を使用している環境では，現在放送中の番組の取得処理が１分以内（安全を考えると50秒以内）に終了するようにトラッカー数を調整する必要があります．</p>
 <pre><code class="lang-yaml"><span class="hljs-attr">onair-program-trackers:</span>
-  <span class="hljs-attr">gr-tracker:</span> <span class="hljs-type">!local</span>
-    <span class="hljs-attr">channel-types:</span> [<span class="hljs-string">GR</span>]
-  <span class="hljs-attr">bs-tracker1:</span> <span class="hljs-type">!local</span>
-    <span class="hljs-attr">channel-types:</span> [<span class="hljs-string">BS</span>]
-    <span class="hljs-comment"># 期限内に処理が終了するように，対象サービスを制限</span>
-    <span class="hljs-attr">services:</span> [<span class="hljs-string">...</span>]
-  <span class="hljs-attr">bs-tracker2:</span> <span class="hljs-type">!local</span>
-    <span class="hljs-attr">channel-types:</span> [<span class="hljs-string">BS</span>]
-    <span class="hljs-comment"># bs-tracker1で処理しないサービスを列挙</span>
-    <span class="hljs-attr">services:</span> [<span class="hljs-string">...</span>]
+  <span class="hljs-attr">gr-tracker:</span>
+    <span class="hljs-attr">local:</span>
+      <span class="hljs-attr">channel-types:</span> [<span class="hljs-string">GR</span>]
+  <span class="hljs-attr">bs-tracker1:</span>
+    <span class="hljs-attr">local:</span>
+      <span class="hljs-attr">channel-types:</span> [<span class="hljs-string">BS</span>]
+      <span class="hljs-comment"># 期限内に処理が終了するように，対象サービスを制限</span>
+      <span class="hljs-attr">services:</span> [<span class="hljs-string">...</span>]
+  <span class="hljs-attr">bs-tracker2:</span>
+    <span class="hljs-attr">local:</span>
+      <span class="hljs-attr">channel-types:</span> [<span class="hljs-string">BS</span>]
+      <span class="hljs-comment"># bs-tracker1で処理しないサービスを列挙</span>
+      <span class="hljs-attr">services:</span> [<span class="hljs-string">...</span>]
 </code></pre>
 <p>本機能がどのように動作するのか見るために，後続の２つの番組の録画予約を行ってみましょう．</p>
 <p>まず，対象番組のIDを取得します．</p>
@@ -653,7 +657,7 @@ $</span><span class="bash"> sh recording.sh -r add 327360102415795 | jq <span cl
     <script>
         var gitbook = gitbook || [];
         gitbook.push(function() {
-            gitbook.page.hasChanged({"page":{"title":"録画予約","level":"1.4.6","depth":2,"next":{"title":"タイムシフト録画","level":"1.4.7","depth":2,"path":"config/timeshift.md","ref":"./config/timeshift.md","articles":[]},"previous":{"title":"局ロゴの表示","level":"1.4.5","depth":2,"path":"config/logos.md","ref":"./config/logos.md","articles":[]},"dir":"ltr"},"config":{"plugins":["gitbook-plugin-japanese-support"],"root":"./src","styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"pluginsConfig":{"gitbook-plugin-japanese-support":{},"highlight":{},"search":{},"lunr":{"maxIndexSize":1000000,"ignoreSpecialCharacters":false},"fontsettings":{"theme":"white","family":"sans","size":2},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false}},"theme":"default","author":"masnagam","pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56},"embedFonts":false},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"variables":{},"title":"できるmirakc","language":"ja","gitbook":"*"},"file":{"path":"config/recording.md","mtime":"2023-01-28T14:16:27.853Z","type":"markdown"},"gitbook":{"version":"4.0.4","time":"2023-01-28T14:16:39.028Z"},"basePath":"..","book":{"language":""}});
+            gitbook.page.hasChanged({"page":{"title":"録画予約","level":"1.4.6","depth":2,"next":{"title":"タイムシフト録画","level":"1.4.7","depth":2,"path":"config/timeshift.md","ref":"./config/timeshift.md","articles":[]},"previous":{"title":"局ロゴの表示","level":"1.4.5","depth":2,"path":"config/logos.md","ref":"./config/logos.md","articles":[]},"dir":"ltr"},"config":{"plugins":["gitbook-plugin-japanese-support"],"root":"./src","styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"pluginsConfig":{"gitbook-plugin-japanese-support":{},"highlight":{},"search":{},"lunr":{"maxIndexSize":1000000,"ignoreSpecialCharacters":false},"fontsettings":{"theme":"white","family":"sans","size":2},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false}},"theme":"default","author":"masnagam","pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56},"embedFonts":false},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"variables":{},"title":"できるmirakc","language":"ja","gitbook":"*"},"file":{"path":"config/recording.md","mtime":"2023-01-29T06:08:44.542Z","type":"markdown"},"gitbook":{"version":"4.0.4","time":"2023-01-29T06:08:50.122Z"},"basePath":"..","book":{"language":""}});
         });
     </script>
 </div>
