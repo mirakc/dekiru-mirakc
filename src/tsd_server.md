@@ -147,8 +147,6 @@ socat tcp-listen:40774,fork,reuseaddr \
 あとはこれらを起動するだけ．
 
 ```yaml
-version: '3'
-
 services:
   b25:
     container_name: b25
