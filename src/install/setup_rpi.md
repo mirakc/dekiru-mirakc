@@ -1,6 +1,6 @@
 # Raspberry Piのセットアップ
 
-Raspberry Piのセットアップ手順については，「Raspberry Pi 4で構築する録画マシン」
+Raspberry Piのセットアップ手順については，「[Raspberry Pi 4で構築する録画マシン]」
 に記載されているため詳細な説明を行いません．
 
 以降の説明は，
@@ -22,13 +22,13 @@ Raspberry Piのセットアップ手順については，「Raspberry Pi 4で構
 
 ```shell
 # SSHの有効化
-touch /Volumes/boot/ssh
+touch /mnt/boot/ssh
 
 # WiFiの無効化（使わない場合）
-echo "dtoverlay=pi3-disable-wifi" >>/Volumes/boot/config.txt
+echo "dtoverlay=disable-wifi" >>/mnt/boot/config.txt
 
 # Bluetoothの無効化（使わない場合）
-echo "dtoverlay=pi3-disable-bt" >>/Volumes/boot/config.txt
+echo "dtoverlay=disable-bt" >>/mnt/boot/config.txt
 ```
 
 必要に応じて以下のカーネルパラメーターを設定してください．
@@ -93,5 +93,6 @@ sudo apt-get dist-upgrade
 sudo reboot
 ```
 
+[Raspberry Pi 4で構築する録画マシン]: https://medium.com/chinachu/c98v-raspberry-pi-4-49c9692f5c09
 [nns779/px4_drv]: https://github.com/nns779/px4_drv
 [Armbian]: https://en.wikipedia.org/wiki/Armbian
