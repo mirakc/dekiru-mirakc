@@ -7,12 +7,10 @@ Mirakurunには無い機能として，mirakcはタイムシフト録画（い�
 
 ```console
 $ mkdir timeshift
-$ fallocate -l 1540096000 timeshift/nhk.timeshift.m2ts
 $ fallocate -l 1540096000 timeshift/bs1.timeshift.m2ts
 $ ls -lh timeshift
 total 3.1G
 -rw-r--r-- 1 pi pi 1.5G Mar 18 07:21 bs1.timeshift.m2ts
--rw-r--r-- 1 pi pi 1.5G Mar 18 07:19 nhk.timeshift.m2ts
 ```
 
 ディスク容量が足りない場合，ファイル作成に失敗します．十分な空き容量を作ってから再チャレンジしてく
@@ -29,7 +27,7 @@ services:
       - ./timeshift:/var/lib/mirakc/timeshift
 ```
 
-NHK総合とBS1をタイムシフト録画するように`config.yml`を修正してみます．
+BS1をタイムシフト録画するように`config.yml`を修正してみます．
 
 ```yaml
 # 追加部分のみ抜粋
@@ -43,11 +41,6 @@ jobs:
 
 timeshift:
   recorders:
-    nhk:
-      service-id: 3273601024
-      ts-file: /var/lib/mirakc/timeshift/nhk.timeshift.m2ts
-      data-file: /var/lib/mirakc/timeshift/nhk.timeshift.json
-      num-chunks: 10
     bs1:
       service-triple: 400101
       ts-file: /var/lib/mirakc/timeshift/bs1.timeshift.m2ts
@@ -65,7 +58,6 @@ $ sudo docker compose up -d
 
 ```console
 $ curl -sG http://localhost:40772/api/timeshift | jq .[].name
-"nhk"
 "bs1"
 ```
 
@@ -280,7 +272,7 @@ sudo docker compose up -d mirakc-timeshift-fs
 
 ```console
 $ ls timeshift-fs
-bs1 nhk
+bs1
 
 $ ls timeshift-fs/bs1
 6052B1C8.ＢＳニュース.m2ts
@@ -406,9 +398,9 @@ Input #0, mpegts, from 'pipe:':
 タイムシフト録画が何らかの理由で停止した場合，自動でタイムシフト録画を再実行します．
 
 ```
-INFO mirakc_core::timeshift: Recording stopped recorder.name="nhk"
+INFO mirakc_core::timeshift: Recording stopped recorder.name="bs1"
 ...
-INFO mirakc_core::timeshift: Recording started recorder.name="nhk"
+INFO mirakc_core::timeshift: Recording started recorder.name="bs1"
 ```
 
 タイムシフト録画が停止している間も，録画データにアクセス可能です．
