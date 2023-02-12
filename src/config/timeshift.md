@@ -259,6 +259,11 @@ services:
     environment:
       TZ: Asia/Tokyo
       RUST_LOG: info
+      # タイムシフト・ファイルシステムの所有者の設定
+      # ログイン・ユーザーのUID/GIDを指定
+      MIRAKC_TIMESHIFT_UID: 1000
+      MIRAKC_TIMESHIFT_GID: 1000
+      MIRAKC_TIMESHIFT_MOUNT_OPTIONS: ALLOW_OTHER
 ```
 
 `timeshift-fs`フォルダーを作成し，追加したコンテナーを起動します．
