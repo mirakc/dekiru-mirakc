@@ -442,12 +442,10 @@
 <p>Mirakurunには無い機能として，mirakcはタイムシフト録画（いわゆる全録）を実装しています．機能の細かい説明は後回しにして，動かしてみましょう．</p>
 <p>まず，タイムシフト録画用のフォルダーとファイルを作成します．</p>
 <pre><code class="lang-console"><span class="hljs-meta">$</span><span class="bash"> mkdir timeshift</span>
-<span class="hljs-meta">$</span><span class="bash"> fallocate -l 1540096000 timeshift/nhk.timeshift.m2ts</span>
 <span class="hljs-meta">$</span><span class="bash"> fallocate -l 1540096000 timeshift/bs1.timeshift.m2ts</span>
 <span class="hljs-meta">$</span><span class="bash"> ls -lh timeshift</span>
 total 3.1G
 -rw-r--r-- 1 pi pi 1.5G Mar 18 07:21 bs1.timeshift.m2ts
--rw-r--r-- 1 pi pi 1.5G Mar 18 07:19 nhk.timeshift.m2ts
 </code></pre>
 <p>ディスク容量が足りない場合，ファイル作成に失敗します．十分な空き容量を作ってから再チャレンジしてください．</p>
 <p>フォルダーとファイルの作成に成功したら，<code>docker-compose.yml</code>を修正し，これを<code>mirakc</code>コンテナーにマウントします．</p>
@@ -457,7 +455,7 @@ total 3.1G
     <span class="hljs-attr">volumes:</span>
       <span class="hljs-bullet">-</span> <span class="hljs-string">./timeshift:/var/lib/mirakc/timeshift</span>
 </code></pre>
-<p>NHK総合とBS1をタイムシフト録画するように<code>config.yml</code>を修正してみます．</p>
+<p>BS1をタイムシフト録画するように<code>config.yml</code>を修正してみます．</p>
 <pre><code class="lang-yaml"><span class="hljs-comment"># 追加部分のみ抜粋</span>
 <span class="hljs-attr">jobs:</span>
   <span class="hljs-comment"># 通常，タイムシフト録画では以下のジョブは不要</span>
@@ -469,11 +467,6 @@ total 3.1G
 
 <span class="hljs-attr">timeshift:</span>
   <span class="hljs-attr">recorders:</span>
-    <span class="hljs-attr">nhk:</span>
-      <span class="hljs-attr">service-id:</span> <span class="hljs-number">3273601024</span>
-      <span class="hljs-attr">ts-file:</span> <span class="hljs-string">/var/lib/mirakc/timeshift/nhk.timeshift.m2ts</span>
-      <span class="hljs-attr">data-file:</span> <span class="hljs-string">/var/lib/mirakc/timeshift/nhk.timeshift.json</span>
-      <span class="hljs-attr">num-chunks:</span> <span class="hljs-number">10</span>
     <span class="hljs-attr">bs1:</span>
       <span class="hljs-attr">service-triple:</span> <span class="hljs-number">400101</span>
       <span class="hljs-attr">ts-file:</span> <span class="hljs-string">/var/lib/mirakc/timeshift/bs1.timeshift.m2ts</span>
@@ -485,7 +478,6 @@ total 3.1G
 </code></pre>
 <p>タイムシフト録画が動いていれば，以下のように表示されます．</p>
 <pre><code class="lang-console"><span class="hljs-meta">$</span><span class="bash"> curl -sG http://localhost:40772/api/timeshift | jq .[].name</span>
-&quot;nhk&quot;
 &quot;bs1&quot;
 </code></pre>
 <p>起動直後は何も録画されていないので何も視聴できませんが，１，２分程度待つと視聴可能な状態になります．</p>
@@ -649,13 +641,18 @@ curl -sG http://raspberrypi.local:40772/api/timeshift/bs1/records/$ID/stream | f
     <span class="hljs-attr">environment:</span>
       <span class="hljs-attr">TZ:</span> <span class="hljs-string">Asia/Tokyo</span>
       <span class="hljs-attr">RUST_LOG:</span> <span class="hljs-string">info</span>
+      <span class="hljs-comment"># タイムシフト・ファイルシステムの所有者の設定</span>
+      <span class="hljs-comment"># ログイン・ユーザーのUID/GIDを指定</span>
+      <span class="hljs-attr">MIRAKC_TIMESHIFT_UID:</span> <span class="hljs-number">1000</span>
+      <span class="hljs-attr">MIRAKC_TIMESHIFT_GID:</span> <span class="hljs-number">1000</span>
+      <span class="hljs-attr">MIRAKC_TIMESHIFT_MOUNT_OPTIONS:</span> <span class="hljs-string">ALLOW_OTHER</span>
 </code></pre>
 <p><code>timeshift-fs</code>フォルダーを作成し，追加したコンテナーを起動します．</p>
 <pre><code>mkdir timeshift-fs
 sudo docker compose up -d mirakc-timeshift-fs
 </code></pre><p>起動に成功すれば，<code>timeshift-fs</code>にタイムシフト・ファイルシステムがマウントされます．</p>
 <pre><code class="lang-console"><span class="hljs-meta">$</span><span class="bash"> ls timeshift-fs</span>
-bs1 nhk
+bs1
 <span class="hljs-meta">
 $</span><span class="bash"> ls timeshift-fs/bs1</span>
 6052B1C8.ＢＳニュース.m2ts
@@ -736,9 +733,9 @@ curl -sG &quot;$STREAM?post-filters[]=split-dual-mono&quot; | ffprobe
 <p>欠点として，post-filterでストリームを変換した場合，シークできなくなります．変換によりストリームが動的に生成されるため，HTTPレスポンスは<code>Content-Length</code>ヘッダーを含まず，HTTPレスポンス・ボディにはチャンク・エンコーディングが適用されるためです．</p>
 <h2 id="タイムシフト録画の再実行">タイムシフト録画の再実行</h2>
 <p>タイムシフト録画が何らかの理由で停止した場合，自動でタイムシフト録画を再実行します．</p>
-<pre><code>INFO mirakc_core::timeshift: Recording stopped recorder.name=&quot;nhk&quot;
+<pre><code>INFO mirakc_core::timeshift: Recording stopped recorder.name=&quot;bs1&quot;
 ...
-INFO mirakc_core::timeshift: Recording started recorder.name=&quot;nhk&quot;
+INFO mirakc_core::timeshift: Recording started recorder.name=&quot;bs1&quot;
 </code></pre><p>タイムシフト録画が停止している間も，録画データにアクセス可能です．</p>
 <p>放送休止中にタイムシフト録画が停止することをユーザーが報告しています．</p>
 <ul>
@@ -787,7 +784,7 @@ INFO mirakc_core::timeshift: Recording started recorder.name=&quot;nhk&quot;
     <script>
         var gitbook = gitbook || [];
         gitbook.push(function() {
-            gitbook.page.hasChanged({"page":{"title":"タイムシフト録画","level":"1.4.7","depth":2,"next":{"title":"イベント通知","level":"1.5","depth":1,"path":"events.md","ref":"./events.md","articles":[]},"previous":{"title":"録画予約","level":"1.4.6","depth":2,"path":"config/recording.md","ref":"./config/recording.md","articles":[]},"dir":"ltr"},"config":{"plugins":["gitbook-plugin-japanese-support"],"root":"./src","styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"pluginsConfig":{"gitbook-plugin-japanese-support":{},"highlight":{},"search":{},"lunr":{"maxIndexSize":1000000,"ignoreSpecialCharacters":false},"fontsettings":{"theme":"white","family":"sans","size":2},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false}},"theme":"default","author":"masnagam","pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56},"embedFonts":false},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"variables":{},"title":"できるmirakc","language":"ja","gitbook":"*"},"file":{"path":"config/timeshift.md","mtime":"2023-02-05T03:59:14.575Z","type":"markdown"},"gitbook":{"version":"4.0.4","time":"2023-02-05T03:59:21.892Z"},"basePath":"..","book":{"language":""}});
+            gitbook.page.hasChanged({"page":{"title":"タイムシフト録画","level":"1.4.7","depth":2,"next":{"title":"イベント通知","level":"1.5","depth":1,"path":"events.md","ref":"./events.md","articles":[]},"previous":{"title":"録画予約","level":"1.4.6","depth":2,"path":"config/recording.md","ref":"./config/recording.md","articles":[]},"dir":"ltr"},"config":{"plugins":["gitbook-plugin-japanese-support"],"root":"./src","styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"pluginsConfig":{"gitbook-plugin-japanese-support":{},"highlight":{},"search":{},"lunr":{"maxIndexSize":1000000,"ignoreSpecialCharacters":false},"fontsettings":{"theme":"white","family":"sans","size":2},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false}},"theme":"default","author":"masnagam","pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56},"embedFonts":false},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"variables":{},"title":"できるmirakc","language":"ja","gitbook":"*"},"file":{"path":"config/timeshift.md","mtime":"2023-02-12T04:57:06.231Z","type":"markdown"},"gitbook":{"version":"4.0.4","time":"2023-02-12T04:57:12.065Z"},"basePath":"..","book":{"language":""}});
         });
     </script>
 </div>
