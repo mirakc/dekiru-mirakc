@@ -97,6 +97,8 @@ mirakc-timeshift-fsおよびSambaを稼働させているマシンが一時的�
 
 ## MiniDLNA (ReadyMedia)
 
+> mirakc/minidlnaは廃止予定なので，後述のmirakc/timeshift-gerberaを使ってください
+
 タイムシフト録画をTVで視聴しようと思っても，TVがSambaをサポートしていない場合があります．このような
 場合でも，もしTVがDLNA/UPnPをサポートしているなら，[MiniDLNA]を使えばTVで視聴可能です．
 
@@ -116,7 +118,22 @@ DLNA/UPnPをサポートしているTVでタイムシフト録画を視聴可能
 
 使用方法については，[README.md](https://github.com/mirakc/docker-minidlna)を参照してください．
 
+## mirakc/timeshift-gerbera
+
+タイムシフト録画をTVで視聴しようと思っても，TVがSambaをサポートしていない場合があります．このような
+場合でも，もしTVがDLNA/UPnPをサポートしているなら，[Gerbera]を使えばTVで視聴可能です．
+
+Gerberaの設定は多少面倒なので，専用のDockerイメージ[mirakc/timeshift-gerbera]を用意してあります．
+
+このDockerイメージでは，コンテナー内で`mirakc-timeshift-fs`を実行するため，自動アンマウントやタイム
+シフト・ファイルシステムのファイル所有権の問題が発生しません．そのため，`mirakc/timeshift-fs`を直接
+使用するのではなく，`mirakc/timeshift-*`の使用を推奨します．
+
+類似のDockerイメージを自分で作成したいという方は，[GitHub](https://github.com/mirakc/docker-timeshift-x)
+にソースをアップロードしてあるので参考にしてください．
+
 [miraview]: https://github.com/maeda577/miraview
 [MiniDLNA]: https://sourceforge.net/projects/minidlna/
 [inotify]: https://ja.wikipedia.org/wiki/Inotify
 [mirakc/minidlna]: https://hub.docker.com/r/mirakc/minidlna
+[mirakc/timeshift-gerbera]: https://hub.docker.com/r/mirakc/timeshift-gerbera
