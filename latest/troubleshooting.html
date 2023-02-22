@@ -477,6 +477,32 @@
       <span class="hljs-comment"># filter-serviceとfilter-programはdebug，それ以外はinfo</span>
       <span class="hljs-attr">MIRAKC_ARIB_LOG:</span> <span class="hljs-string">info,filter-service=debug,filter-program=debug</span>
 </code></pre>
+<p><code>MIRAKC_ARIB_LOG</code>に指定可能なログレベルの一覧が
+<a href="[mirakc/mirakc-aribのREADME.md]">こちら</a>にあります．</p>
+<h2 id="パイプラインの動作確認">パイプラインの動作確認</h2>
+<p>mirakcは，TSストリームに関する処理のほぼ全てを外部プログラムで実行します．この設計には，余分なリソースを消費するデメリットがある一方で，以下のようなメリットがあります．</p>
+<ul>
+<li>既存のTSストリーム処理を行うプログラムを再利用できる</li>
+<li>スクリプト等でTSストリーム処理をカスタマイズできる</li>
+<li>TSストリーム処理部のみ取り出しでデバッグできる</li>
+</ul>
+<p>mirakcでは，TSストリーム処理プログラムをパイプで連結したものを「パイプライン」と呼んでいます．パイプラインの基本的構成については
+<a href="https://github.com/mirakc/mirakc/blob/main/docs/inside-mirakc.md" target="_blank">こちら</a>を参照してください．</p>
+<p>ログレベルを<code>debug</code>に変更すると，パイプラインに関するログが出力されるようになります．</p>
+<pre><code>... DEBUG pipeline{id=0.0 label=&quot;tuner&quot;}: ...
+... DEBUG pipeline{id=0.0.1 label=&quot;epg.scan-services&quot;}: ...
+... DEBUG pipeline{id=0.1.1 label=&quot;epg.sync-clocks&quot;}: ...
+</code></pre><p>上記のように，パイプラインには一意の<code>id</code>と処理毎に<code>label</code>が付与されています．これらを使いログを<code>grep</code>することで，特定のパイプラインの動作を確認できます．</p>
+<p>各パイプラインの最初のログには，以下のように実行したコマンドの情報が出力されます．</p>
+<pre><code>... Spawned command=&quot;&lt;実行したコマンド&gt;&quot; pid=&lt;そのPID&gt;
+</code></pre><p>動作確認対象のパイプラインを構成するコマンドを集めた後，これらを直接実行することで問題の発生源を切り分けることが可能です．以下は<code>GET /api/channels/GR/27/stream</code>
+で実行されるパイプラインを直接実行する場合の例です．</p>
+<pre><code class="lang-shell"><span class="hljs-meta">#</span><span class="bash"> チューナーコマンドで`curl`を，`decode-filter`に`socat`を使用しています</span>
+curl -fsSL http://remote:40772/api/channels/GR/27/stream?decode=0 | \
+  socat -,cool-write tcp-connect:tsd:40773
+</code></pre>
+<p>通常のコマンド実行と同じなので，各プログラムのログレベルを変更することも，<code>gdb</code>
+などをアタッチすることも可能です．</p>
 <h2 id="フィルターの動作確認">フィルターの動作確認</h2>
 <p>フィルターで問題が発生している場合，フィルターに指定した外部プログラムを単独実行することで，問題の切り分けが可能です．</p>
 <p>例えば，以下のコマンドで<code>mirakc-arib filter-service</code>の動作を確認できます．</p>
@@ -591,7 +617,7 @@
     <script>
         var gitbook = gitbook || [];
         gitbook.push(function() {
-            gitbook.page.hasChanged({"page":{"title":"トラブルシューティング","level":"1.8","depth":1,"next":{"title":"tsdサーバーの詳しい話","level":"2.1","depth":1,"path":"tsd_server.md","ref":"./tsd_server.md","articles":[]},"previous":{"title":"カスタムイメージの作成","level":"1.7","depth":1,"path":"custom_image.md","ref":"./custom_image.md","articles":[]},"dir":"ltr"},"config":{"plugins":["gitbook-plugin-japanese-support"],"root":"./src","styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"pluginsConfig":{"gitbook-plugin-japanese-support":{},"highlight":{},"search":{},"lunr":{"maxIndexSize":1000000,"ignoreSpecialCharacters":false},"fontsettings":{"theme":"white","family":"sans","size":2},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false}},"theme":"default","author":"masnagam","pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56},"embedFonts":false},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"variables":{},"title":"できるmirakc","language":"ja","gitbook":"*"},"file":{"path":"troubleshooting.md","mtime":"2023-02-18T06:53:27.458Z","type":"markdown"},"gitbook":{"version":"4.0.4","time":"2023-02-18T06:53:33.162Z"},"basePath":".","book":{"language":""}});
+            gitbook.page.hasChanged({"page":{"title":"トラブルシューティング","level":"1.8","depth":1,"next":{"title":"tsdサーバーの詳しい話","level":"2.1","depth":1,"path":"tsd_server.md","ref":"./tsd_server.md","articles":[]},"previous":{"title":"カスタムイメージの作成","level":"1.7","depth":1,"path":"custom_image.md","ref":"./custom_image.md","articles":[]},"dir":"ltr"},"config":{"plugins":["gitbook-plugin-japanese-support"],"root":"./src","styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"pluginsConfig":{"gitbook-plugin-japanese-support":{},"highlight":{},"search":{},"lunr":{"maxIndexSize":1000000,"ignoreSpecialCharacters":false},"fontsettings":{"theme":"white","family":"sans","size":2},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false}},"theme":"default","author":"masnagam","pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56},"embedFonts":false},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"variables":{},"title":"できるmirakc","language":"ja","gitbook":"*"},"file":{"path":"troubleshooting.md","mtime":"2023-02-22T01:18:23.157Z","type":"markdown"},"gitbook":{"version":"4.0.4","time":"2023-02-22T01:18:29.006Z"},"basePath":".","book":{"language":""}});
         });
     </script>
 </div>
