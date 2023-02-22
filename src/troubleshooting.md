@@ -65,6 +65,55 @@ sudo docker logs --tail=1000 mirakc 2>&1 | grep -e WARN -e ERROR
       MIRAKC_ARIB_LOG: info,filter-service=debug,filter-program=debug
 ```
 
+`MIRAKC_ARIB_LOG`に指定可能なログレベルの一覧が
+[こちら]([mirakc/mirakc-aribのREADME.md])にあります．
+
+## パイプラインの動作確認
+
+mirakcは，TSストリームに関する処理のほぼ全てを外部プログラムで実行します．この設
+計には，余分なリソースを消費するデメリットがある一方で，以下のようなメリットがあ
+ります．
+
+* 既存のTSストリーム処理を行うプログラムを再利用できる
+* スクリプト等でTSストリーム処理をカスタマイズできる
+* TSストリーム処理部のみ取り出しでデバッグできる
+
+mirakcでは，TSストリーム処理プログラムをパイプで連結したものを「パイプライン」と
+呼んでいます．パイプラインの基本的構成については
+[こちら](https://github.com/mirakc/mirakc/blob/main/docs/inside-mirakc.md)を参
+照してください．
+
+ログレベルを`debug`に変更すると，パイプラインに関するログが出力されるようになり
+ます．
+
+```
+... DEBUG pipeline{id=0.0 label="tuner"}: ...
+... DEBUG pipeline{id=0.0.1 label="epg.scan-services"}: ...
+... DEBUG pipeline{id=0.1.1 label="epg.sync-clocks"}: ...
+```
+
+上記のように，パイプラインには一意の`id`と処理毎に`label`が付与されています．こ
+れらを使いログを`grep`することで，特定のパイプラインの動作を確認できます．
+
+各パイプラインの最初のログには，以下のように実行したコマンドの情報が出力されます．
+
+```
+... Spawned command="<実行したコマンド>" pid=<そのPID>
+```
+
+動作確認対象のパイプラインを構成するコマンドを集めた後，これらを直接実行すること
+で問題の発生源を切り分けることが可能です．以下は`GET /api/channels/GR/27/stream`
+で実行されるパイプラインを直接実行する場合の例です．
+
+```shell
+# チューナーコマンドで`curl`を，`decode-filter`に`socat`を使用しています
+curl -fsSL http://remote:40772/api/channels/GR/27/stream?decode=0 | \
+  socat -,cool-write tcp-connect:tsd:40773
+```
+
+通常のコマンド実行と同じなので，各プログラムのログレベルを変更することも，`gdb`
+などをアタッチすることも可能です．
+
 ## フィルターの動作確認
 
 フィルターで問題が発生している場合，フィルターに指定した外部プログラムを単独実行
