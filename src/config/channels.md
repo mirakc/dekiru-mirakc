@@ -40,11 +40,11 @@ channels:
 基本的には，以下のような置き換えでMirakurunの`channels.yml`から変換可能です．
 
 | Mirakuruのプロパティ名 | mirakcのプロパティ名       |
-|---------------------|--------------------------|
-| serviceId           | services（配列）          |
-| satelite            | extra-args （文字列）     |
-| space               | extra-args （文字列）     |
-| （なし）              | excluded_services（配列） |
+|----------------------|--------------------------|
+| serviceId            | services（配列）          |
+| satelite             | extra-args （文字列）     |
+| space                | extra-args （文字列）     |
+| （なし）              | excluded-services（配列） |
 
 チューナーコマンドとして`recpt1`を使用する場合，以下のようなMirakurun用のチャン
 ネルスキャンスクリプトを利用可能です．
