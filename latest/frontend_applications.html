@@ -514,11 +514,39 @@ mirakc-timeshift-fsおよびSambaを稼働させているマシンが一時的�
 DLNA/UPnPをサポートしているTVでタイムシフト録画を視聴可能です．</p>
 <p>使用方法については，<a href="https://github.com/mirakc/docker-minidlna" target="_blank">README.md</a>を参照してください．</p>
 <h2 id="mirakctimeshift-gerbera">mirakc/timeshift-gerbera</h2>
-<p>タイムシフト録画をTVで視聴しようと思っても，TVがSambaをサポートしていない場合があります．このような場合でも，もしTVがDLNA/UPnPをサポートしているなら，[Gerbera]を使えばTVで視聴可能です．</p>
+<p>タイムシフト録画をTVで視聴しようと思っても，TVがSambaをサポートしていない場合があります．このような場合でも，もしTVがDLNA/UPnPをサポートしているなら，<a href="https://gerbera.io/" target="_blank">Gerbera</a>を使えばTVで視聴可能です．</p>
 <p>Gerberaの設定は多少面倒なので，専用のDockerイメージ<a href="https://hub.docker.com/r/mirakc/timeshift-gerbera" target="_blank">mirakc/timeshift-gerbera</a>を用意してあります．</p>
 <p>このDockerイメージでは，コンテナー内で<code>mirakc-timeshift-fs</code>を実行するため，自動アンマウントやタイムシフト・ファイルシステムのファイル所有権の問題が発生しません．そのため，<code>mirakc/timeshift-fs</code>を直接使用するのではなく，<code>mirakc/timeshift-*</code>の使用を推奨します．</p>
 <p>類似のDockerイメージを自分で作成したいという方は，<a href="https://github.com/mirakc/docker-timeshift-x" target="_blank">GitHub</a>
 にソースをアップロードしてあるので参考にしてください．</p>
+<h2 id="mirakc-searchとmirakc-rec">mirakc-searchとmirakc-rec</h2>
+<p>コマンド操作に慣れている人は，<a href="https://github.com/mirakc/contrib" target="_blank">mirakc/contrib</a>にあるスクリプトの利用をお勧めします．</p>
+<p><code>mirakc-search</code></p>
+<pre><code class="lang-sh"><span class="hljs-meta">#!/bin/sh</span>
+<span class="hljs-built_in">export</span> MIRAKC_SEARCH_CUSTOM_PROGRAM_JQ_DIR=/path/to/program-jq
+<span class="hljs-built_in">export</span> MIRAKC_SEARCH_BASE_URL=http://mirakc:40772
+sh /path/to/mirakc/contrib/search/search.sh <span class="hljs-string">&quot;<span class="hljs-variable">$@</span>&quot;</span>
+</code></pre>
+<p><code>mirakc-rec</code></p>
+<pre><code class="lang-sh"><span class="hljs-meta">#!/bin/sh</span>
+<span class="hljs-built_in">export</span> MIRAKC_REC_BASE_URL=http://mirakc:40772
+sh /path/to/mirakc/contrib/recording/recording.sh <span class="hljs-string">&quot;<span class="hljs-variable">$@</span>&quot;</span>
+</code></pre>
+<p>変数と<code>/path/to/...</code>は，自分の環境に合わせて書き換えてください．</p>
+<p>この２つのスクリプトを使って，BSPの映画を録画予約してみます．</p>
+<pre><code class="lang-console"><span class="hljs-meta">#</span><span class="bash"> BSPの映画を検索</span>
+<span class="hljs-meta">#</span><span class="bash"> ビルトインのフィルター以外にも，直接フィルターをインラインで指定することも可能</span>
+<span class="hljs-meta">$</span><span class="bash"> mirakc-search movie gt-1h msid <span class="hljs-string">&apos;map(select(.msid == 400103))&apos;</span></span>
+ID           START             END               MINS  ...
+40010309234  2023-06-23 13:00  2023-06-23 14:45  105   ...
+...
+<span class="hljs-meta">
+#</span><span class="bash"> 録画予約</span>
+<span class="hljs-meta">$</span><span class="bash"> mirakc-rec add 40010309234</span>
+ID           STATE      START             END               MINS  ...
+40010309234  scheduled  2023-06-23 13:00  2023-06-23 14:45  105   ...
+</code></pre>
+<p><code>-h</code>オプションで各スクリプトのヘルプが表示されます．</p>
 
                                 
                                 </section>
@@ -562,7 +590,7 @@ DLNA/UPnPをサポートしているTVでタイムシフト録画を視聴可能
     <script>
         var gitbook = gitbook || [];
         gitbook.push(function() {
-            gitbook.page.hasChanged({"page":{"title":"フロントエンドアプリケーションとの連携","level":"1.6","depth":1,"next":{"title":"カスタムイメージの作成","level":"1.7","depth":1,"path":"custom_image.md","ref":"./custom_image.md","articles":[]},"previous":{"title":"イベント通知","level":"1.5","depth":1,"path":"events.md","ref":"./events.md","articles":[]},"dir":"ltr"},"config":{"plugins":["gitbook-plugin-japanese-support"],"root":"./src","styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"pluginsConfig":{"gitbook-plugin-japanese-support":{},"highlight":{},"search":{},"lunr":{"maxIndexSize":1000000,"ignoreSpecialCharacters":false},"fontsettings":{"theme":"white","family":"sans","size":2},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false}},"theme":"default","author":"masnagam","pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56},"embedFonts":false},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"variables":{},"title":"できるmirakc","language":"ja","gitbook":"*"},"file":{"path":"frontend_applications.md","mtime":"2023-05-29T06:45:04.208Z","type":"markdown"},"gitbook":{"version":"4.0.7","time":"2023-05-29T06:45:14.710Z"},"basePath":".","book":{"language":""}});
+            gitbook.page.hasChanged({"page":{"title":"フロントエンドアプリケーションとの連携","level":"1.6","depth":1,"next":{"title":"カスタムイメージの作成","level":"1.7","depth":1,"path":"custom_image.md","ref":"./custom_image.md","articles":[]},"previous":{"title":"イベント通知","level":"1.5","depth":1,"path":"events.md","ref":"./events.md","articles":[]},"dir":"ltr"},"config":{"plugins":["gitbook-plugin-japanese-support"],"root":"./src","styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"pluginsConfig":{"gitbook-plugin-japanese-support":{},"highlight":{},"search":{},"lunr":{"maxIndexSize":1000000,"ignoreSpecialCharacters":false},"fontsettings":{"theme":"white","family":"sans","size":2},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false}},"theme":"default","author":"masnagam","pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56},"embedFonts":false},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"variables":{},"title":"できるmirakc","language":"ja","gitbook":"*"},"file":{"path":"frontend_applications.md","mtime":"2023-06-23T03:12:01.690Z","type":"markdown"},"gitbook":{"version":"4.0.7","time":"2023-06-23T03:12:10.466Z"},"basePath":".","book":{"language":""}});
         });
     </script>
 </div>
