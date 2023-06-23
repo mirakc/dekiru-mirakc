@@ -132,8 +132,52 @@ Gerberaの設定は多少面倒なので，専用のDockerイメージ[mirakc/ti
 類似のDockerイメージを自分で作成したいという方は，[GitHub](https://github.com/mirakc/docker-timeshift-x)
 にソースをアップロードしてあるので参考にしてください．
 
+## mirakc-searchとmirakc-rec
+
+コマンド操作に慣れている人は，[mirakc/contrib]にあるスクリプトの利用をお勧めしま
+す．
+
+`mirakc-search`
+
+```sh
+#!/bin/sh
+export MIRAKC_SEARCH_CUSTOM_PROGRAM_JQ_DIR=/path/to/program-jq
+export MIRAKC_SEARCH_BASE_URL=http://mirakc:40772
+sh /path/to/mirakc/contrib/search/search.sh "$@"
+```
+
+`mirakc-rec`
+
+```sh
+#!/bin/sh
+export MIRAKC_REC_BASE_URL=http://mirakc:40772
+sh /path/to/mirakc/contrib/recording/recording.sh "$@"
+```
+
+変数と`/path/to/...`は，自分の環境に合わせて書き換えてください．
+
+この２つのスクリプトを使って，BSPの映画を録画予約してみます．
+
+```console
+# BSPの映画を検索
+# ビルトインのフィルター以外にも，直接フィルターをインラインで指定することも可能
+$ mirakc-search movie gt-1h msid 'map(select(.msid == 400103))'
+ID           START             END               MINS  ...
+40010309234  2023-06-23 13:00  2023-06-23 14:45  105   ...
+...
+
+# 録画予約
+$ mirakc-rec add 40010309234
+ID           STATE      START             END               MINS  ...
+40010309234  scheduled  2023-06-23 13:00  2023-06-23 14:45  105   ...
+```
+
+`-h`オプションで各スクリプトのヘルプが表示されます．
+
 [miraview]: https://github.com/maeda577/miraview
+[Gerbera]: https://gerbera.io/
 [MiniDLNA]: https://sourceforge.net/projects/minidlna/
 [inotify]: https://ja.wikipedia.org/wiki/Inotify
+[mirakc/contrib]: https://github.com/mirakc/contrib
 [mirakc/minidlna]: https://hub.docker.com/r/mirakc/minidlna
 [mirakc/timeshift-gerbera]: https://hub.docker.com/r/mirakc/timeshift-gerbera
