@@ -137,6 +137,8 @@ Gerberaの設定は多少面倒なので，専用のDockerイメージ[mirakc/ti
 コマンド操作に慣れている人は，[mirakc/contrib]にあるスクリプトの利用をお勧めしま
 す．
 
+> タイムシフト録画用の`timeshift/timeshift.sh`も追加しました
+
 `mirakc-search`
 
 ```sh
