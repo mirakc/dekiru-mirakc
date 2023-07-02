@@ -132,6 +132,11 @@ Gerberaの設定は多少面倒なので，専用のDockerイメージ[mirakc/ti
 類似のDockerイメージを自分で作成したいという方は，[GitHub](https://github.com/mirakc/docker-timeshift-x)
 にソースをアップロードしてあるので参考にしてください．
 
+KodiはGerberaと相性が悪く，タイムシフト録画を再生できません．詳細は
+[mirakc/docker-timeshift-x#2](https://github.com/mirakc/docker-timeshift-x/issues/2)を見てください．
+
+VLCはGerberaから供給されるタイムシフト録画を問題なく再生できることを確認済みです．
+
 ## mirakc-searchとmirakc-rec
 
 コマンド操作に慣れている人は，[mirakc/contrib]にあるスクリプトの利用をお勧めしま
