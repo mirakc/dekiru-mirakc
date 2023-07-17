@@ -6,7 +6,7 @@
         <title>フィルター設定 · できるmirakc</title>
         <meta http-equiv="X-UA-Compatible" content="IE=edge" />
         <meta name="description" content="">
-        <meta name="generator" content="HonKit 4.0.8">
+        <meta name="generator" content="HonKit 5.0.0">
         <meta name="author" content="masnagam">
         
         
@@ -440,17 +440,17 @@
                                 
                                 <h1 id="フィルター設定">フィルター設定</h1>
 <p>EPGデータの取得が完了すると，特定サービスのTSストリーミングが可能となります．</p>
-<pre><code class="lang-console"><span class="hljs-meta">#</span><span class="bash"> mirakcコンテナーをバックグラウンドで起動</span>
-<span class="hljs-meta">$</span><span class="bash"> sudo docker compose up -d</span>
+<pre><code class="lang-console"><span class="hljs-meta prompt_"># </span><span class="language-bash">mirakcコンテナーをバックグラウンドで起動</span>
+<span class="hljs-meta prompt_">$ </span><span class="language-bash">sudo docker compose up -d</span>
 Starting mirakc ... done
-<span class="hljs-meta">
-#</span><span class="bash"> 最初のサービス（ＮＨＫ総合１）のIDを表示</span>
-<span class="hljs-meta">$</span><span class="bash"> curl -s http://localhost:40772/api/services | jq .[0].id</span>
+<span class="hljs-meta prompt_">
+# </span><span class="language-bash">最初のサービス（ＮＨＫ総合１）のIDを表示</span>
+<span class="hljs-meta prompt_">$ </span><span class="language-bash">curl -s http://localhost:40772/api/services | jq .[0].<span class="hljs-built_in">id</span></span>
 3273601024
-<span class="hljs-meta">
-#</span><span class="bash"> ＮＨＫ総合１のTSストリーミングを実行（Ctrl+Cで停止）</span>
-<span class="hljs-meta">$</span><span class="bash"> curl http://localhost:40772/api/services/3273601024/stream?decode=0 &gt;/dev/null</span>
-<span class="hljs-meta">  %</span><span class="bash"> Total    % Received % Xferd  Average Speed   Time    Time     Time  Current</span>
+<span class="hljs-meta prompt_">
+# </span><span class="language-bash">ＮＨＫ総合１のTSストリーミングを実行（Ctrl+Cで停止）</span>
+<span class="hljs-meta prompt_">$ </span><span class="language-bash">curl http://localhost:40772/api/services/3273601024/stream?decode=0 &gt;/dev/null</span>
+<span class="hljs-meta prompt_">  % </span><span class="language-bash">Total    % Received % Xferd  Average Speed   Time    Time     Time  Current</span>
                                  Dload  Upload   Total   Spent    Left  Speed
 100 16.8M    0 16.8M    0     0  1578k      0 --:--:--  0:00:10 --:--:-- 1725k
 </code></pre>
@@ -464,11 +464,11 @@ Starting mirakc ... done
       echo &quot;{{{channel_type}}}/{{{channel}}} SID#{{{sid}}}&quot;
 </span></code></pre>
 <p>設定反映のためmirakcコンテナーを再起動し，動作確認します．</p>
-<pre><code class="lang-console"><span class="hljs-meta">#</span><span class="bash"> mirakcコンテナーを再起動</span>
-<span class="hljs-meta">$</span><span class="bash"> sudo docker compose restart</span>
-<span class="hljs-meta">
-#</span><span class="bash"> decode-filter付きTSストリーミングを実行</span>
-<span class="hljs-meta">$</span><span class="bash"> curl -s http://localhost:40772/api/services/3273601024/stream?decode=1</span>
+<pre><code class="lang-console"><span class="hljs-meta prompt_"># </span><span class="language-bash">mirakcコンテナーを再起動</span>
+<span class="hljs-meta prompt_">$ </span><span class="language-bash">sudo docker compose restart</span>
+<span class="hljs-meta prompt_">
+# </span><span class="language-bash">decode-filter付きTSストリーミングを実行</span>
+<span class="hljs-meta prompt_">$ </span><span class="language-bash">curl -s http://localhost:40772/api/services/3273601024/stream?decode=1</span>
 GR/27 SID#1024
 </code></pre>
 <p>TSストリームをチャンネル情報に置き換えることに成功しました．</p>
@@ -493,7 +493,7 @@ GR/27 SID#1024
 <p><a href="http://www.dest-unreach.org/socat/doc/socat.html" target="_blank">socat</a>は，配布している<code>mirakc/mirakc</code>イメージにも含まれているツールです．詳しい説明はリンク先を見るかGoogle先生に教えてもらってください．</p>
 <p><code>filters</code>プロパティーはチューナーごとに設定するのではなく，すべてのチューナーに対して共通で利用される設定です．そのため，特定のチューナーに対して特別な処理を行いたい場合は，渡されたテンプレートパラメーターを利用して処理を分岐するようなスクリプトを作成し，これをフィルターとして設定する必要があります．</p>
 <p>試しに，以下のような簡単な<code>bs-not-supported</code>スクリプトを作って，動作を確認してみます．</p>
-<pre><code class="lang-shell"><span class="hljs-meta">#</span><span class="bash">!/bin/sh</span>
+<pre><code class="lang-shell"><span class="hljs-meta prompt_">#</span><span class="language-bash">!/bin/sh</span>
 
 CHANNEL_TYPE=&quot;$1&quot;
 CHANNEL=&quot;$2&quot;
@@ -522,10 +522,10 @@ fi
 <span class="hljs-string">...</span>
 </code></pre>
 <p>以下のように表示されれば，<code>bs-not-supported</code>スクリプトは機能しています．</p>
-<pre><code class="lang-console"><span class="hljs-meta">$</span><span class="bash"> curl http://localhost:40772/api/channels/GR/27/stream?decode=1</span>
+<pre><code class="lang-console"><span class="hljs-meta prompt_">$ </span><span class="language-bash">curl http://localhost:40772/api/channels/GR/27/stream?decode=1</span>
 27
-<span class="hljs-meta">
-$</span><span class="bash"> curl http://localhost:40772/api/channels/BS/BS15_0/stream?decode=1</span>
+<span class="hljs-meta prompt_">
+$ </span><span class="language-bash">curl http://localhost:40772/api/channels/BS/BS15_0/stream?decode=1</span>
 BS not supported
 </code></pre>
 
@@ -571,7 +571,7 @@ BS not supported
     <script>
         var gitbook = gitbook || [];
         gitbook.push(function() {
-            gitbook.page.hasChanged({"page":{"title":"フィルター設定","level":"1.4.4","depth":2,"next":{"title":"局ロゴの表示","level":"1.4.5","depth":2,"path":"config/logos.md","ref":"./config/logos.md","articles":[]},"previous":{"title":"EGPデータキャッシュ","level":"1.4.3","depth":2,"path":"config/epg.md","ref":"./config/epg.md","articles":[]},"dir":"ltr"},"config":{"plugins":["gitbook-plugin-japanese-support"],"root":"./src","styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"pluginsConfig":{"gitbook-plugin-japanese-support":{},"highlight":{},"search":{},"lunr":{"maxIndexSize":1000000,"ignoreSpecialCharacters":false},"fontsettings":{"theme":"white","family":"sans","size":2},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false}},"theme":"default","author":"masnagam","pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56},"embedFonts":false},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"variables":{},"title":"できるmirakc","language":"ja","gitbook":"*"},"file":{"path":"config/filters.md","mtime":"2023-07-17T23:35:12.272Z","type":"markdown"},"gitbook":{"version":"4.0.8","time":"2023-07-17T23:35:27.127Z"},"basePath":"..","book":{"language":""}});
+            gitbook.page.hasChanged({"page":{"title":"フィルター設定","level":"1.4.4","depth":2,"next":{"title":"局ロゴの表示","level":"1.4.5","depth":2,"path":"config/logos.md","ref":"./config/logos.md","articles":[]},"previous":{"title":"EGPデータキャッシュ","level":"1.4.3","depth":2,"path":"config/epg.md","ref":"./config/epg.md","articles":[]},"dir":"ltr"},"config":{"plugins":["gitbook-plugin-japanese-support"],"root":"./src","styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"pluginsConfig":{"gitbook-plugin-japanese-support":{},"highlight":{},"search":{},"lunr":{"maxIndexSize":1000000,"ignoreSpecialCharacters":false},"fontsettings":{"theme":"white","family":"sans","size":2},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false}},"theme":"default","author":"masnagam","pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56},"embedFonts":false},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"variables":{},"title":"できるmirakc","language":"ja","gitbook":"*"},"file":{"path":"config/filters.md","mtime":"2023-07-17T23:35:54.441Z","type":"markdown"},"gitbook":{"version":"5.0.0","time":"2023-07-17T23:36:08.857Z"},"basePath":"..","book":{"language":""}});
         });
     </script>
 </div>

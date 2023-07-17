@@ -6,7 +6,7 @@
         <title>Raspberry Piのセットアップ · できるmirakc</title>
         <meta http-equiv="X-UA-Compatible" content="IE=edge" />
         <meta name="description" content="">
-        <meta name="generator" content="HonKit 4.0.8">
+        <meta name="generator" content="HonKit 5.0.0">
         <meta name="author" content="masnagam">
         
         
@@ -455,13 +455,13 @@
 <h2 id="デバイスの準備">デバイスの準備</h2>
 <p>デバイスにログインしないことには何も始まりません．Raspbianを書き込んだマイクロSD
 カードに以下の修正を適用します．</p>
-<pre><code class="lang-shell"><span class="hljs-meta">#</span><span class="bash"> SSHの有効化</span>
+<pre><code class="lang-shell"><span class="hljs-meta prompt_"># </span><span class="language-bash">SSHの有効化</span>
 touch /mnt/boot/ssh
-<span class="hljs-meta">
-#</span><span class="bash"> WiFiの無効化（使わない場合）</span>
+<span class="hljs-meta prompt_">
+# </span><span class="language-bash">WiFiの無効化（使わない場合）</span>
 echo &quot;dtoverlay=disable-wifi&quot; &gt;&gt;/mnt/boot/config.txt
-<span class="hljs-meta">
-#</span><span class="bash"> Bluetoothの無効化（使わない場合）</span>
+<span class="hljs-meta prompt_">
+# </span><span class="language-bash">Bluetoothの無効化（使わない場合）</span>
 echo &quot;dtoverlay=disable-bt&quot; &gt;&gt;/mnt/boot/config.txt
 </code></pre>
 <p>必要に応じて以下のカーネルパラメーターを設定してください．</p>
@@ -469,35 +469,35 @@ echo &quot;dtoverlay=disable-bt&quot; &gt;&gt;/mnt/boot/config.txt
 ... coherent_pool=4M ...
 </code></pre>
 <p>マイクロSDカードをRaspberry Piに挿入し，電源をオン．有効化してある<code>ssh</code>を使ってログインします．</p>
-<pre><code class="lang-shell"><span class="hljs-meta">#</span><span class="bash"> 必要に応じてホストを追加</span>
+<pre><code class="lang-shell"><span class="hljs-meta prompt_"># </span><span class="language-bash">必要に応じてホストを追加</span>
 cat &lt;&lt;EOF &gt;&gt;~/.ssh/config
 Host pi
   HostName raspberrypi.local
   User pi
 EOF
-<span class="hljs-meta">
-#</span><span class="bash"> パスワード入力が面倒なので公開鍵をコピー</span>
+<span class="hljs-meta prompt_">
+# </span><span class="language-bash">パスワード入力が面倒なので公開鍵をコピー</span>
 ssh-copy-id pi
-<span class="hljs-meta">
-#</span><span class="bash"> ログイン</span>
+<span class="hljs-meta prompt_">
+# </span><span class="language-bash">ログイン</span>
 ssh pi
 </code></pre>
 <p><code>raspberrypi.local</code>に接続できない場合，何らかの理由でmDNSが機能していないことを意味します．</p>
 <p>ログインしたら，安全のために以下を実行しておきます．</p>
-<pre><code class="lang-shell"><span class="hljs-meta">#</span><span class="bash"> パスワード変更</span>
+<pre><code class="lang-shell"><span class="hljs-meta prompt_"># </span><span class="language-bash">パスワード変更</span>
 passwd
-<span class="hljs-meta">
-#</span><span class="bash"> rootをロック</span>
+<span class="hljs-meta prompt_">
+# </span><span class="language-bash">rootをロック</span>
 sudo passwd -l root
 </code></pre>
 <p>SDカードの寿命が気になる人は，以下の設定に追加してtmpfsの設定も行っておきましょう．</p>
-<pre><code class="lang-shell"><span class="hljs-meta">#</span><span class="bash"> swapの無効化</span>
+<pre><code class="lang-shell"><span class="hljs-meta prompt_"># </span><span class="language-bash">swapの無効化</span>
 sudo systemctl stop dphys-swapfile
 sudo systemctl disable dphys-swapfile
 sudo rm -f /var/swap
 free -h
-<span class="hljs-meta">
-#</span><span class="bash"> ntpの有効化</span>
+<span class="hljs-meta prompt_">
+# </span><span class="language-bash">ntpの有効化</span>
 echo &apos;NTP=ntp.nict.jp&apos; | sudo tee -a /etc/systemd/timesyncd.conf &gt;/dev/null
 sudo systemctl restart systemd-timesyncd
 systemctl status systemd-timesyncd | grep nict
@@ -550,7 +550,7 @@ sudo reboot
     <script>
         var gitbook = gitbook || [];
         gitbook.push(function() {
-            gitbook.page.hasChanged({"page":{"title":"Raspberry Piのセットアップ","level":"1.3.1","depth":2,"next":{"title":"Dockerのインストール","level":"1.3.2","depth":2,"path":"install/docker.md","ref":"./install/docker.md","articles":[]},"previous":{"title":"Dockerを使ったインストール","level":"1.3","depth":1,"path":"install/README.md","ref":"./install/README.md","articles":[{"title":"Raspberry Piのセットアップ","level":"1.3.1","depth":2,"path":"install/setup_rpi.md","ref":"./install/setup_rpi.md","articles":[]},{"title":"Dockerのインストール","level":"1.3.2","depth":2,"path":"install/docker.md","ref":"./install/docker.md","articles":[]},{"title":"mirakcのインストール","level":"1.3.3","depth":2,"path":"install/mirakc.md","ref":"./install/mirakc.md","articles":[]},{"title":"Dockerイメージ","level":"1.3.4","depth":2,"path":"install/image.md","ref":"./install/image.md","articles":[]}]},"dir":"ltr"},"config":{"plugins":["gitbook-plugin-japanese-support"],"root":"./src","styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"pluginsConfig":{"gitbook-plugin-japanese-support":{},"highlight":{},"search":{},"lunr":{"maxIndexSize":1000000,"ignoreSpecialCharacters":false},"fontsettings":{"theme":"white","family":"sans","size":2},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false}},"theme":"default","author":"masnagam","pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56},"embedFonts":false},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"variables":{},"title":"できるmirakc","language":"ja","gitbook":"*"},"file":{"path":"install/setup_rpi.md","mtime":"2023-07-17T23:35:12.272Z","type":"markdown"},"gitbook":{"version":"4.0.8","time":"2023-07-17T23:35:27.127Z"},"basePath":"..","book":{"language":""}});
+            gitbook.page.hasChanged({"page":{"title":"Raspberry Piのセットアップ","level":"1.3.1","depth":2,"next":{"title":"Dockerのインストール","level":"1.3.2","depth":2,"path":"install/docker.md","ref":"./install/docker.md","articles":[]},"previous":{"title":"Dockerを使ったインストール","level":"1.3","depth":1,"path":"install/README.md","ref":"./install/README.md","articles":[{"title":"Raspberry Piのセットアップ","level":"1.3.1","depth":2,"path":"install/setup_rpi.md","ref":"./install/setup_rpi.md","articles":[]},{"title":"Dockerのインストール","level":"1.3.2","depth":2,"path":"install/docker.md","ref":"./install/docker.md","articles":[]},{"title":"mirakcのインストール","level":"1.3.3","depth":2,"path":"install/mirakc.md","ref":"./install/mirakc.md","articles":[]},{"title":"Dockerイメージ","level":"1.3.4","depth":2,"path":"install/image.md","ref":"./install/image.md","articles":[]}]},"dir":"ltr"},"config":{"plugins":["gitbook-plugin-japanese-support"],"root":"./src","styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"pluginsConfig":{"gitbook-plugin-japanese-support":{},"highlight":{},"search":{},"lunr":{"maxIndexSize":1000000,"ignoreSpecialCharacters":false},"fontsettings":{"theme":"white","family":"sans","size":2},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false}},"theme":"default","author":"masnagam","pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56},"embedFonts":false},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"variables":{},"title":"できるmirakc","language":"ja","gitbook":"*"},"file":{"path":"install/setup_rpi.md","mtime":"2023-07-17T23:35:54.445Z","type":"markdown"},"gitbook":{"version":"5.0.0","time":"2023-07-17T23:36:08.857Z"},"basePath":"..","book":{"language":""}});
         });
     </script>
 </div>

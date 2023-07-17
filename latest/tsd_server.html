@@ -6,7 +6,7 @@
         <title>tsdサーバーの詳しい話 · できるmirakc</title>
         <meta http-equiv="X-UA-Compatible" content="IE=edge" />
         <meta name="description" content="">
-        <meta name="generator" content="HonKit 4.0.8">
+        <meta name="generator" content="HonKit 5.0.0">
         <meta name="author" content="masnagam">
         
         
@@ -467,7 +467,7 @@
 <p><code>Dockerfile</code>:</p>
 <pre><code class="lang-Dockerfile"><span class="hljs-keyword">FROM</span> alpine:latest
 
-<span class="hljs-keyword">RUN</span><span class="bash"> <span class="hljs-built_in">set</span> -eux \
+<span class="hljs-keyword">RUN</span><span class="language-bash"> <span class="hljs-built_in">set</span> -eux \
  &amp;&amp; apk add --no-cache \
       ccid \
       musl \
@@ -493,13 +493,13 @@
  &amp;&amp; apk del --purge .build-deps \
  &amp;&amp; rm -rf /tmp/*
 
-<span class="hljs-keyword">COPY</span><span class="bash"> b25-server /usr/<span class="hljs-built_in">local</span>/bin/</span>
+<span class="hljs-keyword">COPY</span><span class="language-bash"> b25-server /usr/local/bin/</span>
 
 <span class="hljs-keyword">EXPOSE</span> <span class="hljs-number">40773</span>
-<span class="hljs-keyword">ENTRYPOINT</span><span class="bash"> [<span class="hljs-string">&quot;b25-server&quot;</span>]</span>
+<span class="hljs-keyword">ENTRYPOINT</span><span class="language-bash"> [<span class="hljs-string">&quot;b25-server&quot;</span>]</span>
 </code></pre>
 <p><code>b25-server</code>:</p>
-<pre><code class="lang-shell"><span class="hljs-meta">#</span><span class="bash">!/bin/sh -eu</span>
+<pre><code class="lang-shell"><span class="hljs-meta prompt_">#</span><span class="language-bash">!/bin/sh -eu</span>
 
 B25_BCAS_SERVER=${B25_BCAS_SERVER:-}
 
@@ -522,7 +522,7 @@ socat tcp-listen:40773,fork,reuseaddr system:b25
 <p><code>Dockerfile</code>:</p>
 <pre><code class="lang-Dockerfile"><span class="hljs-keyword">FROM</span> alpine:latest
 
-<span class="hljs-keyword">RUN</span><span class="bash"> <span class="hljs-built_in">set</span> -eux \
+<span class="hljs-keyword">RUN</span><span class="language-bash"> <span class="hljs-built_in">set</span> -eux \
  &amp;&amp; apk add --no-cache \
       ccid \
       musl \
@@ -530,13 +530,13 @@ socat tcp-listen:40773,fork,reuseaddr system:b25
       socat \
       tzdata</span>
 
-<span class="hljs-keyword">COPY</span><span class="bash"> bcas-server /usr/<span class="hljs-built_in">local</span>/bin/</span>
+<span class="hljs-keyword">COPY</span><span class="language-bash"> bcas-server /usr/local/bin/</span>
 
 <span class="hljs-keyword">EXPOSE</span> <span class="hljs-number">40774</span>
-<span class="hljs-keyword">ENTRYPOINT</span><span class="bash"> [<span class="hljs-string">&quot;bcas-server&quot;</span>]</span>
+<span class="hljs-keyword">ENTRYPOINT</span><span class="language-bash"> [<span class="hljs-string">&quot;bcas-server&quot;</span>]</span>
 </code></pre>
 <p><code>bcas-server</code>:</p>
-<pre><code class="lang-shell"><span class="hljs-meta">#</span><span class="bash">!/bin/sh -eu</span>
+<pre><code class="lang-shell"><span class="hljs-meta prompt_">#</span><span class="language-bash">!/bin/sh -eu</span>
 
 BCAS_DEBUG=${BCAS_DEBUG:-}
 
@@ -620,7 +620,7 @@ socat tcp-listen:40774,fork,reuseaddr \
     <script>
         var gitbook = gitbook || [];
         gitbook.push(function() {
-            gitbook.page.hasChanged({"page":{"title":"tsdサーバーの詳しい話","level":"2.1","depth":1,"next":{"title":"v1からv2への移行","level":"2.2","depth":1,"path":"migration.md","ref":"./migration.md","articles":[]},"previous":{"title":"トラブルシューティング","level":"1.8","depth":1,"path":"troubleshooting.md","ref":"./troubleshooting.md","articles":[]},"dir":"ltr"},"config":{"plugins":["gitbook-plugin-japanese-support"],"root":"./src","styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"pluginsConfig":{"gitbook-plugin-japanese-support":{},"highlight":{},"search":{},"lunr":{"maxIndexSize":1000000,"ignoreSpecialCharacters":false},"fontsettings":{"theme":"white","family":"sans","size":2},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false}},"theme":"default","author":"masnagam","pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56},"embedFonts":false},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"variables":{},"title":"できるmirakc","language":"ja","gitbook":"*"},"file":{"path":"tsd_server.md","mtime":"2023-07-17T23:35:12.272Z","type":"markdown"},"gitbook":{"version":"4.0.8","time":"2023-07-17T23:35:27.127Z"},"basePath":".","book":{"language":""}});
+            gitbook.page.hasChanged({"page":{"title":"tsdサーバーの詳しい話","level":"2.1","depth":1,"next":{"title":"v1からv2への移行","level":"2.2","depth":1,"path":"migration.md","ref":"./migration.md","articles":[]},"previous":{"title":"トラブルシューティング","level":"1.8","depth":1,"path":"troubleshooting.md","ref":"./troubleshooting.md","articles":[]},"dir":"ltr"},"config":{"plugins":["gitbook-plugin-japanese-support"],"root":"./src","styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"pluginsConfig":{"gitbook-plugin-japanese-support":{},"highlight":{},"search":{},"lunr":{"maxIndexSize":1000000,"ignoreSpecialCharacters":false},"fontsettings":{"theme":"white","family":"sans","size":2},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false}},"theme":"default","author":"masnagam","pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56},"embedFonts":false},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"variables":{},"title":"できるmirakc","language":"ja","gitbook":"*"},"file":{"path":"tsd_server.md","mtime":"2023-07-17T23:35:54.445Z","type":"markdown"},"gitbook":{"version":"5.0.0","time":"2023-07-17T23:36:08.857Z"},"basePath":".","book":{"language":""}});
         });
     </script>
 </div>

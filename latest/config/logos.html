@@ -6,7 +6,7 @@
         <title>局ロゴの表示 · できるmirakc</title>
         <meta http-equiv="X-UA-Compatible" content="IE=edge" />
         <meta name="description" content="">
-        <meta name="generator" content="HonKit 4.0.8">
+        <meta name="generator" content="HonKit 5.0.0">
         <meta name="author" content="masnagam">
         
         
@@ -451,11 +451,11 @@
 </code></pre>
 <p>ここで<code>nhk.png</code>は局ロゴとして使用する画像です．この画像はどこかから拾ってくるか（ライセンスに注意！），自力でTSストリームから抽出する必要があります．今回は
 <code>mirakc/mirakc</code>イメージに含まれている<code>mirakc-arib</code>を使って，TSストリームからロゴを抽出することにします．</p>
-<pre><code class="lang-shell"><span class="hljs-meta">#</span><span class="bash"> mirakcは起動済みとする</span>
+<pre><code class="lang-shell"><span class="hljs-meta prompt_"># </span><span class="language-bash">mirakcは起動済みとする</span>
 mkdir -p logos
-<span class="hljs-meta">#</span><span class="bash"> `.data`はdata URL文字列</span>
-<span class="hljs-meta">#</span><span class="bash"> Base64文字列の前に`data:image/png;base64,`が付与されている</span>
-<span class="hljs-meta">#</span><span class="bash"> Base64文字列内に`,`は存在しないので，これを区切り文字とできる</span>
+<span class="hljs-meta prompt_"># </span><span class="language-bash">`.data`はdata URL文字列</span>
+<span class="hljs-meta prompt_"># </span><span class="language-bash">Base64文字列の前に`data:image/png;<span class="hljs-built_in">base64</span>,`が付与されている</span>
+<span class="hljs-meta prompt_"># </span><span class="language-bash">Base64文字列内に`,`は存在しないので，これを区切り文字とできる</span>
 curl -sG http://localhost:40772/api/channels/GR/27/stream?decode=0 | \
   sudo docker run --rm -i --entrypoint=/usr/bin/env mirakc/mirakc:alpine \
     mirakc-arib collect-logos | head -1 | jq -Mr &apos;.data&apos; | \
@@ -473,7 +473,7 @@ curl -sG http://localhost:40772/api/channels/GR/27/stream?decode=0 | \
       <span class="hljs-bullet">-</span> <span class="hljs-string">./logos:/var/lib/mirakc/logos:ro</span>
 </code></pre>
 <p>コンテナーを再起動して動作を確認します．</p>
-<pre><code class="lang-console"><span class="hljs-meta">$</span><span class="bash"> curl -I http://localhost:40772/api/services/3273601024/logo</span>
+<pre><code class="lang-console"><span class="hljs-meta prompt_">$ </span><span class="language-bash">curl -I http://localhost:40772/api/services/3273601024/logo</span>
 HTTP/1.1 200 OK
 content-length: 760
 server: mirakc-core/0.18.0
@@ -486,10 +486,10 @@ date: Sat, 19 Jun 2021 07:29:46 GMT
 </code></pre>
 <p>ブラウザーを使えば，実際に表示される画像を確認できます．</p>
 <p>設定した局ロゴは，<code>/api/iptv/*</code>にも反映されます．</p>
-<pre><code class="lang-console"><span class="hljs-meta">$</span><span class="bash"> curl -sG http://localhost:40772/api/iptv/playlist | grep tvg-logo</span>
+<pre><code class="lang-console"><span class="hljs-meta prompt_">$ </span><span class="language-bash">curl -sG http://localhost:40772/api/iptv/playlist | grep tvg-logo</span>
 ... tvg-logo=&quot;http://localhost:40772/api/services/3273601024/logo&quot; ...
-<span class="hljs-meta">
-$</span><span class="bash"> curl -sG http://localhost:40772/api/iptv/epg | xmllint --format - | grep icon</span>
+<span class="hljs-meta prompt_">
+$ </span><span class="language-bash">curl -sG http://localhost:40772/api/iptv/epg | xmllint --format - | grep icon</span>
     &lt;icon src=&quot;http://localhost:40772/api/services/3273601024/logo&quot;/&gt;
 </code></pre>
 
@@ -535,7 +535,7 @@ $</span><span class="bash"> curl -sG http://localhost:40772/api/iptv/epg | xmlli
     <script>
         var gitbook = gitbook || [];
         gitbook.push(function() {
-            gitbook.page.hasChanged({"page":{"title":"局ロゴの表示","level":"1.4.5","depth":2,"next":{"title":"録画予約","level":"1.4.6","depth":2,"path":"config/recording.md","ref":"./config/recording.md","articles":[]},"previous":{"title":"フィルター設定","level":"1.4.4","depth":2,"path":"config/filters.md","ref":"./config/filters.md","articles":[]},"dir":"ltr"},"config":{"plugins":["gitbook-plugin-japanese-support"],"root":"./src","styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"pluginsConfig":{"gitbook-plugin-japanese-support":{},"highlight":{},"search":{},"lunr":{"maxIndexSize":1000000,"ignoreSpecialCharacters":false},"fontsettings":{"theme":"white","family":"sans","size":2},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false}},"theme":"default","author":"masnagam","pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56},"embedFonts":false},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"variables":{},"title":"できるmirakc","language":"ja","gitbook":"*"},"file":{"path":"config/logos.md","mtime":"2023-07-17T23:35:12.272Z","type":"markdown"},"gitbook":{"version":"4.0.8","time":"2023-07-17T23:35:27.127Z"},"basePath":"..","book":{"language":""}});
+            gitbook.page.hasChanged({"page":{"title":"局ロゴの表示","level":"1.4.5","depth":2,"next":{"title":"録画予約","level":"1.4.6","depth":2,"path":"config/recording.md","ref":"./config/recording.md","articles":[]},"previous":{"title":"フィルター設定","level":"1.4.4","depth":2,"path":"config/filters.md","ref":"./config/filters.md","articles":[]},"dir":"ltr"},"config":{"plugins":["gitbook-plugin-japanese-support"],"root":"./src","styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"pluginsConfig":{"gitbook-plugin-japanese-support":{},"highlight":{},"search":{},"lunr":{"maxIndexSize":1000000,"ignoreSpecialCharacters":false},"fontsettings":{"theme":"white","family":"sans","size":2},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false}},"theme":"default","author":"masnagam","pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56},"embedFonts":false},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"variables":{},"title":"できるmirakc","language":"ja","gitbook":"*"},"file":{"path":"config/logos.md","mtime":"2023-07-17T23:35:54.441Z","type":"markdown"},"gitbook":{"version":"5.0.0","time":"2023-07-17T23:36:08.857Z"},"basePath":"..","book":{"language":""}});
         });
     </script>
 </div>

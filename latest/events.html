@@ -6,7 +6,7 @@
         <title>イベント通知 · できるmirakc</title>
         <meta http-equiv="X-UA-Compatible" content="IE=edge" />
         <meta name="description" content="">
-        <meta name="generator" content="HonKit 4.0.8">
+        <meta name="generator" content="HonKit 5.0.0">
         <meta name="author" content="masnagam">
         
         
@@ -441,7 +441,7 @@
                                 <h1 id="イベント通知">イベント通知</h1>
 <p>mirakcはServer-Sent Events (<a href="https://developer.mozilla.org/en-US/docs/Web/API/Server-sent_events" target="_blank">SSE</a>) によるイベント通知をサポートしています．これを利用することで，特定のイベントが発生したときにスクリプトを実行できます．</p>
 <p>すでにmirakcが起動している場合，以下のコマンドを実行してみてください．通知されたイベントが表示されるはずです．番組情報の取得が完了していない場合は表示されません．番組情報の取得が完了するまで待ちましょう．</p>
-<pre><code class="lang-console"><span class="hljs-meta">$</span><span class="bash"> curl http://localhost:40772/events -sG</span>
+<pre><code class="lang-console"><span class="hljs-meta prompt_">$ </span><span class="language-bash">curl http://localhost:40772/events -sG</span>
 event:epg.programs-updated
 data:{&quot;serviceId&quot;:400101}
 
@@ -472,7 +472,7 @@ data:{&quot;serviceId&quot;:3273601024}
 </code></pre>
 <p><code>sample-rules.js</code>の実行には<a href="https://deno.land/" target="_blank"><code>deno</code></a>を使用します．<code>node</code>ではないので注意してください．</p>
 <p><code>recman</code>コンテナーを起動しログを確認します．</p>
-<pre><code class="lang-console"><span class="hljs-meta">$</span><span class="bash"> docker logs -f recman</span>
+<pre><code class="lang-console"><span class="hljs-meta prompt_">$ </span><span class="language-bash">docker logs -f recman</span>
 ...
 Connect to http://mirakc:40772/events...
 EPG programs updated: ＮＨＫ総合１・東京: 3273601024
@@ -482,7 +482,7 @@ Added: scheduled: ＮＨＫ総合１・東京: 327360102422829: ...
 ...
 </code></pre>
 <p>スクリプトの実行完了をしばらく待って以下を実行すると，録画予約が自動登録されていることを確認できます．</p>
-<pre><code class="lang-console"><span class="hljs-meta">$</span><span class="bash"> curl http://localhost:40772/api/recording/schedules -sG | jq <span class="hljs-string">&apos;.[].program.id&apos;</span></span>
+<pre><code class="lang-console"><span class="hljs-meta prompt_">$ </span><span class="language-bash">curl http://localhost:40772/api/recording/schedules -sG | jq <span class="hljs-string">&apos;.[].program.id&apos;</span></span>
 327360102422829
 327360102423293
 327360102423762
@@ -490,8 +490,8 @@ Added: scheduled: ＮＨＫ総合１・東京: 327360102422829: ...
 327360102424706
 327360102425360
 327360102426083
-<span class="hljs-meta">
-$</span><span class="bash"> curl http://localhost:40772/api/programs/327360102422829 -sG | \
+<span class="hljs-meta prompt_">
+$ </span><span class="language-bash">curl http://localhost:40772/api/programs/327360102422829 -sG | \
     jq -r <span class="hljs-string">&apos;.name | test(&quot;ＮＨＫニュース７&quot;)&apos;</span></span>
 true
 </code></pre>
@@ -548,7 +548,7 @@ true
     <script>
         var gitbook = gitbook || [];
         gitbook.push(function() {
-            gitbook.page.hasChanged({"page":{"title":"イベント通知","level":"1.5","depth":1,"next":{"title":"フロントエンドアプリケーションとの連携","level":"1.6","depth":1,"path":"frontend_applications.md","ref":"./frontend_applications.md","articles":[]},"previous":{"title":"タイムシフト録画","level":"1.4.7","depth":2,"path":"config/timeshift.md","ref":"./config/timeshift.md","articles":[]},"dir":"ltr"},"config":{"plugins":["gitbook-plugin-japanese-support"],"root":"./src","styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"pluginsConfig":{"gitbook-plugin-japanese-support":{},"highlight":{},"search":{},"lunr":{"maxIndexSize":1000000,"ignoreSpecialCharacters":false},"fontsettings":{"theme":"white","family":"sans","size":2},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false}},"theme":"default","author":"masnagam","pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56},"embedFonts":false},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"variables":{},"title":"できるmirakc","language":"ja","gitbook":"*"},"file":{"path":"events.md","mtime":"2023-07-17T23:35:12.272Z","type":"markdown"},"gitbook":{"version":"4.0.8","time":"2023-07-17T23:35:27.127Z"},"basePath":".","book":{"language":""}});
+            gitbook.page.hasChanged({"page":{"title":"イベント通知","level":"1.5","depth":1,"next":{"title":"フロントエンドアプリケーションとの連携","level":"1.6","depth":1,"path":"frontend_applications.md","ref":"./frontend_applications.md","articles":[]},"previous":{"title":"タイムシフト録画","level":"1.4.7","depth":2,"path":"config/timeshift.md","ref":"./config/timeshift.md","articles":[]},"dir":"ltr"},"config":{"plugins":["gitbook-plugin-japanese-support"],"root":"./src","styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"pluginsConfig":{"gitbook-plugin-japanese-support":{},"highlight":{},"search":{},"lunr":{"maxIndexSize":1000000,"ignoreSpecialCharacters":false},"fontsettings":{"theme":"white","family":"sans","size":2},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false}},"theme":"default","author":"masnagam","pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56},"embedFonts":false},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"variables":{},"title":"できるmirakc","language":"ja","gitbook":"*"},"file":{"path":"events.md","mtime":"2023-07-17T23:35:54.445Z","type":"markdown"},"gitbook":{"version":"5.0.0","time":"2023-07-17T23:36:08.857Z"},"basePath":".","book":{"language":""}});
         });
     </script>
 </div>

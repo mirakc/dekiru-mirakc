@@ -6,7 +6,7 @@
         <title>録画予約 · できるmirakc</title>
         <meta http-equiv="X-UA-Compatible" content="IE=edge" />
         <meta name="description" content="">
-        <meta name="generator" content="HonKit 4.0.8">
+        <meta name="generator" content="HonKit 5.0.0">
         <meta name="author" content="masnagam">
         
         
@@ -453,54 +453,54 @@
       <span class="hljs-bullet">-</span> <span class="hljs-string">./recording:/var/lib/mirakc/recording</span>
 </code></pre>
 <p>mirakcコンテナーを再起動し，録画予約関係のWebエンドポイントが有効になっているか確認します．</p>
-<pre><code class="lang-console"><span class="hljs-meta">#</span><span class="bash"> 録画予約一覧の取得</span>
-<span class="hljs-meta">#</span><span class="bash"> 何も予約していないので当然空のリストが返ってきます</span>
-<span class="hljs-meta">$</span><span class="bash"> curl http://localhost:40772/api/recording/schedules -sG</span>
+<pre><code class="lang-console"><span class="hljs-meta prompt_"># </span><span class="language-bash">録画予約一覧の取得</span>
+<span class="hljs-meta prompt_"># </span><span class="language-bash">何も予約していないので当然空のリストが返ってきます</span>
+<span class="hljs-meta prompt_">$ </span><span class="language-bash">curl http://localhost:40772/api/recording/schedules -sG</span>
 []
 </code></pre>
 <p>以降の説明では<a href="https://github.com/mirakc/contrib/blob/main/recording/recording.sh" target="_blank"><code>recording.sh</code></a>というシェル・スクリプトを使用しています．</p>
 <h2 id="録画予約の登録・削除">録画予約の登録・削除</h2>
 <p>試しに，現在放送中の番組を録画予約してみましょう．</p>
-<pre><code class="lang-console"><span class="hljs-meta">#</span><span class="bash"> ＮＨＫ総合１・東京の番組表から，現在放送中の番組のProgram IDを取得</span>
-<span class="hljs-meta">#</span><span class="bash"> Program IDは，実際に返ってきた値に読み替えてください</span>
-<span class="hljs-meta">$</span><span class="bash"> curl http://localhost:40772/api/services/3273601024/programs -sG | \
+<pre><code class="lang-console"><span class="hljs-meta prompt_"># </span><span class="language-bash">ＮＨＫ総合１・東京の番組表から，現在放送中の番組のProgram IDを取得</span>
+<span class="hljs-meta prompt_"># </span><span class="language-bash">Program IDは，実際に返ってきた値に読み替えてください</span>
+<span class="hljs-meta prompt_">$ </span><span class="language-bash">curl http://localhost:40772/api/services/3273601024/programs -sG | \
     jq <span class="hljs-string">&apos;.[] | select((.startAt / 1000) &lt;= now and ((.startAt + .duration) / 1000) &gt; now) | .id&apos;</span></span>
 327360102407046
-<span class="hljs-meta">
-#</span><span class="bash"> 録画予約を登録</span>
-<span class="hljs-meta">#</span><span class="bash"> もうすぐ終了する番組でなければ，登録に成功します</span>
-<span class="hljs-meta">$</span><span class="bash"> sh recording.sh -r add 327360102407046 | jq <span class="hljs-string">&apos;.program.id&apos;</span></span>
+<span class="hljs-meta prompt_">
+# </span><span class="language-bash">録画予約を登録</span>
+<span class="hljs-meta prompt_"># </span><span class="language-bash">もうすぐ終了する番組でなければ，登録に成功します</span>
+<span class="hljs-meta prompt_">$ </span><span class="language-bash">sh recording.sh -r add 327360102407046 | jq <span class="hljs-string">&apos;.program.id&apos;</span></span>
 327360102407046
 </code></pre>
 <p>録画予約の登録に成功しました．放送中の番組を録画予約したので，録画はすぐに開始されます．</p>
-<pre><code class="lang-console"><span class="hljs-meta">#</span><span class="bash"> すぐに録画が開始されるので，空のリストが返されます</span>
-<span class="hljs-meta">$</span><span class="bash"> sh recording.sh -r list | jq <span class="hljs-string">&apos;.[] | .program.id, .state&apos;</span></span>
+<pre><code class="lang-console"><span class="hljs-meta prompt_"># </span><span class="language-bash">すぐに録画が開始されるので，空のリストが返されます</span>
+<span class="hljs-meta prompt_">$ </span><span class="language-bash">sh recording.sh -r list | jq <span class="hljs-string">&apos;.[] | .program.id, .state&apos;</span></span>
 327360102407046
 &quot;recording&quot;
-<span class="hljs-meta">
-#</span><span class="bash"> 番組がまだ放送中なら録画中のリストに含まれています</span>
-<span class="hljs-meta">$</span><span class="bash"> curl http://localhost:40772/api/recording/recorders -sG | jq <span class="hljs-string">&apos;.[].programId&apos;</span></span>
+<span class="hljs-meta prompt_">
+# </span><span class="language-bash">番組がまだ放送中なら録画中のリストに含まれています</span>
+<span class="hljs-meta prompt_">$ </span><span class="language-bash">curl http://localhost:40772/api/recording/recorders -sG | jq <span class="hljs-string">&apos;.[].programId&apos;</span></span>
 327360102407046
 </code></pre>
 <p><code>options.contentPath</code>に指定したファイルが，<code>recording/videos</code>フォルダー内に作成されていることが確認できます．</p>
-<pre><code class="lang-console"><span class="hljs-meta">$</span><span class="bash"> ls recording</span>
+<pre><code class="lang-console"><span class="hljs-meta prompt_">$ </span><span class="language-bash"><span class="hljs-built_in">ls</span> recording</span>
 schedules.json  videos
-<span class="hljs-meta">
-$</span><span class="bash"> ls recording/videos</span>
+<span class="hljs-meta prompt_">
+$ </span><span class="language-bash"><span class="hljs-built_in">ls</span> recording/videos</span>
 &apos;&lt;datetime&gt;_&lt;program-id&gt;.m2ts&apos;  # &lt;datetime&gt;および&lt;program-id&gt;は実際の値に読み替えること
 </code></pre>
 <p>このように，<code>options.contentPath</code>に存在しないディレクトリーが含まれている場合，録画時に自動でディレクトリーが作成されます．</p>
 <p>録画予約を削除すれば，録画も停止します．</p>
-<pre><code class="lang-console"><span class="hljs-meta">$</span><span class="bash"> sh recording.sh delete 327360102407046</span>
-<span class="hljs-meta">
-$</span><span class="bash"> sh recording.sh -r list</span>
+<pre><code class="lang-console"><span class="hljs-meta prompt_">$ </span><span class="language-bash">sh recording.sh delete 327360102407046</span>
+<span class="hljs-meta prompt_">
+$ </span><span class="language-bash">sh recording.sh -r list</span>
 []
-<span class="hljs-meta">
-$</span><span class="bash"> curl http://localhost:40772/api/recording/recorders -sG</span>
+<span class="hljs-meta prompt_">
+$ </span><span class="language-bash">curl http://localhost:40772/api/recording/recorders -sG</span>
 []
 </code></pre>
 <p>録画予約を削除しても録画データは消えません．</p>
-<pre><code class="lang-console"><span class="hljs-meta">$</span><span class="bash"> ls recording/videos</span>
+<pre><code class="lang-console"><span class="hljs-meta prompt_">$ </span><span class="language-bash"><span class="hljs-built_in">ls</span> recording/videos</span>
 &apos;&lt;datetime&gt;_&lt;program-id&gt;.m2ts&apos;
 </code></pre>
 <p>基本的に録画予約は，番組表に記載されている時刻に録画を開始します．多くの場合，これでも問題はないのですが，ごく稀に，前番組の放送延長などが原因で録画予約した番組の放送時間が変更されることがあります．このような場合，番組表に記載された時刻には番組は開始されないため，当然の結果として番組全体を正しく録画することはできません．</p>
@@ -524,7 +524,7 @@ $</span><span class="bash"> curl http://localhost:40772/api/recording/recorders 
       <span class="hljs-attr">channel-types:</span> [<span class="hljs-string">GR</span>, <span class="hljs-string">BS</span>]
 </code></pre>
 <p>mirakcコンテナーを再起動してください．以下のようなログが毎分出力されるようになります．</p>
-<pre><code class="lang-console"><span class="hljs-meta">$</span><span class="bash"> docker logs -f mirakc | grep OnairProgramTracker</span>
+<pre><code class="lang-console"><span class="hljs-meta prompt_">$ </span><span class="language-bash">docker logs -f mirakc | grep OnairProgramTracker</span>
 ... INFO ... Use dedicated tuner tuner.index=1 channel=GR/27 user.info=OnairProgramTracker(tracker)
 ... INFO ... Activate tuner.index=1 channel=GR/27 user.info=OnairProgramTracker(tracker)
 ... INFO ... Subscribed subscription.id=tuner#1.0.1 user.info=OnairProgramTracker(tracker)
@@ -550,18 +550,18 @@ $</span><span class="bash"> curl http://localhost:40772/api/recording/recorders 
 </code></pre>
 <p>本機能がどのように動作するのか見るために，後続の２つの番組の録画予約を行ってみましょう．</p>
 <p>まず，対象番組のIDを取得します．</p>
-<pre><code class="lang-console"><span class="hljs-meta">$</span><span class="bash"> curl http://localhost:40772/api/services/3273601024/programs -sG | \
-    jq <span class="hljs-string">&apos;.[] | select((.startAt / 1000) &gt; now) | .id&apos;</span> | head -n 2</span>
+<pre><code class="lang-console"><span class="hljs-meta prompt_">$ </span><span class="language-bash">curl http://localhost:40772/api/services/3273601024/programs -sG | \
+    jq <span class="hljs-string">&apos;.[] | select((.startAt / 1000) &gt; now) | .id&apos;</span> | <span class="hljs-built_in">head</span> -n 2</span>
 327360102415793  # 番組表情，次の番組
 327360102415795  # その次の番組
 </code></pre>
 <p>まず，番組表で次の次に始まる番組予定を予約します．</p>
-<pre><code class="lang-console"><span class="hljs-meta">$</span><span class="bash"> sh recording.sh -r add 327360102415795 | jq <span class="hljs-string">&apos;.program.id, .state&apos;</span></span>
+<pre><code class="lang-console"><span class="hljs-meta prompt_">$ </span><span class="language-bash">sh recording.sh -r add 327360102415795 | jq <span class="hljs-string">&apos;.program.id, .state&apos;</span></span>
 327360102415795
 &quot;scheduled&quot;
 </code></pre>
 <p>状態<code>scheduled</code>とは，番組表の情報を元に録画予約された状態です．録画予約された番組が次に放送予定の番組（または現在放送中の番組）になると，状態が<code>tracking</code>へと変わります．これを確認するために，番組表で次に始まる予定の番組を録画予約します．</p>
-<pre><code class="lang-console"><span class="hljs-meta">$</span><span class="bash"> sh recording.sh -r add 327360102415793 | jq <span class="hljs-string">&apos;.program.id, .state&apos;</span></span>
+<pre><code class="lang-console"><span class="hljs-meta prompt_">$ </span><span class="language-bash">sh recording.sh -r add 327360102415793 | jq <span class="hljs-string">&apos;.program.id, .state&apos;</span></span>
 327360102415793
 &quot;tracking&quot;
 </code></pre>
@@ -577,21 +577,21 @@ $</span><span class="bash"> curl http://localhost:40772/api/recording/recorders 
 実際の削除は録画予約の実行直前に行うため，録画予約がなければ残り続けます．</p>
 </blockquote>
 <p>録画失敗の状況を擬似的に体験するため，すでに終了している番組の録画を録画予約してみます．</p>
-<pre><code class="lang-console"><span class="hljs-meta">$</span><span class="bash"> curl http://localhost:40772/api/services/3273601024/programs -sG | \
-    jq <span class="hljs-string">&apos;.[] | select((.startAt / 1000) &lt;= now) | .id&apos;</span> | tail -n 2</span>
+<pre><code class="lang-console"><span class="hljs-meta prompt_">$ </span><span class="language-bash">curl http://localhost:40772/api/services/3273601024/programs -sG | \
+    jq <span class="hljs-string">&apos;.[] | select((.startAt / 1000) &lt;= now) | .id&apos;</span> | <span class="hljs-built_in">tail</span> -n 2</span>
 327360102415795  # 番組表上，終了している番組
 327360102415796  # 番組表上，現在放送中の番組
-<span class="hljs-meta">
-$</span><span class="bash"> sh recording.sh -r add 327360102415795 | jq <span class="hljs-string">&apos;.program.id, .state&apos;</span></span>
+<span class="hljs-meta prompt_">
+$ </span><span class="language-bash">sh recording.sh -r add 327360102415795 | jq <span class="hljs-string">&apos;.program.id, .state&apos;</span></span>
 327360102415795
 &quot;scheduled&quot;
 </code></pre>
 <p>追加した録画予約に対する録画はすぐに開始されますが，番組は終了しているので当然失敗します．</p>
-<pre><code class="lang-console"><span class="hljs-meta">$</span><span class="bash"> docker logs mirakc | grep WARN</span>
+<pre><code class="lang-console"><span class="hljs-meta prompt_">$ </span><span class="language-bash">docker logs mirakc | grep WARN</span>
 ...  WARN ... Need rescheduling schedule.program.quad=7FE07FE004003DB3
 </code></pre>
 <p>その後，録画予約は<code>rescheduling</code>状態に．</p>
-<pre><code class="lang-console"><span class="hljs-meta">$</span><span class="bash"> sh recording.sh -r list | jq <span class="hljs-string">&apos;.[] | .program.id, .state&apos;</span></span>
+<pre><code class="lang-console"><span class="hljs-meta prompt_">$ </span><span class="language-bash">sh recording.sh -r list | jq <span class="hljs-string">&apos;.[] | .program.id, .state&apos;</span></span>
 327360102415795
 &quot;rescheduling&quot;
 </code></pre>
@@ -658,7 +658,7 @@ $</span><span class="bash"> sh recording.sh -r add 327360102415795 | jq <span cl
     <script>
         var gitbook = gitbook || [];
         gitbook.push(function() {
-            gitbook.page.hasChanged({"page":{"title":"録画予約","level":"1.4.6","depth":2,"next":{"title":"タイムシフト録画","level":"1.4.7","depth":2,"path":"config/timeshift.md","ref":"./config/timeshift.md","articles":[]},"previous":{"title":"局ロゴの表示","level":"1.4.5","depth":2,"path":"config/logos.md","ref":"./config/logos.md","articles":[]},"dir":"ltr"},"config":{"plugins":["gitbook-plugin-japanese-support"],"root":"./src","styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"pluginsConfig":{"gitbook-plugin-japanese-support":{},"highlight":{},"search":{},"lunr":{"maxIndexSize":1000000,"ignoreSpecialCharacters":false},"fontsettings":{"theme":"white","family":"sans","size":2},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false}},"theme":"default","author":"masnagam","pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56},"embedFonts":false},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"variables":{},"title":"できるmirakc","language":"ja","gitbook":"*"},"file":{"path":"config/recording.md","mtime":"2023-07-17T23:35:12.272Z","type":"markdown"},"gitbook":{"version":"4.0.8","time":"2023-07-17T23:35:27.127Z"},"basePath":"..","book":{"language":""}});
+            gitbook.page.hasChanged({"page":{"title":"録画予約","level":"1.4.6","depth":2,"next":{"title":"タイムシフト録画","level":"1.4.7","depth":2,"path":"config/timeshift.md","ref":"./config/timeshift.md","articles":[]},"previous":{"title":"局ロゴの表示","level":"1.4.5","depth":2,"path":"config/logos.md","ref":"./config/logos.md","articles":[]},"dir":"ltr"},"config":{"plugins":["gitbook-plugin-japanese-support"],"root":"./src","styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"pluginsConfig":{"gitbook-plugin-japanese-support":{},"highlight":{},"search":{},"lunr":{"maxIndexSize":1000000,"ignoreSpecialCharacters":false},"fontsettings":{"theme":"white","family":"sans","size":2},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false}},"theme":"default","author":"masnagam","pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56},"embedFonts":false},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"variables":{},"title":"できるmirakc","language":"ja","gitbook":"*"},"file":{"path":"config/recording.md","mtime":"2023-07-17T23:35:54.445Z","type":"markdown"},"gitbook":{"version":"5.0.0","time":"2023-07-17T23:36:08.857Z"},"basePath":"..","book":{"language":""}});
         });
     </script>
 </div>

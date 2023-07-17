@@ -6,7 +6,7 @@
         <title>タイムシフト録画 · できるmirakc</title>
         <meta http-equiv="X-UA-Compatible" content="IE=edge" />
         <meta name="description" content="">
-        <meta name="generator" content="HonKit 4.0.8">
+        <meta name="generator" content="HonKit 5.0.0">
         <meta name="author" content="masnagam">
         
         
@@ -441,9 +441,9 @@
                                 <h1 id="タイムシフト録画（全録）">タイムシフト録画（全録）</h1>
 <p>Mirakurunには無い機能として，mirakcはタイムシフト録画（いわゆる全録）を実装しています．機能の細かい説明は後回しにして，動かしてみましょう．</p>
 <p>まず，タイムシフト録画用のフォルダーとファイルを作成します．</p>
-<pre><code class="lang-console"><span class="hljs-meta">$</span><span class="bash"> mkdir timeshift</span>
-<span class="hljs-meta">$</span><span class="bash"> fallocate -l 1540096000 timeshift/bs1.timeshift.m2ts</span>
-<span class="hljs-meta">$</span><span class="bash"> ls -lh timeshift</span>
+<pre><code class="lang-console"><span class="hljs-meta prompt_">$ </span><span class="language-bash"><span class="hljs-built_in">mkdir</span> timeshift</span>
+<span class="hljs-meta prompt_">$ </span><span class="language-bash">fallocate -l 1540096000 timeshift/bs1.timeshift.m2ts</span>
+<span class="hljs-meta prompt_">$ </span><span class="language-bash"><span class="hljs-built_in">ls</span> -lh timeshift</span>
 total 3.1G
 -rw-r--r-- 1 pi pi 1.5G Mar 18 07:21 bs1.timeshift.m2ts
 </code></pre>
@@ -474,19 +474,19 @@ total 3.1G
       <span class="hljs-attr">num-chunks:</span> <span class="hljs-number">10</span>
 </code></pre>
 <p>準備は整いました．mirakcを起動してください．</p>
-<pre><code class="lang-console"><span class="hljs-meta">$</span><span class="bash"> sudo docker compose up -d</span>
+<pre><code class="lang-console"><span class="hljs-meta prompt_">$ </span><span class="language-bash">sudo docker compose up -d</span>
 </code></pre>
 <p>タイムシフト録画が動いていれば，以下のように表示されます．</p>
-<pre><code class="lang-console"><span class="hljs-meta">$</span><span class="bash"> curl -sG http://localhost:40772/api/timeshift | jq .[].name</span>
+<pre><code class="lang-console"><span class="hljs-meta prompt_">$ </span><span class="language-bash">curl -sG http://localhost:40772/api/timeshift | jq .[].name</span>
 &quot;bs1&quot;
 </code></pre>
 <p>起動直後は何も録画されていないので何も視聴できませんが，１，２分程度待つと視聴可能な状態になります．</p>
-<pre><code class="lang-console"><span class="hljs-meta">#</span><span class="bash"> 直後は0で視聴できないが，そのうち0以外が表示されるようになる</span>
-<span class="hljs-meta">$</span><span class="bash"> curl -sG http://localhost:40772/api/timeshift/bs1 | jq .duration</span>
+<pre><code class="lang-console"><span class="hljs-meta prompt_"># </span><span class="language-bash">直後は0で視聴できないが，そのうち0以外が表示されるようになる</span>
+<span class="hljs-meta prompt_">$ </span><span class="language-bash">curl -sG http://localhost:40772/api/timeshift/bs1 | jq .duration</span>
 75420
 </code></pre>
 <p><code>ffplay</code>がインストールされているデスクトップ環境上で以下のコマンドを実行すると，最初の番組からタイムシフト再生されます．</p>
-<pre><code class="lang-shell"><span class="hljs-meta">#</span><span class="bash"> raspberrypi上ではなく，別のデスクトップ環境上で実行すること</span>
+<pre><code class="lang-shell"><span class="hljs-meta prompt_"># </span><span class="language-bash">raspberrypi上ではなく，別のデスクトップ環境上で実行すること</span>
 curl -sG http://raspberrypi.local:40772/api/timeshift/bs1/stream | ffplay -
 </code></pre>
 <p>上記のWeb APIはタイムシフト録画をライブ視聴相当でストリーミングします．そのため，シークはできませんが，視聴中の番組が終了したら次の番組が自動で再生されます．</p>
@@ -651,10 +651,10 @@ curl -sG http://raspberrypi.local:40772/api/timeshift/bs1/records/$ID/stream | f
 <pre><code>mkdir timeshift-fs
 sudo docker compose up -d mirakc-timeshift-fs
 </code></pre><p>起動に成功すれば，<code>timeshift-fs</code>にタイムシフト・ファイルシステムがマウントされます．</p>
-<pre><code class="lang-console"><span class="hljs-meta">$</span><span class="bash"> ls timeshift-fs</span>
+<pre><code class="lang-console"><span class="hljs-meta prompt_">$ </span><span class="language-bash"><span class="hljs-built_in">ls</span> timeshift-fs</span>
 bs1
-<span class="hljs-meta">
-$</span><span class="bash"> ls timeshift-fs/bs1</span>
+<span class="hljs-meta prompt_">
+$ </span><span class="language-bash"><span class="hljs-built_in">ls</span> timeshift-fs/bs1</span>
 6052B1C8.ＢＳニュース.m2ts
 </code></pre>
 <p>タイムシフト・ファイルシステムは読み取り専用なので書き込みはできません．録画が進むとファイルが増えたり減ったりします．</p>
@@ -712,8 +712,8 @@ $</span><span class="bash"> ls timeshift-fs/bs1</span>
         -f mpegts pipe:1
 </span></code></pre>
 <p>音声トラックを切り替え可能なメディアプレーヤーで再生すれば，目的の言語の音声のみを再生できます．</p>
-<pre><code class="lang-shell"><span class="hljs-meta">#</span><span class="bash"> ステレオ音声が２つのモノラル音声に分離されることを確認</span>
-<span class="hljs-meta">#</span><span class="bash"> 実際は多重音声（デュアルモノラル）の録画にフィルターを適用する</span>
+<pre><code class="lang-shell"><span class="hljs-meta prompt_"># </span><span class="language-bash">ステレオ音声が２つのモノラル音声に分離されることを確認</span>
+<span class="hljs-meta prompt_"># </span><span class="language-bash">実際は多重音声（デュアルモノラル）の録画にフィルターを適用する</span>
 STREAM=http://raspberrypi.local:40772/api/timeshift/bs1/stream
 curl -sG &quot;$STREAM?post-filters[]=split-dual-mono&quot; | ffprobe
 </code></pre>
@@ -784,7 +784,7 @@ INFO mirakc_core::timeshift: Recording started recorder.name=&quot;bs1&quot;
     <script>
         var gitbook = gitbook || [];
         gitbook.push(function() {
-            gitbook.page.hasChanged({"page":{"title":"タイムシフト録画","level":"1.4.7","depth":2,"next":{"title":"イベント通知","level":"1.5","depth":1,"path":"events.md","ref":"./events.md","articles":[]},"previous":{"title":"録画予約","level":"1.4.6","depth":2,"path":"config/recording.md","ref":"./config/recording.md","articles":[]},"dir":"ltr"},"config":{"plugins":["gitbook-plugin-japanese-support"],"root":"./src","styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"pluginsConfig":{"gitbook-plugin-japanese-support":{},"highlight":{},"search":{},"lunr":{"maxIndexSize":1000000,"ignoreSpecialCharacters":false},"fontsettings":{"theme":"white","family":"sans","size":2},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false}},"theme":"default","author":"masnagam","pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56},"embedFonts":false},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"variables":{},"title":"できるmirakc","language":"ja","gitbook":"*"},"file":{"path":"config/timeshift.md","mtime":"2023-07-17T23:35:12.272Z","type":"markdown"},"gitbook":{"version":"4.0.8","time":"2023-07-17T23:35:27.127Z"},"basePath":"..","book":{"language":""}});
+            gitbook.page.hasChanged({"page":{"title":"タイムシフト録画","level":"1.4.7","depth":2,"next":{"title":"イベント通知","level":"1.5","depth":1,"path":"events.md","ref":"./events.md","articles":[]},"previous":{"title":"録画予約","level":"1.4.6","depth":2,"path":"config/recording.md","ref":"./config/recording.md","articles":[]},"dir":"ltr"},"config":{"plugins":["gitbook-plugin-japanese-support"],"root":"./src","styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"pluginsConfig":{"gitbook-plugin-japanese-support":{},"highlight":{},"search":{},"lunr":{"maxIndexSize":1000000,"ignoreSpecialCharacters":false},"fontsettings":{"theme":"white","family":"sans","size":2},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false}},"theme":"default","author":"masnagam","pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56},"embedFonts":false},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"variables":{},"title":"できるmirakc","language":"ja","gitbook":"*"},"file":{"path":"config/timeshift.md","mtime":"2023-07-17T23:35:54.445Z","type":"markdown"},"gitbook":{"version":"5.0.0","time":"2023-07-17T23:36:08.857Z"},"basePath":"..","book":{"language":""}});
         });
     </script>
 </div>
