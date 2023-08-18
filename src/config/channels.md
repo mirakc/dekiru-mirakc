@@ -52,6 +52,10 @@ channels:
 * [mcconfig.pl](https://www.jifu-labo.net/2019/02/mirakurn_channels_config/)
 * [uru2/scan_ch_mirak.sh](https://gist.github.com/uru2/479b7da80063e39d1ca2cf467e40e290)
 
+mirakc専用のスクリプトもあります．
+
+* [uru2/scan_ch_mirakc_docker.sh](https://gist.github.com/uru2/7f738d864c2789b35c35e6bb7be9d0cb)
+
 どちらも`epgdump`を使用していますが，現時点では`mirakc/mirakc`イメージには含ま
 れていません．`mirakc/mirakc`イメージからカスタムイメージを作成する方法につい
 ては後述します．
