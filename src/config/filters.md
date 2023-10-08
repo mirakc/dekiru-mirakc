@@ -57,6 +57,10 @@ TSストリームをチャンネル情報に置き換えることに成功しま
 ```yaml
 filters:
   # Chinachu/Mirakurunの設定例より
+  #
+  # tsukumijima/libaribb25を使用する場合は，`arib-b25-stream-test -v 0`とログを
+  # 制限する必要があります．これはSTDERRへの出力で`\r`が使用されており，これが原
+  # 因でログのライン分割処理で問題が発生するためです．
   decode-filter:
     command: >-
       arib-b25-stream-test
