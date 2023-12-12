@@ -32,4 +32,4 @@ jobs:
         uses: JamesIves/github-pages-deploy-action@v4
         with:
           folder: ./_book
-          target-folder: nightly
+          target-folder: unstable
