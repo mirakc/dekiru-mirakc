@@ -7,10 +7,10 @@ Mirakurunには無い機能として，mirakcはタイムシフト録画（い�
 
 ```console
 $ mkdir timeshift
-$ fallocate -l 1540096000 timeshift/bs1.timeshift.m2ts
+$ fallocate -l 1540096000 timeshift/nhk-bs.timeshift.m2ts
 $ ls -lh timeshift
 total 3.1G
--rw-r--r-- 1 pi pi 1.5G Mar 18 07:21 bs1.timeshift.m2ts
+-rw-r--r-- 1 pi pi 1.5G Mar 18 07:21 nhk-bs.timeshift.m2ts
 ```
 
 ディスク容量が足りない場合，ファイル作成に失敗します．十分な空き容量を作ってから再チャレンジしてく
@@ -27,10 +27,15 @@ services:
       - ./timeshift:/var/lib/mirakc/timeshift
 ```
 
-BS1をタイムシフト録画するように`config.yml`を修正してみます．
+NHK BSをタイムシフト録画するように`config.yml`を修正してみます．
 
 ```yaml
 # 追加部分のみ抜粋
+tuners:
+  - name: nhk-bs-timeshift
+    types: [BS]
+    command: recpt1 --device /dev/px4video1 {{{channel}}} - -
+
 jobs:
   # 通常，タイムシフト録画では以下のジョブは不要
   # 無効化すると`/api/programs`などが機能しなくなる
@@ -41,11 +46,15 @@ jobs:
 
 timeshift:
   recorders:
-    bs1:
+    nhk-bs:
       service-triple: 400101
-      ts-file: /var/lib/mirakc/timeshift/bs1.timeshift.m2ts
-      data-file: /var/lib/mirakc/timeshift/bs1.timeshift.json
+      ts-file: /var/lib/mirakc/timeshift/nhk-bs.timeshift.m2ts
+      data-file: /var/lib/mirakc/timeshift/bhk-bs.timeshift.json
       num-chunks: 10
+      uses:
+        tuner: nhk-bs-timeshift
+        channel-type: BS
+        channel: BS15_0
 ```
 
 準備は整いました．mirakcを起動してください．
@@ -58,14 +67,14 @@ $ sudo docker compose up -d
 
 ```console
 $ curl -sG http://localhost:40772/api/timeshift | jq .[].name
-"bs1"
+"nhk-bs"
 ```
 
 起動直後は何も録画されていないので何も視聴できませんが，１，２分程度待つと視聴可能な状態になります．
 
 ```console
 # 直後は0で視聴できないが，そのうち0以外が表示されるようになる
-$ curl -sG http://localhost:40772/api/timeshift/bs1 | jq .duration
+$ curl -sG http://localhost:40772/api/timeshift/nhk-bs | jq .duration
 75420
 ```
 
@@ -74,7 +83,7 @@ $ curl -sG http://localhost:40772/api/timeshift/bs1 | jq .duration
 
 ```shell
 # raspberrypi上ではなく，別のデスクトップ環境上で実行すること
-curl -sG http://raspberrypi.local:40772/api/timeshift/bs1/stream | ffplay -
+curl -sG http://raspberrypi.local:40772/api/timeshift/nhk-bs/stream | ffplay -
 ```
 
 上記のWeb APIはタイムシフト録画をライブ視聴相当でストリーミングします．そのため，シークはできません
@@ -83,8 +92,8 @@ curl -sG http://raspberrypi.local:40772/api/timeshift/bs1/stream | ffplay -
 特定の番組のみを視聴したい場合は，以下のWeb APIを使います．
 
 ```shell
-ID=$(curl -sG http://raspberrypi.local:40772/api/timeshift/bs1/records | jq .[0].id)
-curl -sG http://raspberrypi.local:40772/api/timeshift/bs1/records/$ID/stream | ffplay -
+ID=$(curl -sG http://raspberrypi.local:40772/api/timeshift/nhk-bs/records | jq .[0].id)
+curl -sG http://raspberrypi.local:40772/api/timeshift/nhk-bs/records/$ID/stream | ffplay -
 ```
 
 こちらはWeb API呼び出し時に録画されているところまでが再生可能範囲になります．シーク可能ですが，録
@@ -146,10 +155,10 @@ num-chunks = ts-file-max-size / chunk-size = 1000000000000 / 154009600 = 6493
 
 となります．
 
-録画期間からチャンク数を計算する場合は，少し面倒な計算が必要です．例えば，BS1を一週間分タイムシフト
+録画期間からチャンク数を計算する場合は，少し面倒な計算が必要です．例えば，NHK BSを一週間分タイムシフト
 録画しようと考えた場合，
 
-* BS1のTSストリームのビットレートは約20Mbps
+* NHK BSのTSストリームのビットレートは約20Mbps
 * 一分間の録画に必要なサイズは`20M bits * 60 / 8`で約150MB（既定値の１チャンクで大体１分間録画でき
   る）
   * タイムシフト録画対象のサービスに依存しますが，既定値の１チャンクは約１〜３分に相当するサイズで
@@ -277,9 +286,9 @@ sudo docker compose up -d mirakc-timeshift-fs
 
 ```console
 $ ls timeshift-fs
-bs1
+nhk-bs
 
-$ ls timeshift-fs/bs1
+$ ls timeshift-fs/nhk-bs
 6052B1C8.ＢＳニュース.m2ts
 ```
 
@@ -374,7 +383,7 @@ filters:
 ```shell
 # ステレオ音声が２つのモノラル音声に分離されることを確認
 # 実際は多重音声（デュアルモノラル）の録画にフィルターを適用する
-STREAM=http://raspberrypi.local:40772/api/timeshift/bs1/stream
+STREAM=http://raspberrypi.local:40772/api/timeshift/nhk-bs/stream
 curl -sG "$STREAM?post-filters[]=split-dual-mono" | ffprobe
 ```
 
@@ -403,9 +412,9 @@ Input #0, mpegts, from 'pipe:':
 タイムシフト録画が何らかの理由で停止した場合，自動でタイムシフト録画を再実行します．
 
 ```
-INFO mirakc_core::timeshift: Recording stopped recorder.name="bs1"
+INFO mirakc_core::timeshift: Recording stopped recorder.name="nhk-bs"
 ...
-INFO mirakc_core::timeshift: Recording started recorder.name="bs1"
+INFO mirakc_core::timeshift: Recording started recorder.name="nhk-bs"
 ```
 
 タイムシフト録画が停止している間も，録画データにアクセス可能です．

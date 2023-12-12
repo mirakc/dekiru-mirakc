@@ -11,8 +11,8 @@ Mirakurunの`channels.yml`の例:
   type: GR
   channel: '27'
 
-# NHK BS1
-- name: BS1
+# NHK BS
+- name: NHK-BS
   type: BS
   channel: BS15_0
   serviceId: 101
@@ -28,8 +28,8 @@ channels:
     type: GR
     channel: '27'
 
-  # NHK BS1
-  - name: BS1
+  # NHK BS
+  - name: NHK-BS
     type: BS
     channel: BS15_0
     # プロパティ名が違う

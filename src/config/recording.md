@@ -123,13 +123,15 @@ tuners:
   - name: tracker
     types: [GR, BS]
     command: ...
-    # このプロパティでチューナーを独占的に使用するトラッカーを指定
     dedicated-for: tracker
 
 onair-program-trackers:
   tracker:
     local:
       channel-types: [GR, BS]
+      # このプロパティでを独占的に使用するチューナーを指定
+      uses:
+        tuner: tracker
 ```
 
 mirakcコンテナーを再起動してください．以下のようなログが毎分出力されるようになります．
@@ -158,16 +160,19 @@ onair-program-trackers:
   gr-tracker:
     local:
       channel-types: [GR]
+      uses: ...
   bs-tracker1:
     local:
       channel-types: [BS]
       # 期限内に処理が終了するように，対象サービスを制限
       services: [...]
+      uses: ...
   bs-tracker2:
     local:
       channel-types: [BS]
       # bs-tracker1で処理しないサービスを列挙
       services: [...]
+      uses: ...
 ```
 
 本機能がどのように動作するのか見るために，後続の２つの番組の録画予約を行ってみま
