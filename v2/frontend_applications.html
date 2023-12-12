@@ -1,0 +1,675 @@
+
+<!DOCTYPE HTML>
+<html lang="ja" >
+    <head>
+        <meta charset="UTF-8">
+        <title>フロントエンドアプリケーションとの連携 · できるmirakc</title>
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <meta name="description" content="">
+        <meta name="generator" content="HonKit 5.1.1">
+        <meta name="author" content="masnagam">
+        
+        
+    
+    <link rel="stylesheet" href="gitbook/style.css">
+
+    
+            
+                
+                <link rel="stylesheet" href="gitbook/@honkit/honkit-plugin-highlight/website.css">
+                
+            
+                
+                <link rel="stylesheet" href="gitbook/gitbook-plugin-search/search.css">
+                
+            
+                
+                <link rel="stylesheet" href="gitbook/gitbook-plugin-fontsettings/website.css">
+                
+            
+        
+
+    
+
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+
+        
+    
+    
+    <meta name="HandheldFriendly" content="true"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <link rel="apple-touch-icon-precomposed" sizes="152x152" href="gitbook/images/apple-touch-icon-precomposed-152.png">
+    <link rel="shortcut icon" href="gitbook/images/favicon.ico" type="image/x-icon">
+
+    
+    <link rel="next" href="custom_image.html" />
+    
+    
+    <link rel="prev" href="events.html" />
+    
+
+    </head>
+    <body>
+        
+<div class="book honkit-cloak">
+    <div class="book-summary">
+        
+            
+<div id="book-search-input" role="search">
+    <input type="text" placeholder="検索ワードを入力" />
+</div>
+
+            
+                <nav role="navigation">
+                
+
+
+<ul class="summary">
+    
+    
+
+    
+
+    
+        
+        
+    
+        <li class="chapter " data-level="1.1" data-path="./">
+            
+                <a href="./">
+            
+                    
+                    できるmirakc
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.2" data-path="what.html">
+            
+                <a href="what.html">
+            
+                    
+                    mirakcって何ですか？
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.3" data-path="install/">
+            
+                <a href="install/">
+            
+                    
+                    Dockerを使ったインストール
+            
+                </a>
+            
+
+            
+            <ul class="articles">
+                
+    
+        <li class="chapter " data-level="1.3.1" data-path="install/setup_rpi.html">
+            
+                <a href="install/setup_rpi.html">
+            
+                    
+                    Raspberry Piのセットアップ
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.3.2" data-path="install/docker.html">
+            
+                <a href="install/docker.html">
+            
+                    
+                    Dockerのインストール
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.3.3" data-path="install/mirakc.html">
+            
+                <a href="install/mirakc.html">
+            
+                    
+                    mirakcのインストール
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.3.4" data-path="install/image.html">
+            
+                <a href="install/image.html">
+            
+                    
+                    Dockerイメージ
+            
+                </a>
+            
+
+            
+        </li>
+    
+
+            </ul>
+            
+        </li>
+    
+        <li class="chapter " data-level="1.4" data-path="config/">
+            
+                <a href="config/">
+            
+                    
+                    mirakcの設定
+            
+                </a>
+            
+
+            
+            <ul class="articles">
+                
+    
+        <li class="chapter " data-level="1.4.1" data-path="config/channels.html">
+            
+                <a href="config/channels.html">
+            
+                    
+                    チャンネル設定
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.4.2" data-path="config/tuners.html">
+            
+                <a href="config/tuners.html">
+            
+                    
+                    チューナー設定
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.4.3" data-path="config/epg.html">
+            
+                <a href="config/epg.html">
+            
+                    
+                    EGPデータキャッシュ
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.4.4" data-path="config/filters.html">
+            
+                <a href="config/filters.html">
+            
+                    
+                    フィルター設定
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.4.5" data-path="config/logos.html">
+            
+                <a href="config/logos.html">
+            
+                    
+                    局ロゴの表示
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.4.6" data-path="config/recording.html">
+            
+                <a href="config/recording.html">
+            
+                    
+                    録画予約
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.4.7" data-path="config/timeshift.html">
+            
+                <a href="config/timeshift.html">
+            
+                    
+                    タイムシフト録画
+            
+                </a>
+            
+
+            
+        </li>
+    
+
+            </ul>
+            
+        </li>
+    
+        <li class="chapter " data-level="1.5" data-path="events.html">
+            
+                <a href="events.html">
+            
+                    
+                    イベント通知
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter active" data-level="1.6" data-path="frontend_applications.html">
+            
+                <a href="frontend_applications.html">
+            
+                    
+                    フロントエンドアプリケーションとの連携
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.7" data-path="custom_image.html">
+            
+                <a href="custom_image.html">
+            
+                    
+                    カスタムイメージの作成
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.8" data-path="troubleshooting.html">
+            
+                <a href="troubleshooting.html">
+            
+                    
+                    トラブルシューティング
+            
+                </a>
+            
+
+            
+        </li>
+    
+
+    
+        
+        <li class="divider"></li>
+        
+        
+    
+        <li class="chapter " data-level="2.1" data-path="tsd_server.html">
+            
+                <a href="tsd_server.html">
+            
+                    
+                    tsdサーバーの詳しい話
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="2.2" data-path="migration.html">
+            
+                <a href="migration.html">
+            
+                    
+                    v1からv2への移行
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="2.3" data-path="older_versions.html">
+            
+                <a href="older_versions.html">
+            
+                    
+                    旧バージョンのドキュメント
+            
+                </a>
+            
+
+            
+        </li>
+    
+
+    
+
+    <li class="divider"></li>
+
+    <li>
+        <a href="https://github.com/honkit/honkit" target="blank" class="gitbook-link">
+            HonKitで公開 
+        </a>
+    </li>
+</ul>
+
+
+                </nav>
+            
+        
+    </div>
+
+    <div class="book-body">
+        
+            <div class="body-inner">
+                
+                    
+
+<div class="book-header" role="navigation">
+    
+
+    <!-- Title -->
+    <h1>
+        <i class="fa fa-circle-o-notch fa-spin"></i>
+        <a href="." >フロントエンドアプリケーションとの連携</a>
+    </h1>
+</div>
+
+
+
+
+                    <div class="page-wrapper" tabindex="-1" role="main">
+                        <div class="page-inner">
+                            
+<div id="book-search-results">
+    <div class="search-noresults">
+    
+                                <section class="normal markdown-section">
+                                
+                                <h1 id="フロントエンドアプリケーションとの連携">フロントエンドアプリケーションとの連携</h1>
+<p>mirakcの準備が整ったので，フロントエンドアプリケーションから利用できるように設定を変更してみましょう．</p>
+<h2 id="epgstation-v1">EPGStation v1</h2>
+<p>EPGStationのセットアップ方法は，すでに色々なところに書かれているので省略します．以下，既にセットアップ済みの環境が存在すると仮定して説明を行います．</p>
+<p>もし，実験目的で設定変更しようとしているのでしたら，以下を実行する前にデータベースのバックアップを作成しておいてください．設定を変更し，EPGStationを再起動すると，データベースに保存されているEPGデータは上書きされます．Mirakurunとmirakcでは利用している文字コード変換処理が異なるため，録画ルールで使用している正規表現などが機能しなくなります．</p>
+<p>それでは設定を変更します．変更箇所は以下の１箇所のみです．</p>
+<pre><code class="lang-json">{
+  <span class="hljs-comment">// 変更不要な設定は省略</span>
+  <span class="hljs-string">&quot;mirakurunPath&quot;</span>: <span class="hljs-string">&quot;http://raspberrypi.local:40772/&quot;</span>
+}
+</code></pre>
+<p>EPGStationを動かしているサーバーから<code>raspberrypi.local</code>をmDNSを使って名前解決できることを前提としています．mDNSが使えない場合は，IPアドレスもしくは名前解決可能なホスト名に置き換えてください．</p>
+<p>EPGStationを再起動すると置き換えは完了します．チャンネル設定で指定したチャンネルの番組表が表示されていれば，置き換え成功です．</p>
+<h2 id="epgstation-v2">EPGStation v2</h2>
+<p>EPGStation v2では，設定ファイルの形式がJSONからYAMLに変わりました．しかし，
+Mirakurunからの移行時に書き換える箇所は変わりません．</p>
+<pre><code class="lang-yaml"><span class="hljs-comment"># 変更不要な設定は省略</span>
+<span class="hljs-attr">mirakurunPath:</span> <span class="hljs-string">http://raspberrypi.local:40772/</span>
+</code></pre>
+<h2 id="miraview">miraview</h2>
+<p><a href="https://github.com/maeda577/miraview" target="_blank">miraview</a>はmirakc用のWeb UIです．コンテナー利用者であれば，README.mdに書かれている手順で簡単に導入できます．</p>
+<p><code>curl</code>と<code>jq</code>さえあれば何でもできるけど，さすがに番組表はGUIで見たいという人は利用を検討しましょう．</p>
+<h2 id="tvtest">TVTest</h2>
+<p>原因はよく分かっていませんが，Mirakurun用の<code>BonDriver_Mirakurun</code>ではうまく動かないようです．代わりに，epgdatacapbonさんが作成した<a href="https://github.com/epgdatacapbon/BonDriver_mirakc" target="_blank">BonDriver_mirakc</a>を使ってください．</p>
+<p><code>SERVICE_SPLIT=1</code>とすることでmirakcと<code>BonDriver_mirakc</code>間の通信量を減らすことができます．</p>
+<h2 id="kodi">Kodi</h2>
+<p><a href="https://kodi.wiki/view/Add-on:PVR_IPTV_Simple_Client" target="_blank">PVR IPTV Simple Client</a>アドオンをインストールすれば，Kodiからライブ視聴が可能となります．</p>
+<p>アドオンの設定画面から，以下を設定してください．</p>
+<ul>
+<li>General | M3U Play List URL<ul>
+<li>http://<code>HOST</code>:<code>PORT</code>/api/iptv/playlist</li>
+</ul>
+</li>
+<li>EPG Settings | XMLTV URL<ul>
+<li>http://<code>HOST</code>:<code>PORT</code>/api/iptv/epg</li>
+</ul>
+</li>
+</ul>
+<p><code>HOST</code>および<code>PORT</code>は，自分の環境に合わせて書き換えてください．</p>
+<p>スキン設定からフォントを<code>Arial based</code>に変更しても日本語が正しく表示されない場合があります．そのような場合は，Kodi内の<code>arial.ttf</code>を日本語グリフを含んだUnicode対応フォントに置き換えることで改善します．以下にmacOSでの設定例があります．</p>
+<ul>
+<li><a href="https://gist.github.com/masnagam/e79a1e5e02c8343f5117dd6572be8031" target="_blank">https://gist.github.com/masnagam/e79a1e5e02c8343f5117dd6572be8031</a></li>
+</ul>
+<p><a href="config/timeshift.html#タイムシフト・ファイルシステム">タイムシフト・ファイルシステム</a>をSambaで公開している場合，<code>smb://&lt;host&gt;/&lt;folder&gt;</code>をビデオソースとして登録することで，録画ファイルをKodi
+で再生できます．以下のオプションがお薦めです．</p>
+<ul>
+<li>Viewtype: WideList</li>
+<li>Sort by: Date</li>
+<li>Order: Descending</li>
+</ul>
+<p>Sambaを使った場合，サムネイル画像の生成などのために集中的なファイルアクセスが発生し，
+mirakc-timeshift-fsおよびSambaを稼働させているマシンが一時的に高負荷状態になることがあります．この負荷状態は，サムネイル画像の生成をやめるなどKodiの設定を見直すことでを回避できます．しかし，他にも問題があるようで，タイムシフト録画ファイルが大量に存在すると，Kodiがハングすることがありました．そのため，Kodiでタイムシフト録画を視聴する場合，後述のMiniDLNA経由にすることを推奨します．</p>
+<h2 id="minidlna-readymedia">MiniDLNA (ReadyMedia)</h2>
+<blockquote>
+<p>mirakc/minidlnaは廃止予定なので，後述のmirakc/timeshift-gerberaを使ってください</p>
+</blockquote>
+<p>タイムシフト録画をTVで視聴しようと思っても，TVがSambaをサポートしていない場合があります．このような場合でも，もしTVがDLNA/UPnPをサポートしているなら，<a href="https://sourceforge.net/projects/minidlna/" target="_blank">MiniDLNA</a>を使えばTVで視聴可能です．</p>
+<p>MiniDLNAは<a href="https://ja.wikipedia.org/wiki/Inotify" target="_blank">inotify</a>を使って録画ファイルの更新を検出できますが，残念ながら以下のような状況では機能しません．</p>
+<ul>
+<li><a href="config/timeshift.html#タイムシフト・ファイルシステム">タイムシフト・ファイルシステム</a>の実装で利用しているFUSEでは，inotifyがサポートされていません<ul>
+<li><a href="https://github.com/libfuse/libfuse/wiki/Fsnotify-and-FUSE" target="_blank">https://github.com/libfuse/libfuse/wiki/Fsnotify-and-FUSE</a></li>
+</ul>
+</li>
+<li><code>mount.cifs</code>でマウントしたファイルシステムはinotifyをサポートしていません<ul>
+<li><a href="https://lists.samba.org/archive/linux-cifs-client/2009-April/004318.html" target="_blank">https://lists.samba.org/archive/linux-cifs-client/2009-April/004318.html</a></li>
+</ul>
+</li>
+<li>Dockerコンテナーにマウントしたホストファイルシステム上では，inotifyが動作しない場合があります<ul>
+<li><a href="https://github.com/moby/moby/issues/18246" target="_blank">https://github.com/moby/moby/issues/18246</a></li>
+</ul>
+</li>
+</ul>
+<p>そこで，MiniDLNAにパッチを当てたDockerイメージ<a href="https://hub.docker.com/r/mirakc/minidlna" target="_blank">mirakc/minidlna</a>を用意してあります．これを使えば
+DLNA/UPnPをサポートしているTVでタイムシフト録画を視聴可能です．</p>
+<p>使用方法については，<a href="https://github.com/mirakc/docker-minidlna" target="_blank">README.md</a>を参照してください．</p>
+<h2 id="mirakctimeshift-gerbera">mirakc/timeshift-gerbera</h2>
+<p>タイムシフト録画をTVで視聴しようと思っても，TVがSambaをサポートしていない場合があります．このような場合でも，もしTVがDLNA/UPnPをサポートしているなら，<a href="https://gerbera.io/" target="_blank">Gerbera</a>を使えばTVで視聴可能です．</p>
+<p>Gerberaの設定は多少面倒なので，専用のDockerイメージ<a href="https://hub.docker.com/r/mirakc/timeshift-gerbera" target="_blank">mirakc/timeshift-gerbera</a>を用意してあります．</p>
+<p>このDockerイメージでは，コンテナー内で<code>mirakc-timeshift-fs</code>を実行するため，自動アンマウントやタイムシフト・ファイルシステムのファイル所有権の問題が発生しません．そのため，<code>mirakc/timeshift-fs</code>を直接使用するのではなく，<code>mirakc/timeshift-*</code>の使用を推奨します．</p>
+<p>類似のDockerイメージを自分で作成したいという方は，<a href="https://github.com/mirakc/docker-timeshift-x" target="_blank">GitHub</a>
+にソースをアップロードしてあるので参考にしてください．</p>
+<p>KodiはGerberaと相性が悪く，タイムシフト録画を再生できません．詳細は
+<a href="https://github.com/mirakc/docker-timeshift-x/issues/2" target="_blank">mirakc/docker-timeshift-x#2</a>を見てください．</p>
+<p>VLCはGerberaから供給されるタイムシフト録画を問題なく再生できることを確認済みです．</p>
+<h2 id="mirakc-searchとmirakc-rec">mirakc-searchとmirakc-rec</h2>
+<p>コマンド操作に慣れている人は，<a href="https://github.com/mirakc/contrib" target="_blank">mirakc/contrib</a>にあるスクリプトの利用をお勧めします．</p>
+<blockquote>
+<p>タイムシフト録画用の<code>timeshift/timeshift.sh</code>も追加しました</p>
+</blockquote>
+<p><code>mirakc-search</code></p>
+<pre><code class="lang-sh"><span class="hljs-meta">#!/bin/sh</span>
+<span class="hljs-built_in">export</span> MIRAKC_SEARCH_CUSTOM_PROGRAM_JQ_DIR=/path/to/program-jq
+<span class="hljs-built_in">export</span> MIRAKC_SEARCH_BASE_URL=http://mirakc:40772
+sh /path/to/mirakc/contrib/search/search.sh <span class="hljs-string">&quot;<span class="hljs-variable">$@</span>&quot;</span>
+</code></pre>
+<p><code>mirakc-rec</code></p>
+<pre><code class="lang-sh"><span class="hljs-meta">#!/bin/sh</span>
+<span class="hljs-built_in">export</span> MIRAKC_REC_BASE_URL=http://mirakc:40772
+sh /path/to/mirakc/contrib/recording/recording.sh <span class="hljs-string">&quot;<span class="hljs-variable">$@</span>&quot;</span>
+</code></pre>
+<p>変数と<code>/path/to/...</code>は，自分の環境に合わせて書き換えてください．</p>
+<p>この２つのスクリプトを使って，BSPの映画を録画予約してみます．</p>
+<pre><code class="lang-console"><span class="hljs-meta prompt_"># </span><span class="language-bash">BSPの映画を検索</span>
+<span class="hljs-meta prompt_"># </span><span class="language-bash">ビルトインのフィルター以外にも，直接フィルターをインラインで指定することも可能</span>
+<span class="hljs-meta prompt_">$ </span><span class="language-bash">mirakc-search movie gt-1h msid <span class="hljs-string">&apos;map(select(.msid == 400103))&apos;</span></span>
+ID           START             END               MINS  ...
+40010309234  2023-06-23 13:00  2023-06-23 14:45  105   ...
+...
+<span class="hljs-meta prompt_">
+# </span><span class="language-bash">録画予約</span>
+<span class="hljs-meta prompt_">$ </span><span class="language-bash">mirakc-rec add 40010309234</span>
+ID           STATE      START             END               MINS  ...
+40010309234  scheduled  2023-06-23 13:00  2023-06-23 14:45  105   ...
+</code></pre>
+<p><code>-h</code>オプションで各スクリプトのヘルプが表示されます．</p>
+
+                                
+                                </section>
+                            
+    </div>
+    <div class="search-results">
+        <div class="has-results">
+            
+            <h1 class="search-results-title"><span class='search-results-count'></span> results matching "<span class='search-query'></span>"</h1>
+            <ul class="search-results-list"></ul>
+            
+        </div>
+        <div class="no-results">
+            
+            <h1 class="search-results-title">No results matching "<span class='search-query'></span>"</h1>
+            
+        </div>
+    </div>
+</div>
+
+                        </div>
+                    </div>
+                
+            </div>
+
+            
+                
+                <a href="events.html" class="navigation navigation-prev " aria-label="Previous page: イベント通知">
+                    <i class="fa fa-angle-left"></i>
+                </a>
+                
+                
+                <a href="custom_image.html" class="navigation navigation-next " aria-label="Next page: カスタムイメージの作成">
+                    <i class="fa fa-angle-right"></i>
+                </a>
+                
+            
+        
+    </div>
+
+    <script>
+        var gitbook = gitbook || [];
+        gitbook.push(function() {
+            gitbook.page.hasChanged({"page":{"title":"フロントエンドアプリケーションとの連携","level":"1.6","depth":1,"next":{"title":"カスタムイメージの作成","level":"1.7","depth":1,"path":"custom_image.md","ref":"./custom_image.md","articles":[]},"previous":{"title":"イベント通知","level":"1.5","depth":1,"path":"events.md","ref":"./events.md","articles":[]},"dir":"ltr"},"config":{"plugins":["gitbook-plugin-japanese-support"],"root":"./src","styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"pluginsConfig":{"gitbook-plugin-japanese-support":{},"highlight":{},"search":{},"lunr":{"maxIndexSize":1000000,"ignoreSpecialCharacters":false},"fontsettings":{"theme":"white","family":"sans","size":2},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false}},"theme":"default","author":"masnagam","pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56},"embedFonts":false},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"variables":{},"title":"できるmirakc","language":"ja","gitbook":"*"},"file":{"path":"frontend_applications.md","mtime":"2023-10-08T06:43:55.021Z","type":"markdown"},"gitbook":{"version":"5.1.1","time":"2023-10-08T06:44:05.902Z"},"basePath":".","book":{"language":""}});
+        });
+    </script>
+</div>
+
+        
+    <noscript>
+        <style>
+            .honkit-cloak {
+                display: block !important;
+            }
+        </style>
+    </noscript>
+    <script>
+        // Restore sidebar state as critical path for prevent layout shift
+        function __init__getSidebarState(defaultValue){
+            var baseKey = "";
+            var key = baseKey + ":sidebar";
+            try {
+                var value = localStorage[key];
+                if (value === undefined) {
+                    return defaultValue;
+                }
+                var parsed = JSON.parse(value);
+                return parsed == null ? defaultValue : parsed;
+            } catch (e) {
+                return defaultValue;
+            }
+        }
+        function __init__restoreLastSidebarState() {
+            var isMobile = window.matchMedia("(max-width: 600px)").matches;
+            if (isMobile) {
+                // Init last state if not mobile
+                return;
+            }
+            var sidebarState = __init__getSidebarState(true);
+            var book = document.querySelector(".book");
+            // Show sidebar if it enabled
+            if (sidebarState && book) {
+                book.classList.add("without-animation", "with-summary");
+            }
+        }
+
+        try {
+            __init__restoreLastSidebarState();
+        } finally {
+            var book = document.querySelector(".book");
+            book.classList.remove("honkit-cloak");
+        }
+    </script>
+    <script src="gitbook/gitbook.js"></script>
+    <script src="gitbook/theme.js"></script>
+    
+        
+        <script src="gitbook/gitbook-plugin-search/search-engine.js"></script>
+        
+    
+        
+        <script src="gitbook/gitbook-plugin-search/search.js"></script>
+        
+    
+        
+        <script src="gitbook/gitbook-plugin-lunr/lunr.min.js"></script>
+        
+    
+        
+        <script src="gitbook/gitbook-plugin-lunr/search-lunr.js"></script>
+        
+    
+        
+        <script src="gitbook/gitbook-plugin-fontsettings/fontsettings.js"></script>
+        
+    
+
+    </body>
+</html>
+
