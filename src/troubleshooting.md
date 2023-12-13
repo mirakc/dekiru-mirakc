@@ -45,7 +45,7 @@ sudo docker logs --tail=1000 mirakc 2>&1 | grep -e WARN -e ERROR
 ...
     environment:
       MIRAKC_ARIB_LOG: info
-      MIRAKC_ARIB_NO_TIMESTAMP: 1
+      MIRAKC_ARIB_LOG_NO_TIMESTAMP: 1
       MIRAKC_DEBUG_CHILD_PROCESS: 1
       RUST_LOG: info,mirakc=debug
 ```
