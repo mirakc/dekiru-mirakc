@@ -1,9 +1,9 @@
 # `tsd`サーバーの詳しい話
 
-> 実運用ので`tsd`サーバーの使用はお勧めしません．理由は以下を参照してください．
+> 実運用での`tsd`サーバーの使用はお勧めしません．理由は以下を参照してください．
 
 私が動作検証用に利用しているTSストリームを処理するためのサーバーです．サーバー化
-することで，TSストリーム処理機能を開発環境（macOS）と動作検証環境（SBC）に個別に
+することで，TSストリーム処理機能を開発環境と動作検証環境（SBC）に個別に
 準備する手間が省けます．また，TSストリームに対する処理は，SBCにとって軽い処理で
 はないため，複数のTSストリームを同時に処理する場合，１台のSBCで全てを処理するこ
 とが困難であるという事情もあります．
@@ -42,61 +42,38 @@
 `Dockerfile`:
 
 ```Dockerfile
-FROM alpine:latest
+FROM alpine AS b25-build
+RUN apk add --no-cache cmake git g++ libtool make pkgconf pcsc-lite-dev
+RUN git clone --depth=1 https://github.com/tsukumijima/libaribb25.git /src
+RUN cmake -S /src -B /build -D CMAKE_BUILD_TYPE=Release -D CMAKE_INSTALL_PREFIX=/opt/libaribb25
+RUN make -C /build -j $(nproc)
+RUN make -C /build install
 
-RUN set -eux \
- && apk add --no-cache \
-      ccid \
-      musl \
-      pcsc-lite-libs \
-      socat \
-      tzdata \
- && apk add --no-cache --virtual .build-deps \
-      gcc \
-      g++\
-      make \
-      musl-dev \
-      nodejs \
-      npm \
-      pcsc-lite-dev \
-      pkgconf \
- # Use arib-b25-stream-test instead of stz2012/libarib25.
- # Because stz2012/libarib25 doesn't support STDIN/STDOUT.
- # stz2012/libarib25 supports NEON, but it doesn't improve the performance
- # significantly.
- && (cd /tmp; npm i arib-b25-stream-test) \
- && cp /tmp/node_modules/.bin/arib-b25-stream-test /usr/local/bin/b25 \
- # cleanup
- && apk del --purge .build-deps \
- && rm -rf /tmp/*
-
-COPY b25-server /usr/local/bin/
-
+FROM alpine
+COPY --from=b25-build /opt/libaribb25 /usr/local/
+COPY ./main.sh /
+RUN apk add --no-cache ccid libgcc libstdc++ musl pcsc-lite-libs socat tzdata
 EXPOSE 40773
-ENTRYPOINT ["b25-server"]
+ENTRYPOINT ["/bin/sh", "/main.sh"]
 ```
 
-`b25-server`:
+`main.sh`:
 
 ```shell
-#!/bin/sh -eu
-
-B25_BCAS_SERVER=${B25_BCAS_SERVER:-}
-
-if [ -z "$B25_BCAS_SERVER" ]; then
-    echo "B25_BCAS_SERVER must be defined" >&2
-    exit 1
+if [ -z "$BCAS_SERVER" ]
+then
+  echo "BCAS_SERVER must be defined" >&2
+  exit 1
 fi
 
 rm -rf /var/run/pcscd
 mkdir -p /var/run/pcscd
 
-echo "Create a UNIX-domain socket to communicate with a remote BCAS server listening on $B25_BCAS_SERVER"
-socat unix-listen:/var/run/pcscd/pcscd.comm,fork \
-      tcp-connect:$B25_BCAS_SERVER &
+echo "Create a UNIX-domain socket to communicate with a remote BCAS server listening on $BCAS_SERVER"
+socat unix-listen:/var/run/pcscd/pcscd.comm,fork tcp-connect:$BCAS_SERVER &
 
 echo "Start a descrambling server on tcp 40773"
-socat tcp-listen:40773,fork,reuseaddr system:b25
+socat tcp-listen:40773,fork,reuseaddr system:'arib-b25-stream-test -v 0'
 ```
 
 ## `bcas`コンテナー
@@ -104,45 +81,32 @@ socat tcp-listen:40773,fork,reuseaddr system:b25
 `Dockerfile`:
 
 ```Dockerfile
-FROM alpine:latest
-
-RUN set -eux \
- && apk add --no-cache \
-      ccid \
-      musl \
-      pcsc-lite-libs \
-      socat \
-      tzdata
-
-COPY bcas-server /usr/local/bin/
-
+FROM alpine
+COPY ./main.sh /
+RUN apk add --no-cache ccid musl pcsc-lite-libs socat tzdata
 EXPOSE 40774
-ENTRYPOINT ["bcas-server"]
+ENTRYPOINT ["/bin/sh", "/main.sh"]
 ```
 
-`bcas-server`:
+`main.sh`:
 
 ```shell
-#!/bin/sh -eu
-
-BCAS_DEBUG=${BCAS_DEBUG:-}
-
 rm -rf /var/run/pcscd
 mkdir -p /var/run/pcscd
 
 echo "Start pcscd"
-if [ -n "$BCAS_DEBUG" ]; then
-    pcscd -f --debug &
+if [ -n "$BCAS_DEBUG" ]
+then
+  pcscd -f --debug &
 else
-    pcscd -f &
+  pcscd -f &
 fi
 
 echo "Start a pcscd proxy on tcp 40774"
-socat tcp-listen:40774,fork,reuseaddr \
-      unix-connect:/var/run/pcscd/pcscd.comm
+socat tcp-listen:40774,fork,reuseaddr unix-connect:/var/run/pcscd/pcscd.comm
 ```
 
-## docker-compose.yml
+## compose.yaml
 
 あとはこれらを起動するだけ．
 
@@ -150,16 +114,22 @@ socat tcp-listen:40774,fork,reuseaddr \
 services:
   b25:
     container_name: b25
+    depends_on:
+      - bcas
+    image: b25
+    init: true
+    restart: unless-stopped
     ports:
       - 40773:40773
     environment:
       B25_BCAS_SERVER: bcas:40774
       TZ: Asia/Tokyo
-    depends_on:
-      - bcas
 
   bcas:
     container_name: bcas
+    image: bcas
+    init: true
+    restart: unless-stopped
     devices:
       - /dev/bus/usb
     ports:
