@@ -3,10 +3,10 @@
 <html lang="ja" >
     <head>
         <meta charset="UTF-8">
-        <title>v1からv2への移行 · できるmirakc</title>
+        <title>v2からv3への移行 · できるmirakc</title>
         <meta http-equiv="X-UA-Compatible" content="IE=edge" />
         <meta name="description" content="">
-        <meta name="generator" content="HonKit 5.1.1">
+        <meta name="generator" content="HonKit 5.1.4">
         <meta name="author" content="masnagam">
         
         
@@ -372,7 +372,7 @@
                 <a href="migration.html">
             
                     
-                    v1からv2への移行
+                    v2からv3への移行
             
                 </a>
             
@@ -423,7 +423,7 @@
     <!-- Title -->
     <h1>
         <i class="fa fa-circle-o-notch fa-spin"></i>
-        <a href="." >v1からv2への移行</a>
+        <a href="." >v2からv3への移行</a>
     </h1>
 </div>
 
@@ -438,74 +438,59 @@
     
                                 <section class="normal markdown-section">
                                 
-                                <h1 id="v1からv2への移行">v1からv2への移行</h1>
-<p>ここでは，v1からv2への移行について説明します．</p>
-<h2 id="epgキャッシュの再構築">EPGキャッシュの再構築</h2>
-<p>内部のデータ構造が変更されたことに伴い，v1のEPGキャッシュをv2では再利用できません．そのため，v2移行時にEPGキャッシュが再構築されます．</p>
-<p>チャンネル数に依存しますが，EPGキャッシュの再構築は時間がかかります．例えば，地デジ12チャンネル＋BS12チャンネルのEPGキャッシュの再構築には40分以上必要です．そのため，録画予約が詰まっていない時間帯を選んでv2移行を行ってください．</p>
+                                <h1 id="v2からv3への移行">v2からv3への移行</h1>
+<p>ここでは，v2からv3への移行について説明します．</p>
 <h2 id="configyml">config.yml</h2>
-<p><a href="https://github.com/mirakc/mirakc/issues/690" target="_blank">mirakc内部のサービスID及び番組IDからTSIDを削除したことに伴い</a>，
-<code>timeshift.recorders[].service-triple</code>が<code>timeshift.recorders[].service-id</code>に変更されました．</p>
-<pre><code class="lang-yaml"><span class="hljs-comment"># v1</span>
+<p><code>tuners[].dedicated-for</code>が廃止され，<code>timeshift.recorders[].uses</code>および
+<code>onair-program-trackers[].local.uses</code>が追加されました．</p>
+<pre><code class="lang-yaml"><span class="hljs-comment"># v2</span>
+<span class="hljs-attr">tuners:</span>
+  <span class="hljs-bullet">-</span> <span class="hljs-attr">name:</span> <span class="hljs-string">gr-tracker</span>
+    <span class="hljs-attr">types:</span> [<span class="hljs-string">GR</span>]
+    <span class="hljs-attr">command:</span> <span class="hljs-string">...</span>
+    <span class="hljs-attr">dedicated-for:</span> <span class="hljs-string">gr-tracker</span>
+  <span class="hljs-bullet">-</span> <span class="hljs-attr">name:</span> <span class="hljs-string">timeshift-etv</span>
+    <span class="hljs-attr">types:</span> [<span class="hljs-string">GR</span>]
+    <span class="hljs-attr">command:</span> <span class="hljs-string">...</span>
+    <span class="hljs-attr">dedicated-for:</span> <span class="hljs-string">&apos;timeshift#etv&apos;</span>
+
 <span class="hljs-attr">timeshift:</span>
   <span class="hljs-attr">recorders:</span>
-    <span class="hljs-attr">bs1:</span>
-      <span class="hljs-attr">service-triple:</span> [<span class="hljs-number">4</span>, <span class="hljs-number">16625</span>, <span class="hljs-number">101</span>]
+    <span class="hljs-attr">etv:</span>
+      <span class="hljs-attr">service-id:</span> <span class="hljs-number">3273701032</span>
+      <span class="hljs-string">...</span>
 
-<span class="hljs-comment"># v2</span>
+<span class="hljs-attr">onair-program-trackers:</span>
+  <span class="hljs-attr">gr-tracker:</span>
+    <span class="hljs-attr">local:</span>
+      <span class="hljs-attr">channel-types:</span> [<span class="hljs-string">GR</span>]
+
+<span class="hljs-comment"># v3</span>
+<span class="hljs-attr">tuners:</span>
+  <span class="hljs-bullet">-</span> <span class="hljs-attr">name:</span> <span class="hljs-string">gr-tracker</span>
+    <span class="hljs-attr">types:</span> [<span class="hljs-string">GR</span>]
+    <span class="hljs-attr">command:</span> <span class="hljs-string">...</span>
+  <span class="hljs-bullet">-</span> <span class="hljs-attr">name:</span> <span class="hljs-string">timeshift-etv</span>
+    <span class="hljs-attr">types:</span> [<span class="hljs-string">GR</span>]
+    <span class="hljs-attr">command:</span> <span class="hljs-string">...</span>
+
 <span class="hljs-attr">timeshift:</span>
   <span class="hljs-attr">recorders:</span>
-    <span class="hljs-attr">bs1:</span>
-      <span class="hljs-attr">service-id:</span> <span class="hljs-number">400101</span>  <span class="hljs-comment"># Mirakurun Service ID</span>
-</code></pre>
-<p><code>resource.logos[].service-triple</code> も同様です．</p>
-<pre><code class="lang-yaml"><span class="hljs-comment"># v1</span>
-<span class="hljs-attr">resource:</span>
-  <span class="hljs-attr">logos:</span>
-    <span class="hljs-bullet">-</span> <span class="hljs-attr">service-triple:</span> [<span class="hljs-number">4</span>, <span class="hljs-number">16625</span>, <span class="hljs-number">101</span>]
+    <span class="hljs-attr">etv:</span>
+      <span class="hljs-attr">service-id:</span> <span class="hljs-number">3273701032</span>
+      <span class="hljs-string">...</span>
+      <span class="hljs-attr">uses:</span>
+        <span class="hljs-attr">tuner:</span> <span class="hljs-string">timeshift-etv</span>
+        <span class="hljs-attr">channel-type:</span> <span class="hljs-string">GR</span>
+        <span class="hljs-attr">channel:</span> <span class="hljs-string">&apos;26&apos;</span>
 
-<span class="hljs-comment"># v2</span>
-<span class="hljs-string">resource</span>
-  <span class="hljs-attr">logos:</span>
-    <span class="hljs-bullet">-</span> <span class="hljs-attr">service-id:</span> <span class="hljs-number">400101</span>  <span class="hljs-comment"># Mirakurun Service ID</span>
+<span class="hljs-attr">onair-program-trackers:</span>
+  <span class="hljs-attr">gr-tracker:</span>
+    <span class="hljs-attr">local:</span>
+      <span class="hljs-attr">channel-types:</span> [<span class="hljs-string">GR</span>]
+      <span class="hljs-attr">uses:</span>
+        <span class="hljs-attr">tuner:</span> <span class="hljs-string">gr-tracker</span>
 </code></pre>
-<p>これに伴い，Web APIのいくつかのJSON形式が変更されましたが，本文書の説明対象外なので，詳細は省略します．</p>
-<p><a href="https://github.com/mirakc/mirakc/issues/623" target="_blank">mirakc内部でopenapi.jsonを生成するようになったため</a>，<code>mirakurun.openapi-json</code>は削除されました．</p>
-<pre><code class="lang-yaml"><span class="hljs-comment"># v1</span>
-<span class="hljs-attr">mirakurun:</span>
-  <span class="hljs-attr">openapi-json:</span> <span class="hljs-string">/path/to/mirakurun.openapi.json</span>
-
-<span class="hljs-comment"># v2: Removed</span>
-</code></pre>
-<h2 id="タイムシフト録画">タイムシフト録画</h2>
-<p>チャンクサイズの既定値が変更されました．</p>
-<ul>
-<li>v1<ul>
-<li>163840000</li>
-<li><code>8192</code>の倍数でなければならない</li>
-</ul>
-</li>
-<li>v2<ul>
-<li>154009600</li>
-<li><code>8192</code>の倍数でなければならない<ul>
-<li><code>8192 * 188</code>の倍数を推奨</li>
-</ul>
-</li>
-</ul>
-</li>
-</ul>
-<p><code>ts-file</code>のサイズも変わるため，再計算してください．</p>
-<p><code>data-file</code>のJSON形式も変更されたため，mirakcを実行すると以下のようなエラーが表示され，タイムシフト録画は開始されません．</p>
-<pre><code>ERROR mirakc_core::timeshift: Failed to load records err=JSON \
-  error: missing field `id` at line 1 column 233 recorder.name=&quot;nhk&quot;
-ERROR mirakc_core::timeshift: Recover or simply remove &lt;data-file&gt; recorder.name=&quot;nhk&quot;
-</code></pre><p>エラーメッセージで提案されているように，以下のどちらかを実行してください．</p>
-<ol>
-<li><code>mirakc rebuild-timeshift</code>を実行し，タイムシフト録画ファイルを再構築する</li>
-<li><code>data-file</code>を削除する</li>
-</ol>
-<p><code>mirakc rebuild-timeshift</code>によるタイムシフト録画ファイルの再構築には時間がかかります（詳細は<a href="https://github.com/mirakc/mirakc/issues/690#issuecomment-1384949952" target="_blank">こちら</a>）．当然，再構築が完了するまでタイムシフト録画を実行することは不可能なので，この方法はお勧めしません．mirakc (v1)を起動し，必要なレコードのみを別ファイルに保存．その後，<code>data-file</code>を削除することを推奨します．</p>
-<p>レコードの保存は，<code>mirakc-timesift-fs</code>を利用しているならファイルをコピーすれば良いだけです．<code>curl</code>とWeb APIを使っても保存できますが，説明は省略します．</p>
 
                                 
                                 </section>
@@ -549,7 +534,7 @@ ERROR mirakc_core::timeshift: Recover or simply remove &lt;data-file&gt; recorde
     <script>
         var gitbook = gitbook || [];
         gitbook.push(function() {
-            gitbook.page.hasChanged({"page":{"title":"v1からv2への移行","level":"2.2","depth":1,"next":{"title":"旧バージョンのドキュメント","level":"2.3","depth":1,"path":"older_versions.md","ref":"./older_versions.md","articles":[]},"previous":{"title":"tsdサーバーの詳しい話","level":"2.1","depth":1,"path":"tsd_server.md","ref":"./tsd_server.md","articles":[]},"dir":"ltr"},"config":{"plugins":["gitbook-plugin-japanese-support"],"root":"./src","styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"pluginsConfig":{"gitbook-plugin-japanese-support":{},"highlight":{},"search":{},"lunr":{"maxIndexSize":1000000,"ignoreSpecialCharacters":false},"fontsettings":{"theme":"white","family":"sans","size":2},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false}},"theme":"default","author":"masnagam","pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56},"embedFonts":false},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"variables":{},"title":"できるmirakc","language":"ja","gitbook":"*"},"file":{"path":"migration.md","mtime":"2023-12-12T11:03:03.991Z","type":"markdown"},"gitbook":{"version":"5.1.1","time":"2023-12-12T11:03:11.941Z"},"basePath":".","book":{"language":""}});
+            gitbook.page.hasChanged({"page":{"title":"v2からv3への移行","level":"2.2","depth":1,"next":{"title":"旧バージョンのドキュメント","level":"2.3","depth":1,"path":"older_versions.md","ref":"./older_versions.md","articles":[]},"previous":{"title":"tsdサーバーの詳しい話","level":"2.1","depth":1,"path":"tsd_server.md","ref":"./tsd_server.md","articles":[]},"dir":"ltr"},"config":{"plugins":["gitbook-plugin-japanese-support"],"root":"./src","styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"pluginsConfig":{"gitbook-plugin-japanese-support":{},"highlight":{},"search":{},"lunr":{"maxIndexSize":1000000,"ignoreSpecialCharacters":false},"fontsettings":{"theme":"white","family":"sans","size":2},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false}},"theme":"default","author":"masnagam","pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56},"embedFonts":false},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"variables":{},"title":"できるmirakc","language":"ja","gitbook":"*"},"file":{"path":"migration.md","mtime":"2024-01-06T16:01:00.760Z","type":"markdown"},"gitbook":{"version":"5.1.4","time":"2024-01-06T16:01:07.739Z"},"basePath":".","book":{"language":""}});
         });
     </script>
 </div>
