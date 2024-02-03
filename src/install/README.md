@@ -15,7 +15,7 @@ CPUパワーが貧弱なSBCでDocker使って大丈夫なのかと危惧する�
 もちろん，Dockerを使わず，ホストOSにmirakcを直接インストールすることも可能です．
 その手順は，Dockerイメージのビルド手順を記述したDockerfileにすべて記述されていま
 す．[このフォルダー](https://github.com/mirakc/mirakc/tree/main/docker)に
-DebianおよびApline用のDockerfileがそれぞれ格納されています．ビルド環境の違いによ
+DebianおよびAlpine用のDockerfileがそれぞれ格納されています．ビルド環境の違いによ
 り多少手順が異なりますが，基本的には同様の手順を実行することで，任意のLinux環境
 にインストールできると思います．
 
