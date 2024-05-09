@@ -13,7 +13,7 @@
 # NHK総合のロゴ画像を指定
 resource:
   logos:
-    - service-triple: [32736, 32736, 1024]
+    - service-id: 3273601024
       image: /var/lib/mirakc/logos/nhk.png
 ```
 

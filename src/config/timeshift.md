@@ -47,7 +47,7 @@ jobs:
 timeshift:
   recorders:
     nhk-bs:
-      service-triple: 400101
+      service-id: 400101
       ts-file: /var/lib/mirakc/timeshift/nhk-bs.timeshift.m2ts
       data-file: /var/lib/mirakc/timeshift/bhk-bs.timeshift.json
       num-chunks: 10
