@@ -25,7 +25,7 @@ epg:
   cache-dir: /var/lib/mirakc/epg
 ```
 
-`docker-compose.yml`:
+`compose.yaml`:
 
 ```yaml
 services:

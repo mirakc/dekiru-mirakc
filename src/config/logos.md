@@ -37,7 +37,7 @@ curl -sG http://localhost:40772/api/channels/GR/27/stream?decode=0 | \
 局ロゴは頻繁には流れてこないので，抽出には数分（NHKの場合は１０分以下）かかりま
 す．お茶でも飲んでしばらく待ちましょう．
 
-抽出が完了したら，`docker-compose.yml`を以下のように書き換えて，コンテナーに
+抽出が完了したら，`compose.yaml`を以下のように書き換えて，コンテナーに
 `logos`フォルダーをマウントします．
 
 ```yaml

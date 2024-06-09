@@ -11,7 +11,7 @@ recording:
 `basedir`には，登録した録画予約の内容など管理情報を保持するためのファイル
 （`schedules.json`）や，録画データが保存されます．
 
-`docker-compose.yml`でフォルダーをマウントします．
+`compose.yaml`でフォルダーをマウントします．
 
 ```yaml
 services:

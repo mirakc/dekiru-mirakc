@@ -114,7 +114,7 @@ filters:
       bs-not-supported {{{channel_type}}} {{{channel}}}
 ```
 
-`docker-compose.yml`:
+`compose.yaml`:
 
 ```yaml
 # 変更部分のみ記載

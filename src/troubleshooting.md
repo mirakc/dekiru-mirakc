@@ -29,7 +29,7 @@ sudo docker logs --tail=1000 mirakc 2>&1 | grep -e WARN -e ERROR
 ログレベルを変更することで，より多くの情報を得られるようになります．
 
 ```yaml
-# docker-compose.ymlからの抜粋
+# compose.yamlからの抜粋
 ...
     environment:
       # mirakcのログレベルをdebugに
@@ -41,7 +41,7 @@ sudo docker logs --tail=1000 mirakc 2>&1 | grep -e WARN -e ERROR
 
 
 ```yaml
-# docker-compose.ymlからの抜粋
+# compose.yamlからの抜粋
 ...
     environment:
       MIRAKC_ARIB_LOG: info
@@ -58,7 +58,7 @@ sudo docker logs --tail=1000 mirakc 2>&1 | grep -e WARN -e ERROR
 にログレベルを指定することも可能です．
 
 ```yaml
-# docker-compose.ymlからの抜粋
+# compose.yamlからの抜粋
 ...
     environment:
       # filter-serviceとfilter-programはdebug，それ以外はinfo

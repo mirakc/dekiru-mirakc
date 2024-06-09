@@ -2,7 +2,7 @@
 
 細かい設定は後回しにして，mirakcを起動してみましょう．
 
-まず，以下のような`docker-compose.yml`を作成します．
+まず，以下のような`compose.yaml`を作成します．
 
 ```yaml
 services:
