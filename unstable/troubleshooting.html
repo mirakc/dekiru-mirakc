@@ -452,7 +452,7 @@
 ... sync-clocks: Failed: JSON error: EOF while parsing a value at line 1 column 0
 </code></pre>
 <p>ログレベルを変更することで，より多くの情報を得られるようになります．</p>
-<pre><code class="lang-yaml"><span class="hljs-comment"># docker-compose.ymlからの抜粋</span>
+<pre><code class="lang-yaml"><span class="hljs-comment"># compose.yamlからの抜粋</span>
 <span class="hljs-string">...</span>
     <span class="hljs-attr">environment:</span>
       <span class="hljs-comment"># mirakcのログレベルをdebugに</span>
@@ -460,7 +460,7 @@
 </code></pre>
 <p>フィルター等の外部プログラムが<code>stderr</code>に出力するログを確認したい場合は，環境変数
 <code>MIRAKC_DEBUG_CHILD_PROCESS</code>を以下のように定義してください．</p>
-<pre><code class="lang-yaml"><span class="hljs-comment"># docker-compose.ymlからの抜粋</span>
+<pre><code class="lang-yaml"><span class="hljs-comment"># compose.yamlからの抜粋</span>
 <span class="hljs-string">...</span>
     <span class="hljs-attr">environment:</span>
       <span class="hljs-attr">MIRAKC_ARIB_LOG:</span> <span class="hljs-string">info</span>
@@ -471,7 +471,7 @@
 <p>環境変数<code>MIRAKC_ARIB_LOG_NO_TIMESTAMP=1</code>を定義すると，<code>mirakc-arib</code>のログメッセージからタイムスタンプを削除できます．</p>
 <p>デフォルト設定では，<code>mirakc-arib</code>は何もログを出力しません．必ず，環境変数
 <code>MIRAKC_ARIB_LOG</code>でログレベルを指定してください．<code>RUST_LOG</code>のように，コマンド毎にログレベルを指定することも可能です．</p>
-<pre><code class="lang-yaml"><span class="hljs-comment"># docker-compose.ymlからの抜粋</span>
+<pre><code class="lang-yaml"><span class="hljs-comment"># compose.yamlからの抜粋</span>
 <span class="hljs-string">...</span>
     <span class="hljs-attr">environment:</span>
       <span class="hljs-comment"># filter-serviceとfilter-programはdebug，それ以外はinfo</span>
@@ -617,7 +617,7 @@ curl -fsSL http://remote:40772/api/channels/GR/27/stream?decode=0 | \
     <script>
         var gitbook = gitbook || [];
         gitbook.push(function() {
-            gitbook.page.hasChanged({"page":{"title":"トラブルシューティング","level":"1.8","depth":1,"next":{"title":"tsdサーバーの詳しい話","level":"2.1","depth":1,"path":"tsd_server.md","ref":"./tsd_server.md","articles":[]},"previous":{"title":"カスタムイメージの作成","level":"1.7","depth":1,"path":"custom_image.md","ref":"./custom_image.md","articles":[]},"dir":"ltr"},"config":{"plugins":["gitbook-plugin-japanese-support"],"root":"./src","styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"pluginsConfig":{"gitbook-plugin-japanese-support":{},"highlight":{},"search":{},"lunr":{"maxIndexSize":1000000,"ignoreSpecialCharacters":false},"fontsettings":{"theme":"white","family":"sans","size":2},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false}},"theme":"default","author":"masnagam","pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56},"embedFonts":false},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"variables":{},"title":"できるmirakc","language":"ja","gitbook":"*"},"file":{"path":"troubleshooting.md","mtime":"2024-05-23T00:41:10.282Z","type":"markdown"},"gitbook":{"version":"5.1.4","time":"2024-05-23T00:41:17.698Z"},"basePath":".","book":{"language":""}});
+            gitbook.page.hasChanged({"page":{"title":"トラブルシューティング","level":"1.8","depth":1,"next":{"title":"tsdサーバーの詳しい話","level":"2.1","depth":1,"path":"tsd_server.md","ref":"./tsd_server.md","articles":[]},"previous":{"title":"カスタムイメージの作成","level":"1.7","depth":1,"path":"custom_image.md","ref":"./custom_image.md","articles":[]},"dir":"ltr"},"config":{"plugins":["gitbook-plugin-japanese-support"],"root":"./src","styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"pluginsConfig":{"gitbook-plugin-japanese-support":{},"highlight":{},"search":{},"lunr":{"maxIndexSize":1000000,"ignoreSpecialCharacters":false},"fontsettings":{"theme":"white","family":"sans","size":2},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false}},"theme":"default","author":"masnagam","pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56},"embedFonts":false},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"variables":{},"title":"できるmirakc","language":"ja","gitbook":"*"},"file":{"path":"troubleshooting.md","mtime":"2024-06-09T02:42:59.782Z","type":"markdown"},"gitbook":{"version":"5.1.4","time":"2024-06-09T02:43:07.964Z"},"basePath":".","book":{"language":""}});
         });
     </script>
 </div>

@@ -448,7 +448,7 @@ total 3.1G
 -rw-r--r-- 1 pi pi 1.5G Mar 18 07:21 nhk-bs.timeshift.m2ts
 </code></pre>
 <p>ディスク容量が足りない場合，ファイル作成に失敗します．十分な空き容量を作ってから再チャレンジしてください．</p>
-<p>フォルダーとファイルの作成に成功したら，<code>docker-compose.yml</code>を修正し，これを<code>mirakc</code>コンテナーにマウントします．</p>
+<p>フォルダーとファイルの作成に成功したら，<code>compose.yaml</code>を修正し，これを<code>mirakc</code>コンテナーにマウントします．</p>
 <pre><code class="lang-yaml"><span class="hljs-comment"># 追加部分のみ抜粋</span>
 <span class="hljs-attr">services:</span>
   <span class="hljs-attr">mirakc:</span>
@@ -623,7 +623,7 @@ curl -sG http://raspberrypi.local:40772/api/timeshift/nhk-bs/records/$ID/stream 
 <p>mirakcはバックエンド機能しか提供しません．そのため，タイムシフト録画した番組を再生する場合，<code>curl</code>
 や<code>jq</code>などを使って，必要な情報を取得する必要があります．Web UIなどのフロントエンドを実装すればよいのでしょうが，今の所はその計画はありません．</p>
 <p>タイムシフト録画した番組を再生できるとはいえ，流石にこのままでは不便なので（作った本人である私も）使いたくはありません．そこで，<a href="https://en.wikipedia.org/wiki/Filesystem_in_Userspace" target="_blank">FUSE</a>を使ってタイムシフト録画した番組を普通のファイルとして扱えるファイルシステムを用意しました．</p>
-<p>以下を<code>docker-compose.yml</code>に追記してください．</p>
+<p>以下を<code>compose.yaml</code>に追記してください．</p>
 <pre><code class="lang-yaml"><span class="hljs-attr">services:</span>
   <span class="hljs-string">...</span>
   <span class="hljs-attr">mirakc-timeshift-fs:</span>
@@ -668,7 +668,7 @@ $ </span><span class="language-bash"><span class="hljs-built_in">ls</span> times
 </code></pre>
 <p>タイムシフト・ファイルシステムは読み取り専用なので書き込みはできません．録画が進むとファイルが増えたり減ったりします．</p>
 <p>普通のファイルとして扱われるので，あとは煮るなり焼くなり好きにできます．試しにSambaでファイル共有してみましょう．</p>
-<p><code>docker-compose.yml</code>を書き換え</p>
+<p><code>compose.yaml</code>を書き換え</p>
 <pre><code class="lang-yaml"><span class="hljs-attr">services:</span>
   <span class="hljs-string">...</span>
   <span class="hljs-attr">samba:</span>
@@ -793,7 +793,7 @@ INFO mirakc_core::timeshift: Recording started recorder.name=&quot;nhk-bs&quot;
     <script>
         var gitbook = gitbook || [];
         gitbook.push(function() {
-            gitbook.page.hasChanged({"page":{"title":"タイムシフト録画","level":"1.4.7","depth":2,"next":{"title":"イベント通知","level":"1.5","depth":1,"path":"events.md","ref":"./events.md","articles":[]},"previous":{"title":"録画予約","level":"1.4.6","depth":2,"path":"config/recording.md","ref":"./config/recording.md","articles":[]},"dir":"ltr"},"config":{"plugins":["gitbook-plugin-japanese-support"],"root":"./src","styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"pluginsConfig":{"gitbook-plugin-japanese-support":{},"highlight":{},"search":{},"lunr":{"maxIndexSize":1000000,"ignoreSpecialCharacters":false},"fontsettings":{"theme":"white","family":"sans","size":2},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false}},"theme":"default","author":"masnagam","pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56},"embedFonts":false},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"variables":{},"title":"できるmirakc","language":"ja","gitbook":"*"},"file":{"path":"config/timeshift.md","mtime":"2024-05-23T00:41:10.278Z","type":"markdown"},"gitbook":{"version":"5.1.4","time":"2024-05-23T00:41:17.698Z"},"basePath":"..","book":{"language":""}});
+            gitbook.page.hasChanged({"page":{"title":"タイムシフト録画","level":"1.4.7","depth":2,"next":{"title":"イベント通知","level":"1.5","depth":1,"path":"events.md","ref":"./events.md","articles":[]},"previous":{"title":"録画予約","level":"1.4.6","depth":2,"path":"config/recording.md","ref":"./config/recording.md","articles":[]},"dir":"ltr"},"config":{"plugins":["gitbook-plugin-japanese-support"],"root":"./src","styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"pluginsConfig":{"gitbook-plugin-japanese-support":{},"highlight":{},"search":{},"lunr":{"maxIndexSize":1000000,"ignoreSpecialCharacters":false},"fontsettings":{"theme":"white","family":"sans","size":2},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false}},"theme":"default","author":"masnagam","pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56},"embedFonts":false},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"variables":{},"title":"できるmirakc","language":"ja","gitbook":"*"},"file":{"path":"config/timeshift.md","mtime":"2024-06-09T02:42:59.782Z","type":"markdown"},"gitbook":{"version":"5.1.4","time":"2024-06-09T02:43:07.964Z"},"basePath":"..","book":{"language":""}});
         });
     </script>
 </div>
