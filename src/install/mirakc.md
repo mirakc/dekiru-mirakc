@@ -22,6 +22,10 @@ services:
 
 次に，同じフォルダー内に`config.yml`を作成します．
 
+> 本記事の設定ファイルはすべてYAML形式で記述しますが，TOML形式で記述することも可能です．
+> TOML形式の例は，GitHubリポジトリー内の[docker/config.toml](https://github.com/mirakc/mirakc/blob/main/docker/config.toml)や
+> [mirakc-core/tests/config.toml](https://github.com/mirakc/mirakc/blob/main/mirakc-core/tests/config.toml)を参照してください．
+
 ```yaml
 server:
   addrs:
