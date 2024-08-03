@@ -273,6 +273,9 @@ services:
       MIRAKC_TIMESHIFT_UID: 1000
       MIRAKC_TIMESHIFT_GID: 1000
       MIRAKC_TIMESHIFT_MOUNT_OPTIONS: ALLOW_OTHER
+      # ファイル名にレコードの開始時間を含める場合には以下を設定
+      # ファイル作成日時のファイル属性をサポートしないファイルシステムで有用
+      #MIRAKC_TIMESHIFT_FS_START_TIME_PREFIX: true
 ```
 
 `timeshift-fs`フォルダーを作成し，追加したコンテナーを起動します．
