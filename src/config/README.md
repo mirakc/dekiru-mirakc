@@ -1,6 +1,8 @@
 # mirakcの設定
 
 > 本記事の設定ファイルはすべてYAML形式で記述しますが，TOML形式で記述することも可能です．
+> 記述例は[こちら](https://github.com/mirakc/mirakc/blob/main/docs/config.md#configuration)
+> に記載されています．
 
 mirakcを起動できるようになったので，次はチャンネルやチューナーなどの設定を行いま
 す．
