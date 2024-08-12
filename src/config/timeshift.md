@@ -231,6 +231,11 @@ TSパケットの他に，録画済み番組情報などを記録しておく必
 
 ## タイムシフト・ファイルシステム
 
+> [`mirakc/timeshift-gerbera`]もしくは[`mirakc/timeshift-samba`]を使えば，以下の説明に出てくるよう
+> な複雑なマウント処理は必要ありません．開発処理にはこれらのDockerイメージは提供していなかったとい
+> う歴史的経緯により，以下の説明では２つのコンテナー間でタイムシフト・ファイルシステムを共有するた
+> めに複雑なマウント処理を行っています．
+
 mirakcはバックエンド機能しか提供しません．そのため，タイムシフト録画した番組を再生する場合，`curl`
 や`jq`などを使って，必要な情報を取得する必要があります．Web UIなどのフロントエンドを実装すればよい
 のでしょうが，今の所はその計画はありません．
@@ -427,3 +432,5 @@ INFO mirakc_core::timeshift: Recording started recorder.name="nhk-bs"
 * https://github.com/mirakc/mirakc/issues/693
 
 [FUSE]: https://en.wikipedia.org/wiki/Filesystem_in_Userspace
+[`mirakc/timeshift-gerbera`]: https://github.com/mirakc/docker-timeshift-x/tree/main/gerbera
+[`mirakc/timeshift-samba`]: https://github.com/mirakc/docker-timeshift-x/tree/main/samba
