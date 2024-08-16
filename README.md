@@ -3,7 +3,8 @@
 以下で公開している「できるmirakc」の原稿です．
 
 * [unstable](https://mirakc.github.io/dekiru-mirakc/unstable/)
-* [v2](https://mirakc.github.io/dekiru-mirakc/v2/) (latest stable)
+* [v3](https://mirakc.github.io/dekiru-mirakc/v3/) (latest stable)
+* [v2](https://mirakc.github.io/dekiru-mirakc/v2/)
 * [v1](https://mirakc.github.io/dekiru-mirakc/v1/)
 
 Mediumで公開している「[できるmirakc](https://medium.com/chinachu/c98v-mirakc-cde04fb67531)」
