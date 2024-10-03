@@ -6,7 +6,7 @@
         <title>局ロゴの表示 · できるmirakc</title>
         <meta http-equiv="X-UA-Compatible" content="IE=edge" />
         <meta name="description" content="">
-        <meta name="generator" content="HonKit 5.1.4">
+        <meta name="generator" content="HonKit 6.0.0">
         <meta name="author" content="masnagam">
         
         
@@ -458,8 +458,8 @@ mkdir -p logos
 <span class="hljs-meta prompt_"># </span><span class="language-bash">Base64文字列内に`,`は存在しないので，これを区切り文字とできる</span>
 curl -sG http://localhost:40772/api/channels/GR/27/stream?decode=0 | \
   sudo docker run --rm -i --entrypoint=/usr/bin/env mirakc/mirakc:alpine \
-    mirakc-arib collect-logos | head -1 | jq -Mr &apos;.data&apos; | \
-    cut -d &apos;,&apos; -f 2 | base64 -d &gt;logos/nhk.png
+    mirakc-arib collect-logos | head -1 | jq -Mr '.data' | \
+    cut -d ',' -f 2 | base64 -d &gt;logos/nhk.png
 </code></pre>
 <p>局ロゴは頻繁には流れてこないので，抽出には数分（NHKの場合は１０分以下）かかります．お茶でも飲んでしばらく待ちましょう．</p>
 <p>抽出が完了したら，<code>compose.yaml</code>を以下のように書き換えて，コンテナーに
@@ -479,18 +479,18 @@ content-length: 760
 server: mirakc-core/0.18.0
 accept-ranges: bytes
 last-modified: Sat, 19 Jun 2021 07:26:36 GMT
-content-disposition: inline; filename=&quot;nhk.png&quot;
+content-disposition: inline; filename="nhk.png"
 content-type: image/png
-etag: &quot;e830d5818f5490f2:2f8:60cd9c2c:0&quot;
+etag: "e830d5818f5490f2:2f8:60cd9c2c:0"
 date: Sat, 19 Jun 2021 07:29:46 GMT
 </code></pre>
 <p>ブラウザーを使えば，実際に表示される画像を確認できます．</p>
 <p>設定した局ロゴは，<code>/api/iptv/*</code>にも反映されます．</p>
 <pre><code class="lang-console"><span class="hljs-meta prompt_">$ </span><span class="language-bash">curl -sG http://localhost:40772/api/iptv/playlist | grep tvg-logo</span>
-... tvg-logo=&quot;http://localhost:40772/api/services/3273601024/logo&quot; ...
+... tvg-logo="http://localhost:40772/api/services/3273601024/logo" ...
 <span class="hljs-meta prompt_">
 $ </span><span class="language-bash">curl -sG http://localhost:40772/api/iptv/epg | xmllint --format - | grep icon</span>
-    &lt;icon src=&quot;http://localhost:40772/api/services/3273601024/logo&quot;/&gt;
+    &lt;icon src="http://localhost:40772/api/services/3273601024/logo"/&gt;
 </code></pre>
 
                                 
@@ -535,7 +535,7 @@ $ </span><span class="language-bash">curl -sG http://localhost:40772/api/iptv/ep
     <script>
         var gitbook = gitbook || [];
         gitbook.push(function() {
-            gitbook.page.hasChanged({"page":{"title":"局ロゴの表示","level":"1.4.5","depth":2,"next":{"title":"録画予約","level":"1.4.6","depth":2,"path":"config/recording.md","ref":"./config/recording.md","articles":[]},"previous":{"title":"フィルター設定","level":"1.4.4","depth":2,"path":"config/filters.md","ref":"./config/filters.md","articles":[]},"dir":"ltr"},"config":{"plugins":["gitbook-plugin-japanese-support"],"root":"./src","styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"pluginsConfig":{"gitbook-plugin-japanese-support":{},"highlight":{},"search":{},"lunr":{"maxIndexSize":1000000,"ignoreSpecialCharacters":false},"fontsettings":{"theme":"white","family":"sans","size":2},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false}},"theme":"default","author":"masnagam","pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56},"embedFonts":false},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"variables":{},"title":"できるmirakc","language":"ja","gitbook":"*"},"file":{"path":"config/logos.md","mtime":"2024-08-16T11:37:08.230Z","type":"markdown"},"gitbook":{"version":"5.1.4","time":"2024-08-16T11:37:21.106Z"},"basePath":"..","book":{"language":""}});
+            gitbook.page.hasChanged({"page":{"title":"局ロゴの表示","level":"1.4.5","depth":2,"next":{"title":"録画予約","level":"1.4.6","depth":2,"path":"config/recording.md","ref":"./config/recording.md","articles":[]},"previous":{"title":"フィルター設定","level":"1.4.4","depth":2,"path":"config/filters.md","ref":"./config/filters.md","articles":[]},"dir":"ltr"},"config":{"plugins":["gitbook-plugin-japanese-support"],"root":"./src","styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"pluginsConfig":{"gitbook-plugin-japanese-support":{},"highlight":{},"search":{},"lunr":{"maxIndexSize":1000000,"ignoreSpecialCharacters":false},"fontsettings":{"theme":"white","family":"sans","size":2},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false}},"theme":"default","author":"masnagam","pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56},"embedFonts":false},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"variables":{},"title":"できるmirakc","language":"ja","gitbook":"*"},"file":{"path":"config/logos.md","mtime":"2024-10-03T17:50:02.531Z","type":"markdown"},"gitbook":{"version":"6.0.0","time":"2024-10-03T17:50:11.202Z"},"basePath":"..","book":{"language":""}});
         });
     </script>
 </div>

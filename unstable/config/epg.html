@@ -6,7 +6,7 @@
         <title>EGPデータキャッシュ · できるmirakc</title>
         <meta http-equiv="X-UA-Compatible" content="IE=edge" />
         <meta name="description" content="">
-        <meta name="generator" content="HonKit 5.1.4">
+        <meta name="generator" content="HonKit 6.0.0">
         <meta name="author" content="masnagam">
         
         
@@ -479,7 +479,7 @@
 <p>例えば，現在の設定では，mirakcコンテナーではコマンドをすべて<code>root</code>権限で実行するため，ボリューム内に作成されるファイルの所有者は<code>root</code>になります．Dockerホスト上のフォルダーをマウントする場合には，この辺にも注意が必要です．</p>
 <p>設定が機能しているか，確認してみます．</p>
 <pre><code class="lang-console"><span class="hljs-meta prompt_"># </span><span class="language-bash">mirakcコンテナーの起動（５分程度待ってからCtrl+Cで停止）</span>
-<span class="hljs-meta prompt_">$ </span><span class="language-bash">sudo docker compose up</span>
+<span class="hljs-meta prompt_">$ </span><span class="language-bash"><span class="hljs-built_in">sudo</span> docker compose up</span>
 ...
 ... ERROR ... Failed to load services: ...
 ... ERROR ... Failed to load clocks: ...
@@ -490,56 +490,56 @@
 <p>先程のワーニングが出ていなければ正しく機能しています．</p>
 <p>設定したデータボリュームはmirakcコンテナーをシャットダウンしても残り続けます．</p>
 <pre><code class="lang-console"><span class="hljs-meta prompt_"># </span><span class="language-bash">mirakcコンテナーのシャットダウン</span>
-<span class="hljs-meta prompt_">$ </span><span class="language-bash">sudo docker compose down</span>
+<span class="hljs-meta prompt_">$ </span><span class="language-bash"><span class="hljs-built_in">sudo</span> docker compose down</span>
 Removing mirakc ... done
 Removing network pi_default
 <span class="hljs-meta prompt_">
 # </span><span class="language-bash">データボリュームが存在することを確認</span>
-<span class="hljs-meta prompt_">$ </span><span class="language-bash">sudo docker volume <span class="hljs-built_in">ls</span></span>
+<span class="hljs-meta prompt_">$ </span><span class="language-bash"><span class="hljs-built_in">sudo</span> docker volume <span class="hljs-built_in">ls</span></span>
 DRIVER              VOLUME NAME
 local               mirakc_epg
 </code></pre>
 <p>では次に，キャッシュが機能しているか確認するため，再度mirakcコンテナーを起動します．</p>
 <pre><code class="lang-console"><span class="hljs-meta prompt_"># </span><span class="language-bash">mirakcコンテナーの起動（Ctrl+Cで停止）</span>
-<span class="hljs-meta prompt_">$ </span><span class="language-bash">sudo docker compose up</span>
+<span class="hljs-meta prompt_">$ </span><span class="language-bash"><span class="hljs-built_in">sudo</span> docker compose up</span>
 </code></pre>
 <p>今度はEPGデータ読み込みエラーが表示されなくなっているはずです．キャッシュは正しく機能しています．</p>
 <p>EPGデータが正しく取得できているのか確認してみましょう．</p>
 <pre><code class="lang-console"><span class="hljs-meta prompt_"># </span><span class="language-bash">jqをインストール</span>
-<span class="hljs-meta prompt_">$ </span><span class="language-bash">sudo apt-get install -y jq</span>
+<span class="hljs-meta prompt_">$ </span><span class="language-bash"><span class="hljs-built_in">sudo</span> apt-get install -y jq</span>
 <span class="hljs-meta prompt_">
 # </span><span class="language-bash">mirakcコンテナーをバックグラウンドで起動</span>
-<span class="hljs-meta prompt_">$ </span><span class="language-bash">sudo docker compose up -d</span>
+<span class="hljs-meta prompt_">$ </span><span class="language-bash"><span class="hljs-built_in">sudo</span> docker compose up -d</span>
 <span class="hljs-meta prompt_">
 $ </span><span class="language-bash">curl -s http://localhost:40772/api/services | jq .[0]</span>
 {
-  &quot;id&quot;: 3273601024,
-  &quot;serviceId&quot;: 1024,
-  &quot;networkId&quot;: 32736,
-  &quot;type&quot;: 1,
-  &quot;logoId&quot;: 0,
-  &quot;remoteControlKeyId&quot;: 1,
-  &quot;name&quot;: &quot;ＮＨＫ総合１・東京&quot;,
-  &quot;channel&quot;: {
-    &quot;type&quot;: &quot;GR&quot;,
-    &quot;channel&quot;: &quot;27&quot;
+  "id": 3273601024,
+  "serviceId": 1024,
+  "networkId": 32736,
+  "type": 1,
+  "logoId": 0,
+  "remoteControlKeyId": 1,
+  "name": "ＮＨＫ総合１・東京",
+  "channel": {
+    "type": "GR",
+    "channel": "27"
   },
-  &quot;hasLogoData&quot;: false
+  "hasLogoData": false
 }
 <span class="hljs-meta prompt_">
 # </span><span class="language-bash">アクセスログを確認</span>
-<span class="hljs-meta prompt_">$ </span><span class="language-bash">sudo docker logs --<span class="hljs-built_in">tail</span>=1 mirakc</span>
-... 172.19.0.1:59498 &quot;GET /api/services HTTP/1.1&quot; 200 564 ...
+<span class="hljs-meta prompt_">$ </span><span class="language-bash"><span class="hljs-built_in">sudo</span> docker logs --<span class="hljs-built_in">tail</span>=1 mirakc</span>
+... 172.19.0.1:59498 "GET /api/services HTTP/1.1" 200 564 ...
 <span class="hljs-meta prompt_">
 # </span><span class="language-bash">mirakcコンテナーをシャットダウン</span>
-<span class="hljs-meta prompt_">$ </span><span class="language-bash">sudo docker compose down</span>
+<span class="hljs-meta prompt_">$ </span><span class="language-bash"><span class="hljs-built_in">sudo</span> docker compose down</span>
 </code></pre>
 <p>なお，以下のコマンドを実行すると，シャットダウン時にデータボリュームを削除します．</p>
-<pre><code class="lang-console"><span class="hljs-meta prompt_">$ </span><span class="language-bash">sudo docker compose down -v</span>
+<pre><code class="lang-console"><span class="hljs-meta prompt_">$ </span><span class="language-bash"><span class="hljs-built_in">sudo</span> docker compose down -v</span>
 ...
 Removing volume mirakc_epg
 <span class="hljs-meta prompt_">
-$ </span><span class="language-bash">sudo docker volume <span class="hljs-built_in">ls</span></span>
+$ </span><span class="language-bash"><span class="hljs-built_in">sudo</span> docker volume <span class="hljs-built_in">ls</span></span>
 DRIVER              VOLUME NAME
 </code></pre>
 <p>データボリュームを削除すると，当然EGPデータキャッシュもなくなります．そのため，次回起動時にEGPデータの取得が完了するまで，番組表取得や番組録画はできなくなります．</p>
@@ -586,7 +586,7 @@ DRIVER              VOLUME NAME
     <script>
         var gitbook = gitbook || [];
         gitbook.push(function() {
-            gitbook.page.hasChanged({"page":{"title":"EGPデータキャッシュ","level":"1.4.3","depth":2,"next":{"title":"フィルター設定","level":"1.4.4","depth":2,"path":"config/filters.md","ref":"./config/filters.md","articles":[]},"previous":{"title":"チューナー設定","level":"1.4.2","depth":2,"path":"config/tuners.md","ref":"./config/tuners.md","articles":[]},"dir":"ltr"},"config":{"plugins":["gitbook-plugin-japanese-support"],"root":"./src","styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"pluginsConfig":{"gitbook-plugin-japanese-support":{},"highlight":{},"search":{},"lunr":{"maxIndexSize":1000000,"ignoreSpecialCharacters":false},"fontsettings":{"theme":"white","family":"sans","size":2},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false}},"theme":"default","author":"masnagam","pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56},"embedFonts":false},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"variables":{},"title":"できるmirakc","language":"ja","gitbook":"*"},"file":{"path":"config/epg.md","mtime":"2024-08-16T11:37:08.230Z","type":"markdown"},"gitbook":{"version":"5.1.4","time":"2024-08-16T11:37:21.106Z"},"basePath":"..","book":{"language":""}});
+            gitbook.page.hasChanged({"page":{"title":"EGPデータキャッシュ","level":"1.4.3","depth":2,"next":{"title":"フィルター設定","level":"1.4.4","depth":2,"path":"config/filters.md","ref":"./config/filters.md","articles":[]},"previous":{"title":"チューナー設定","level":"1.4.2","depth":2,"path":"config/tuners.md","ref":"./config/tuners.md","articles":[]},"dir":"ltr"},"config":{"plugins":["gitbook-plugin-japanese-support"],"root":"./src","styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"pluginsConfig":{"gitbook-plugin-japanese-support":{},"highlight":{},"search":{},"lunr":{"maxIndexSize":1000000,"ignoreSpecialCharacters":false},"fontsettings":{"theme":"white","family":"sans","size":2},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false}},"theme":"default","author":"masnagam","pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56},"embedFonts":false},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"variables":{},"title":"できるmirakc","language":"ja","gitbook":"*"},"file":{"path":"config/epg.md","mtime":"2024-10-03T17:50:02.531Z","type":"markdown"},"gitbook":{"version":"6.0.0","time":"2024-10-03T17:50:11.202Z"},"basePath":"..","book":{"language":""}});
         });
     </script>
 </div>

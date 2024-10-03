@@ -6,7 +6,7 @@
         <title>イベント通知 · できるmirakc</title>
         <meta http-equiv="X-UA-Compatible" content="IE=edge" />
         <meta name="description" content="">
-        <meta name="generator" content="HonKit 5.1.4">
+        <meta name="generator" content="HonKit 6.0.0">
         <meta name="author" content="masnagam">
         
         
@@ -443,13 +443,13 @@
 <p>すでにmirakcが起動している場合，以下のコマンドを実行してみてください．通知されたイベントが表示されるはずです．番組情報の取得が完了していない場合は表示されません．番組情報の取得が完了するまで待ちましょう．</p>
 <pre><code class="lang-console"><span class="hljs-meta prompt_">$ </span><span class="language-bash">curl http://localhost:40772/events -sG</span>
 event:epg.programs-updated
-data:{&quot;serviceId&quot;:400101}
+data:{"serviceId":400101}
 
 event:epg.programs-updated
-data:{&quot;serviceId&quot;:3273601025}
+data:{"serviceId":3273601025}
 
 event:epg.programs-updated
-data:{&quot;serviceId&quot;:3273601024}
+data:{"serviceId":3273601024}
 </code></pre>
 <p>それでは，<code>events.epg.programs-updated</code>イベントを使って，簡単なルール・ベースの自動録画予約機能を動かしてみます．</p>
 <p><code>compose.yaml</code></p>
@@ -482,7 +482,7 @@ Added: scheduled: ＮＨＫ総合１・東京: 327360102422829: ...
 ...
 </code></pre>
 <p>スクリプトの実行完了をしばらく待って以下を実行すると，録画予約が自動登録されていることを確認できます．</p>
-<pre><code class="lang-console"><span class="hljs-meta prompt_">$ </span><span class="language-bash">curl http://localhost:40772/api/recording/schedules -sG | jq <span class="hljs-string">&apos;.[].program.id&apos;</span></span>
+<pre><code class="lang-console"><span class="hljs-meta prompt_">$ </span><span class="language-bash">curl http://localhost:40772/api/recording/schedules -sG | jq <span class="hljs-string">'.[].program.id'</span></span>
 327360102422829
 327360102423293
 327360102423762
@@ -492,7 +492,7 @@ Added: scheduled: ＮＨＫ総合１・東京: 327360102422829: ...
 327360102426083
 <span class="hljs-meta prompt_">
 $ </span><span class="language-bash">curl http://localhost:40772/api/programs/327360102422829 -sG | \
-    jq -r <span class="hljs-string">&apos;.name | test(&quot;ＮＨＫニュース７&quot;)&apos;</span></span>
+    jq -r <span class="hljs-string">'.name | test("ＮＨＫニュース７")'</span></span>
 true
 </code></pre>
 <p>上記のスクリプトでは<code>epg.programs-updated</code>イベントのみを使っていますが，放送中の番組の追跡機能を有効化した場合に通知される<code>onair.program-changed</code>イベントを使えば，放送中の番組（及び次に放送される番組）に対しても同様の自動録画ルールを適用できます．</p>
@@ -548,7 +548,7 @@ true
     <script>
         var gitbook = gitbook || [];
         gitbook.push(function() {
-            gitbook.page.hasChanged({"page":{"title":"イベント通知","level":"1.5","depth":1,"next":{"title":"フロントエンドアプリケーションとの連携","level":"1.6","depth":1,"path":"frontend_applications.md","ref":"./frontend_applications.md","articles":[]},"previous":{"title":"タイムシフト録画","level":"1.4.7","depth":2,"path":"config/timeshift.md","ref":"./config/timeshift.md","articles":[]},"dir":"ltr"},"config":{"plugins":["gitbook-plugin-japanese-support"],"root":"./src","styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"pluginsConfig":{"gitbook-plugin-japanese-support":{},"highlight":{},"search":{},"lunr":{"maxIndexSize":1000000,"ignoreSpecialCharacters":false},"fontsettings":{"theme":"white","family":"sans","size":2},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false}},"theme":"default","author":"masnagam","pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56},"embedFonts":false},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"variables":{},"title":"できるmirakc","language":"ja","gitbook":"*"},"file":{"path":"events.md","mtime":"2024-08-16T11:37:08.230Z","type":"markdown"},"gitbook":{"version":"5.1.4","time":"2024-08-16T11:37:21.106Z"},"basePath":".","book":{"language":""}});
+            gitbook.page.hasChanged({"page":{"title":"イベント通知","level":"1.5","depth":1,"next":{"title":"フロントエンドアプリケーションとの連携","level":"1.6","depth":1,"path":"frontend_applications.md","ref":"./frontend_applications.md","articles":[]},"previous":{"title":"タイムシフト録画","level":"1.4.7","depth":2,"path":"config/timeshift.md","ref":"./config/timeshift.md","articles":[]},"dir":"ltr"},"config":{"plugins":["gitbook-plugin-japanese-support"],"root":"./src","styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"pluginsConfig":{"gitbook-plugin-japanese-support":{},"highlight":{},"search":{},"lunr":{"maxIndexSize":1000000,"ignoreSpecialCharacters":false},"fontsettings":{"theme":"white","family":"sans","size":2},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false}},"theme":"default","author":"masnagam","pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56},"embedFonts":false},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"variables":{},"title":"できるmirakc","language":"ja","gitbook":"*"},"file":{"path":"events.md","mtime":"2024-10-03T17:50:02.531Z","type":"markdown"},"gitbook":{"version":"6.0.0","time":"2024-10-03T17:50:11.202Z"},"basePath":".","book":{"language":""}});
         });
     </script>
 </div>

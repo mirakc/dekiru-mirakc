@@ -6,7 +6,7 @@
         <title>フィルター設定 · できるmirakc</title>
         <meta http-equiv="X-UA-Compatible" content="IE=edge" />
         <meta name="description" content="">
-        <meta name="generator" content="HonKit 5.1.4">
+        <meta name="generator" content="HonKit 6.0.0">
         <meta name="author" content="masnagam">
         
         
@@ -441,7 +441,7 @@
                                 <h1 id="フィルター設定">フィルター設定</h1>
 <p>EPGデータの取得が完了すると，特定サービスのTSストリーミングが可能となります．</p>
 <pre><code class="lang-console"><span class="hljs-meta prompt_"># </span><span class="language-bash">mirakcコンテナーをバックグラウンドで起動</span>
-<span class="hljs-meta prompt_">$ </span><span class="language-bash">sudo docker compose up -d</span>
+<span class="hljs-meta prompt_">$ </span><span class="language-bash"><span class="hljs-built_in">sudo</span> docker compose up -d</span>
 Starting mirakc ... done
 <span class="hljs-meta prompt_">
 # </span><span class="language-bash">最初のサービス（ＮＨＫ総合１）のIDを表示</span>
@@ -461,11 +461,11 @@ Starting mirakc ... done
 <pre><code class="lang-yaml"><span class="hljs-attr">filters:</span>
   <span class="hljs-attr">decode-filter:</span>
     <span class="hljs-attr">command:</span> <span class="hljs-string">&gt;-
-      echo &quot;{{{channel_type}}}/{{{channel}}} SID#{{{sid}}}&quot;
+      echo "{{{channel_type}}}/{{{channel}}} SID#{{{sid}}}"
 </span></code></pre>
 <p>設定反映のためmirakcコンテナーを再起動し，動作確認します．</p>
 <pre><code class="lang-console"><span class="hljs-meta prompt_"># </span><span class="language-bash">mirakcコンテナーを再起動</span>
-<span class="hljs-meta prompt_">$ </span><span class="language-bash">sudo docker compose restart</span>
+<span class="hljs-meta prompt_">$ </span><span class="language-bash"><span class="hljs-built_in">sudo</span> docker compose restart</span>
 <span class="hljs-meta prompt_">
 # </span><span class="language-bash">decode-filter付きTSストリーミングを実行</span>
 <span class="hljs-meta prompt_">$ </span><span class="language-bash">curl -s http://localhost:40772/api/services/3273601024/stream?decode=1</span>
@@ -490,7 +490,7 @@ GR/27 SID#1024
     <span class="hljs-comment"># 標準入力から入力されるTSストリームをリモートホストtsdのTCP 40773ポートに転</span>
     <span class="hljs-comment"># 送し，tsdから返されたTSストリームを標準出力に出力</span>
     <span class="hljs-comment">#</span>
-    <span class="hljs-comment"># &quot;Broken pipe&quot;エラーを回避するため`cool-write`オプションを指定</span>
+    <span class="hljs-comment"># "Broken pipe"エラーを回避するため`cool-write`オプションを指定</span>
     <span class="hljs-attr">command:</span> <span class="hljs-string">&gt;-
       socat -,cool-write tcp-connect:tsd:40773
 </span></code></pre>
@@ -499,13 +499,13 @@ GR/27 SID#1024
 <p>試しに，以下のような簡単な<code>bs-not-supported</code>スクリプトを作って，動作を確認してみます．</p>
 <pre><code class="lang-shell"><span class="hljs-meta prompt_">#</span><span class="language-bash">!/bin/sh</span>
 
-CHANNEL_TYPE=&quot;$1&quot;
-CHANNEL=&quot;$2&quot;
+CHANNEL_TYPE="$1"
+CHANNEL="$2"
 
-if [ &quot;$CHANNEL_TYPE&quot; = &quot;GR&quot; ]; then
-  echo &quot;$CHANNEL&quot;
+if [ "$CHANNEL_TYPE" = "GR" ]; then
+  echo "$CHANNEL"
 else
-  echo &quot;BS not supported&quot;
+  echo "BS not supported"
 fi
 </code></pre>
 <p><code>config.yml</code>:</p>
@@ -575,7 +575,7 @@ BS not supported
     <script>
         var gitbook = gitbook || [];
         gitbook.push(function() {
-            gitbook.page.hasChanged({"page":{"title":"フィルター設定","level":"1.4.4","depth":2,"next":{"title":"局ロゴの表示","level":"1.4.5","depth":2,"path":"config/logos.md","ref":"./config/logos.md","articles":[]},"previous":{"title":"EGPデータキャッシュ","level":"1.4.3","depth":2,"path":"config/epg.md","ref":"./config/epg.md","articles":[]},"dir":"ltr"},"config":{"plugins":["gitbook-plugin-japanese-support"],"root":"./src","styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"pluginsConfig":{"gitbook-plugin-japanese-support":{},"highlight":{},"search":{},"lunr":{"maxIndexSize":1000000,"ignoreSpecialCharacters":false},"fontsettings":{"theme":"white","family":"sans","size":2},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false}},"theme":"default","author":"masnagam","pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56},"embedFonts":false},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"variables":{},"title":"できるmirakc","language":"ja","gitbook":"*"},"file":{"path":"config/filters.md","mtime":"2024-08-16T11:37:08.230Z","type":"markdown"},"gitbook":{"version":"5.1.4","time":"2024-08-16T11:37:21.106Z"},"basePath":"..","book":{"language":""}});
+            gitbook.page.hasChanged({"page":{"title":"フィルター設定","level":"1.4.4","depth":2,"next":{"title":"局ロゴの表示","level":"1.4.5","depth":2,"path":"config/logos.md","ref":"./config/logos.md","articles":[]},"previous":{"title":"EGPデータキャッシュ","level":"1.4.3","depth":2,"path":"config/epg.md","ref":"./config/epg.md","articles":[]},"dir":"ltr"},"config":{"plugins":["gitbook-plugin-japanese-support"],"root":"./src","styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"pluginsConfig":{"gitbook-plugin-japanese-support":{},"highlight":{},"search":{},"lunr":{"maxIndexSize":1000000,"ignoreSpecialCharacters":false},"fontsettings":{"theme":"white","family":"sans","size":2},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false}},"theme":"default","author":"masnagam","pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56},"embedFonts":false},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"variables":{},"title":"できるmirakc","language":"ja","gitbook":"*"},"file":{"path":"config/filters.md","mtime":"2024-10-03T17:50:02.531Z","type":"markdown"},"gitbook":{"version":"6.0.0","time":"2024-10-03T17:50:11.202Z"},"basePath":"..","book":{"language":""}});
         });
     </script>
 </div>
