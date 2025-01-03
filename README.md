@@ -14,8 +14,12 @@ HTMLの生成には[HonKit](https://github.com/honkit/honkit)を使っていま�
 
 以下のコマンドでHTML生成後にサーバーが機能します．
 
-```console
-npm run serve
+```shell
+# Install dependencies
+docker run --rm -v $(pwd):/src -w /src -u $(id -u):$(id -g) node npm ci
+
+# Launch server
+docker run --rm -v $(pwd):/src -w /src -u $(id -u):$(id -g) -p 4000:4000 node npm run serve
 ```
 
 `http://localhost:4000/`をブラウザーで開けば，生成内容を確認できます．
