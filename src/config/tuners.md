@@ -128,4 +128,46 @@ tuners:
       dvbv5-zap -a 0 -c /path/to/conf -r -P {{{channel}}} -o -
 ```
 
+## チャンネル制限
+
+> チャンネル制限は3.3.0以降でのみ利用可能です
+
+複数のチューナーがあり，[何らかの理由](https://github.com/mirakc/mirakc/issues/2156)で特定のチュー
+ナーで利用可能なチャンネルを制限したい場合，`excluded-channels`プロパティで設定可能です．
+
+```yaml
+channels:
+  # このチャンネルはtuner-1では何故か開けない．．．
+  # excluded-channelsを指定しないとtuner-1が使われた場合に必ず処理が失敗する
+  - name: channel-1
+    type: GR
+    channel: '99'
+
+tuners
+  - name: tuner-1
+    types: [GR]
+    command: ...
+    excluded-channels:
+      # channel-1がユニークなチャンネル名であるなら，nameで指定できる
+      - name: channel-1
+```
+
+上記の例では，`channel-1`を`tuner-1`で開かないように設定しています．`channel-1`を名前に持つチャンネ
+ルが１つ以下（ユニークなチャンネル名）の場合，`name`プロパティを使って指定できます．
+
+`channel-1`を名前に持つチャンネルが複数存在する場合は`name`プロパティは使えません．代わりに`params`
+プロパティを使って指定します．
+
+```yaml
+tuners
+  - name: tuner-1
+    types: [GR]
+    command: ...
+    excluded-channels:
+      # channel-1をnameに持つチャンネルが複数ある場合，paramsで指定しなければならない
+      - params:
+          channel-type: GR
+          channel: '99'
+```
+
 [Mustache]: https://mustache.github.io/
