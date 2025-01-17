@@ -2,7 +2,7 @@
 
 ここでは，v2からv3への移行について説明します．
 
-## config.yml
+## config.yml {#config-yml}
 
 `tuners[].dedicated-for`が廃止され，`timeshift.recorders[].uses`および
 `onair-program-trackers[].local.uses`が追加されました．

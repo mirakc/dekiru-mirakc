@@ -1,5 +1,6 @@
 # mirakcの設定
 
+> [!NOTE]
 > 本記事の設定ファイルはすべてYAML形式で記述しますが，TOML形式で記述することも可能です．
 > 記述例は[こちら](https://github.com/mirakc/mirakc/blob/main/docs/config.md)に記載されています．
 

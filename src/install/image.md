@@ -1,5 +1,6 @@
 # Dockerイメージ
 
+> [!NOTE]
 > 何らかの修正があった場合，毎週土曜日の早朝に自動でタグを付けて，イメージを
 > Docker Hubにアップロードするようになっています．
 
@@ -24,10 +25,9 @@ Docker Hubで配布している[mirakc/mirakc]イメージには，mirakcと`rec
 * main-alpine
   * GitHub mainブランチの最新コミットから作成したAlpine/3.13ベースのイメージ
 
-> `0.17.0`以降のAlpineイメージは，32ビットCPUでは動作しない可能性があります．詳しいことを以下のペー
-> ジを見てください．
->
-> https://wiki.alpinelinux.org/wiki/Release_Notes_for_Alpine_3.13.0#musl_1.2
+> [!WARNING]
+> `0.17.0`以降のAlpineイメージは，32ビットCPUでは動作しない可能性があります．
+> 詳しくは[こちら](https://wiki.alpinelinux.org/wiki/Release_Notes_for_Alpine_3.13.0#musl_1.2)を見てください．
 
 これらのイメージは全てマルチアーキイメージです．以下のプラットフォームをサポート
 しています．
@@ -38,6 +38,7 @@ Docker Hubで配布している[mirakc/mirakc]イメージには，mirakcと`rec
 * linux/arm/v7
 * linux/arm64/v8
 
+> [!CAUTION]
 > リンクエラーを回避するため，Alpineのlinux/386に含まれる`mirakc-arib`はSSPが無効化されています．
 
 Raspberry PiなどのSBCで実行する場合は，先の例で使用した`mirakc/mirakc:alpine`

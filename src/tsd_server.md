@@ -1,5 +1,6 @@
 # `tsd`サーバーの詳しい話
 
+> [!WARNING]
 > 実運用での`tsd`サーバーの使用はお勧めしません．理由は以下を参照してください．
 
 私が動作検証用に利用しているTSストリームを処理するためのサーバーです．サーバー化
@@ -37,7 +38,7 @@
 パケットの転送処理により，デコード処理を分離した恩恵（CPU使用量の低下）を打ち消
 してしまう可能性があります．
 
-## `b25`コンテナー
+## `b25`コンテナー {#b25}
 
 `Dockerfile`:
 
@@ -76,7 +77,7 @@ echo "Start a descrambling server on tcp 40773"
 socat tcp-listen:40773,fork,reuseaddr system:'arib-b25-stream-test -v 0'
 ```
 
-## `bcas`コンテナー
+## `bcas`コンテナー {#bcas}
 
 `Dockerfile`:
 
@@ -106,7 +107,7 @@ echo "Start a pcscd proxy on tcp 40774"
 socat tcp-listen:40774,fork,reuseaddr unix-connect:/var/run/pcscd/pcscd.comm
 ```
 
-## compose.yaml
+## compose.yaml {#compose-yaml}
 
 あとはこれらを起動するだけ．
 

@@ -4,6 +4,11 @@
   "author": "masnagam",
   "language": "ja",
   "plugins": [
+    "anchors",
+    "back-to-top-button",
+    "blockquote-callout",
+    "collapsible-chapters",
+    "expand-active-chapter",
     "japanese-support"
   ]
 }

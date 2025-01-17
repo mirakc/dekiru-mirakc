@@ -6,7 +6,7 @@
 だけでは録画システムを構築できません．自力でカスタムイメージを作成する必要があり
 ます．
 
-## カスタムイメージのネイティブビルド
+## カスタムイメージのネイティブビルド {#native-build}
 
 カスタムイメージの作成はそれほど難しい作業ではありません．試しに`HEALTHCHECK`を
 追加してみます．
@@ -44,7 +44,7 @@ sudo docker stop custom-mirakc
 * [tv-recorder-dockerfile/mirakc](https://github.com/collelog/tv-recorder-dockerfile/tree/master/mirakc)
 * [docker-bon-mirakurun/dockerfiles/mirakc](https://github.com/68fpjc/docker-bon-mirakurun/blob/master/dockerfiles/mirakc)
 
-## カスタムイメージのクロスビルド
+## カスタムイメージのクロスビルド {#cross-build}
 
 ほとんどの場合，カスタムイメージを特定の実行環境上でビルド（ネイティブビルド）す
 ると思います．しかし，カスタムイメージをクロスビルドすべき幾つかの状況が存在しま

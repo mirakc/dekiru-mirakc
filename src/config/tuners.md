@@ -28,6 +28,7 @@ tuners:
 レート文字列が指定可能で，設定項目毎に使用可能なテンプレートパラメーターは異なり
 ます．
 
+> [!IMPORTANT]
 > Double MustacheとTriple Mustacheでは動作が異なる点に注意してください．
 > 詳細は[こちら](https://mustache.github.io/mustache.5.html)に書かれています．
 
@@ -77,7 +78,7 @@ Stopping mirakc ... done
 たくさんのログが表示されますが，正しく動作していれば，上記のようなログを見つける
 ことができます．
 
-## 既に稼働しているMirakurun/mirakcをチューナーとして利用する
+## 既に稼働しているMirakurun/mirakcをチューナーとして利用する {#mirakurun}
 
 ちょっとした動作確認のために，わざわざチューナーのデバイスドライバーをインストー
 ルするのは面倒な作業です．このような場合には，以下のような設定を行い，既に稼働し
@@ -86,13 +87,13 @@ Stopping mirakc ... done
 
 ```yaml
 tuners:
-  - name: upstream
+  - name: mirakurun
     types: [GR, BS]
     command: >-
-      curl -s http://upstream:40772/api/channels/{{{channel_type}}}/{{{channel}}}/stream?decode=0
+      curl -s http://mirakurun:40772/api/channels/{{{channel_type}}}/{{{channel}}}/stream?decode=0
 ```
 
-上記の`http://upstream:40772`の部分は接続先のMirakurunまたはmirakcサーバーのURL
+上記の`http://mirakurun:40772`の部分は接続先のMirakurunまたはmirakcサーバーのURL
 に置き換えてください．
 
 Mirakurunとは異なり，mirakcの`/api/channels/{{{channel_type}}}/{{{channel}}}/stream?decode=0`
@@ -104,7 +105,7 @@ curl -s http://mirakc:40772/api/channels/GR/27/stream?decode=0 | \
   MIRAKC_ARIB_LOG=debug mirakc-arib scan-services
 ```
 
-## 設定例
+## 設定例 {#examples}
 
 一般的に利用されているチューナーコマンドに対する設定例を以下に記載します．
 
@@ -128,8 +129,9 @@ tuners:
       dvbv5-zap -a 0 -c /path/to/conf -r -P {{{channel}}} -o -
 ```
 
-## チャンネル制限
+## チャンネル制限 {#excluded-channels}
 
+> [!IMPORTANT]
 > チャンネル制限は3.3.0以降でのみ利用可能です
 
 複数のチューナーがあり，[何らかの理由](https://github.com/mirakc/mirakc/issues/2156)で特定のチュー
