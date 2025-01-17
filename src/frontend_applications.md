@@ -48,6 +48,23 @@ mirakurunPath: http://raspberrypi.local:40772/
 `curl`と`jq`さえあれば何でもできるけど，さすがに番組表はGUIで見たいという人は利
 用を検討しましょう．
 
+## mirakc-ui {#mirakc-ui}
+
+[mirakc-ui]はmirakc用のWeb UIです．番組表の表示以外に録画管理をサポートしています．
+
+README.mdに記載されている`Dockerfile`では[イメージのビルドに失敗](https://github.com/ansanloms/mirakc-ui/issues/2)するので，
+しばらくの間は以下のように`deno.lock`を削除するように修正しましょう．
+
+```dockerfile
+...
+# deno cacheの前にdeno.lockを削除
+RUN rm deno.lock
+RUN deno cache ./main.ts --allow-import
+...
+```
+
+`miraview`とは異なり，`mirakc-ui`はWeb UI専用のサーバーを起動します．
+
 ## TVTest {#tvtest}
 
 原因はよく分かっていませんが，Mirakurun用の`BonDriver_Mirakurun`ではうまく動かな
@@ -169,6 +186,7 @@ ID           STATE      START             END               MINS  ...
 `-h`オプションで各スクリプトのヘルプが表示されます．
 
 [miraview]: https://github.com/maeda577/miraview
+[mirakc-ui]: https://github.com/ansanloms/mirakc-ui
 [Gerbera]: https://gerbera.io/
 [Samba]: https://en.wikipedia.org/wiki/Samba
 [MiniDLNA]: https://sourceforge.net/projects/minidlna/

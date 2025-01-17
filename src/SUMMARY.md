@@ -34,6 +34,7 @@
   * [EPGStation v1](./frontend_applications.md#epgstation-v1)
   * [EPGStation v2](./frontend_applications.md#epgstation-v2)
   * [miraview](./frontend_applications.md#miraview)
+  * [mirakc-ui](./frontend_applications.md#mirakc-ui)
   * [TVTest](./frontend_applications.md#tvtest)
   * [Kodi](./frontend_applications.md#kodi)
   * [mirakc/timeshift-gerbera](./frontend_applications.md#mirakc-timeshift-gerbera)
