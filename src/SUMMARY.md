@@ -51,7 +51,6 @@
   * [mirakc/mirakcイメージでTSストリームがデコードできない](./troubleshooting.md#decode)
   * [mirakc-timeshift-fsが起動しない](./troubleshooting.md#timeshift-fs)
   * [GitHub Issuesの検索](./troubleshooting.md#github-issues)
-
 ---
 * [tsdサーバーの詳しい話](./tsd_server.md)
   * [`b25`コンテナー](./tsd_server.md#b25)
@@ -60,3 +59,5 @@
 * [v2からv3への移行](./migration.md)
   * [config.yml](./migration.md#config-yml)
 * [旧バージョンのドキュメント](./older_versions.md)
+---
+* [リンク集](./links.md)

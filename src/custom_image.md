@@ -41,7 +41,9 @@ sudo docker stop custom-mirakc
 
 より実用的な例としては，以下のDockerfileを参考にしてください．
 
-* [tv-recorder-dockerfile/mirakc](https://github.com/collelog/tv-recorder-dockerfile/tree/master/mirakc)
+* [yude/tv-recorder-dockerfile](https://github.com/yude/tv-recorder-dockerfile/tree/master/mirakc)
+* [octarect/tvrec](https://github.com/octarect/tvrec/blob/master/docker/mirakc/Dockerfile)
+* [No292nukegara/mirakc-recisdb](https://github.com/No292nukegara/mirakc-recisdb/blob/main/Dockerfile)
 * [docker-bon-mirakurun/dockerfiles/mirakc](https://github.com/68fpjc/docker-bon-mirakurun/blob/master/dockerfiles/mirakc)
 
 ## カスタムイメージのクロスビルド {#cross-build}
