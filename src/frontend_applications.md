@@ -123,6 +123,34 @@ Kodiがハングすることがありました．そのため，Kodiでタイム
 
 [PVR IPTV Simple Client]: https://kodi.wiki/view/Add-on:PVR_IPTV_Simple_Client
 
+### バージョンの固定
+
+Kodiを更新すると，PVR IPTV Simple Clientが動作しなくなったり，PVR IPTV Simple Clientが原因で起動直
+後にクラッシュが発生することが度々あります．そのため，Kodiの更新は慎重に行いましょう．
+
+[`flatpak`]を使用しているなら，以下の方法で`flatpak update`による自動更新からKodiを除外できます．
+
+```shell
+# See https://unix.stackexchange.com/questions/673741
+
+# バージョンを固定する機能はないが，自動更新を停止することは可能
+flatpak mask tv.kodi.Kodi
+```
+
+発生している問題に依存しますが，以下の方法で過去バージョンにダウングレードできます．
+
+```shell
+# See https://github.com/flatpak/flatpak/issues/3097
+
+# 以下のコマンドで表示される一覧から戻したいバージョンのコミットハッシュを探す
+flatpak remote-info --log flathub tv.kodi.Kodi
+
+# 指定バージョンにダウングレード
+sudo flatpak update --commit=<commit-hash> tv.kodi.Kodi
+```
+
+[`flatpak`]: https://flatpak.org/
+
 ## mirakc/timeshift-gerbera {#mirakc-timeshift-gerbera}
 
 多くのTVはUPnP/DLNAをサポートしているため，[Gerbera]を使えばタイムシフト録画を視聴できます．Gerbera
