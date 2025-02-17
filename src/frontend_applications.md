@@ -51,17 +51,7 @@ mirakurunPath: http://raspberrypi.local:40772/
 ## mirakc-ui {#mirakc-ui}
 
 [mirakc-ui]はmirakc用のWeb UIです．番組表の表示以外に録画管理をサポートしています．
-
-README.mdに記載されている`Dockerfile`では[イメージのビルドに失敗](https://github.com/ansanloms/mirakc-ui/issues/2)するので，
-しばらくの間は以下のように`deno.lock`を削除するように修正しましょう．
-
-```dockerfile
-...
-# deno cacheの前にdeno.lockを削除
-RUN rm deno.lock
-RUN deno cache ./main.ts --allow-import
-...
-```
+README.mdに記載されている手順で簡単に導入できます．
 
 `miraview`とは異なり，`mirakc-ui`はWeb UI専用のサーバーを起動します．
 
