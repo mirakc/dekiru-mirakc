@@ -3,7 +3,7 @@
 <html lang="ja" >
     <head>
         <meta charset="UTF-8">
-        <title>mirakcって何ですか？ · できるmirakc</title>
+        <title>リンク集 · できるmirakc</title>
         <meta http-equiv="X-UA-Compatible" content="IE=edge" />
         <meta name="description" content="">
         <meta name="generator" content="HonKit 6.0.2">
@@ -76,10 +76,8 @@
     <link rel="shortcut icon" href="gitbook/images/favicon.ico" type="image/x-icon">
 
     
-    <link rel="next" href="install/" />
     
-    
-    <link rel="prev" href="./" />
+    <link rel="prev" href="older_versions.html" />
     
 
     </head>
@@ -121,7 +119,7 @@
             
         </li>
     
-        <li class="chapter active" data-level="1.2" data-path="what.html">
+        <li class="chapter " data-level="1.2" data-path="what.html">
             
                 <a href="what.html">
             
@@ -936,7 +934,7 @@
         
         
     
-        <li class="chapter " data-level="3.1" data-path="links.html">
+        <li class="chapter active" data-level="3.1" data-path="links.html">
             
                 <a href="links.html">
             
@@ -979,7 +977,7 @@
     <!-- Title -->
     <h1>
         <i class="fa fa-circle-o-notch fa-spin"></i>
-        <a href="." >mirakcって何ですか？</a>
+        <a href="." >リンク集</a>
     </h1>
 </div>
 
@@ -994,32 +992,60 @@
     
                                 <section class="normal markdown-section">
                                 
-                                <html><head></head><body><h1 id="mirakcって何ですか？"><a name="mirakcって何ですか？" class="plugin-anchor" href="#mirakcって何ですか？"><i class="fa fa-link" aria-hidden="true"></i></a>mirakcって何ですか？</h1>
-<p>初めて名前を目にした人もいると思うので，簡単に説明しておきます．</p>
-<p>mirakcは，Raspberry Piのような<a href="https://ja.wikipedia.org/wiki/%E3%82%B7%E3%83%B3%E3%82%B0%E3%83%AB%E3%83%9C%E3%83%BC%E3%83%89%E3%82%B3%E3%83%B3%E3%83%94%E3%83%A5%E3%83%BC%E3%82%BF" target="_blank">シングルボードコンピュータ</a>（SBC）をターゲットデバイスとして，Rust言語で記述されたMirakurunクローンです．</p>
-<p>大きな改善点として，CPU使用率及びメモリー使用量の改善が挙げられます．例えば，８チャンネル同時ストリーミング時のリソース使用効率が，Mirakurunと比べて以下のように向上しています．</p>
+                                <html><head></head><body><h1 id="リンク集"><a name="リンク集" class="plugin-anchor" href="#リンク集"><i class="fa fa-link" aria-hidden="true"></i></a>リンク集</h1>
+<p>リンク先のページの記述は，対象バージョンが古かったり，期待通り動作しない場合があります．参考情報として活用しましょう．</p>
+<h2 id="録画サーバーを作ろう"><a name="録画サーバーを作ろう" class="plugin-anchor" href="#録画サーバーを作ろう"><i class="fa fa-link" aria-hidden="true"></i></a>録画サーバーを作ろう</h2>
+<p>読み応えのある記事．</p>
 <ul>
-<li>CPU使用率は同程度（もしくは低い）</li>
-<li>メモリー使用量は1/4</li>
+<li><a href="https://qiita.com/motiakoron/items/fdd76590a44461ca061e" target="_blank">mirakc / PX-S1UD / Raspberry Pi 3B で録画鯖 - Qiita</a></li>
+<li><a href="https://aznhe21.hatenablog.com/entry/2023/01/18/mirakc-podman" target="_blank">極小TVチューナーマシンを組む、あるいはpodman play kube周りについて - あずんひの日</a><ul>
+<li><code>docker compose</code>ではなく，<code>podman</code>を使っています</li>
 </ul>
-<p>また，GCを使用しない実装となっていることから（一部，参照カウント方式のメモリー管理を行っています），CPU使用率・メモリー使用量共に安定的に推移します．</p>
-<p>mirakcは，Mirakurunの完全クローンには至っておらず，EPGStationを動作させるために必要な<a href="https://github.com/mirakc/mirakc/blob/main/docs/web-api.md" target="_blank">Web API</a>のみを実装しています．そのため，残念ながらChinachuでは使えません（もちろん，不足しているWeb APIを実装すれば動くとは思います）．</p>
-<h2 id="開発を始めるまでの経緯"><a name="開発を始めるまでの経緯" class="plugin-anchor" href="#開発を始めるまでの経緯"><i class="fa fa-link" aria-hidden="true"></i></a>開発を始めるまでの経緯</h2>
-<p>一般的に，SBCは以下のような特徴を持っています．</p>
+</li>
+<li>Rock5BでTV録画サーバを作る<ul>
+<li><a href="https://zenn.dev/kuruton/articles/293a9cb4f062da" target="_blank">前編</a></li>
+<li><a href="https://zenn.dev/kuruton/articles/2080e1464155d2" target="_blank">後編</a></li>
+</ul>
+</li>
+<li><a href="https://qiita.com/heisannn/items/46c850f78f6104142a43" target="_blank">Proxmox VEでdocker-mirakc-konomitvを使ってテレビ視聴サーバーを構築する - Qiita</a><ul>
+<li><a href="https://en.wikipedia.org/wiki/Proxmox_Virtual_Environment" target="_blank">Proxmox VE</a>という仮想環境管理ツールを使っています</li>
+</ul>
+</li>
+<li><a href="https://blog.mat2uken.blog/posts/mirakc-amatsukaze-juicefs/" target="_blank">mirakc+Amatsukaze+juicefsの組み合わせでテレビ録画を見る - mat2uken-blog</a><ul>
+<li>自動録画予約を自力実装したり，想定通りの使用法</li>
+</ul>
+</li>
+</ul>
+<h2 id="composeyaml"><a name="composeyaml" class="plugin-anchor" href="#composeyaml"><i class="fa fa-link" aria-hidden="true"></i></a>compose.yaml</h2>
+<p><code>compose.yaml</code>の書き方について参考になりそうなもの．</p>
 <ul>
-<li>1GHz程度の低クロックCPU</li>
-<li>1GB程度のメモリー</li>
-<li>十数ワットの電力消費</li>
+<li><a href="https://github.com/5ym/docker-mirakc-epgstation" target="_blank">5ym/docker-mirakc-epgstation</a></li>
+<li><a href="https://github.com/tea-red/tv-recorder" target="_blank">tea-red/tv-recorder</a></li>
+<li><a href="https://github.com/yude/tv-recorder-dockerfile" target="_blank">yude/tv-recorder-dockerfile</a><ul>
+<li>多分，削除されてしまった<code>collelog/tv-recorder-dockerfile</code>のfork</li>
 </ul>
-<p>一昔前のデスクトップPCよりも貧弱な環境です．動画をffmpegでソフトウェアエンコードするといった使い方には向いていません．しかし，２４時間稼働し続けるちょっとしたサービスの運用には最適です．</p>
-<p>ちょっとしたサービス．そう，録画サーバーに向いていると思いませんか？私もそう考えて，棚の上で埃を被っていたRaspberry Pi 3Bに手を伸ばしました．</p>
-<p>早速メルカリでPX-S1UDとカードリーダーを手に入れました．マイクロSDカードに
-Raspbianを書き込み，チューナーデバイスのファームウェアとMirakurunをインストールしました．</p>
-<p>Mirakurunは申し分ない速度で動作しました．CPU使用率も問題ありませんでした．心配していたメモリー使用量は150MB前後であり，予想よりも少ない消費量で動作しました．ちょっとした成功に高揚感を感じた私は，何を思ったのか<a href="https://wiki.pine64.org/index.php/ROCK64" target="_blank">ROCK64</a>とPX-Q3U4を購入していました．</p>
-<p>当時（２０１９年第１四半期），Raspberry Pi 3Bに搭載されているイーサネットの上限が100Mbpsであるため，Mirakurunで４つのTSストリームを同時に送信することは困難であることが知られていました（Qiitaの記事だったと記憶していますが，その記事はすでに削除されてしまっているようです）．そこで，ROCK64の登場です．今ならRaspberry Pi 4
-を購入する場面ですが，その当時，1Gbpsイーサネット搭載で扱いやすそうなSBCの１つが
-ROCK64でした．価格も手頃だったので悩むことなく購入しました．</p>
-<p>準備を整え，８つのTSストリームの同時送信を試したところ，メモリーが枯渇しました．後で分かったことですが，Mirakurunでも2GBあれば８つのTSストリームを同時送信可能です．当時私が使用していたROCK64に搭載されていたメモリーは1GB．ROCK64のメモリーのラインナップは1/2/4GB．数千円をケチって安いのを買ったことがmirakc開発の始まりとなりました．</p>
+</li>
+</ul>
+<h2 id="tips"><a name="tips" class="plugin-anchor" href="#tips"><i class="fa fa-link" aria-hidden="true"></i></a>Tips</h2>
+<p>ちょっとしたテクニックとか．</p>
+<ul>
+<li><a href="https://wktk.jp/entry/use-mirakc-without-docker-easily/" target="_blank">簡単に mirakc を Docker なしで使用する | wktk's blog</a><ul>
+<li><code>glibc</code>とかの互換性（ABI）の問題で動かないこともあるので，自分が何をやっているのか理解している人のみ実行しましょう</li>
+</ul>
+</li>
+</ul>
+<h2 id="古典"><a name="古典" class="plugin-anchor" href="#古典"><i class="fa fa-link" aria-hidden="true"></i></a>古典</h2>
+<p>以下は古すぎて，実用的な情報はあまり含まれていません．</p>
+<ul>
+<li><a href="https://qiita.com/masnagam/items/e71a234f2e66b1246a37" target="_blank">MirakurunクローンをRustで実装しました - Qiita</a><ul>
+<li>多分mirakcに関する最初の記事</li>
+</ul>
+</li>
+<li><a href="https://nyanonon.hatenablog.com/entry/20191114/1573731890" target="_blank">Mirakurunクローンのmirakcを動かしてみた - にゃののん日記</a><ul>
+<li>多分私以外が書いたmirakcに関する最初の記事</li>
+</ul>
+</li>
+</ul>
 </body></html>
                                 
                                 </section>
@@ -1047,14 +1073,10 @@ ROCK64でした．価格も手頃だったので悩むことなく購入しま�
 
             
                 
-                <a href="./" class="navigation navigation-prev " aria-label="Previous page: できるmirakc">
+                <a href="older_versions.html" class="navigation navigation-prev navigation-unique" aria-label="Previous page: 旧バージョンのドキュメント">
                     <i class="fa fa-angle-left"></i>
                 </a>
                 
-                
-                <a href="install/" class="navigation navigation-next " aria-label="Next page: Dockerを使ったインストール">
-                    <i class="fa fa-angle-right"></i>
-                </a>
                 
             
         
@@ -1063,7 +1085,7 @@ ROCK64でした．価格も手頃だったので悩むことなく購入しま�
     <script>
         var gitbook = gitbook || [];
         gitbook.push(function() {
-            gitbook.page.hasChanged({"page":{"title":"mirakcって何ですか？","level":"1.2","depth":1,"next":{"title":"Dockerを使ったインストール","level":"1.3","depth":1,"path":"install/README.md","ref":"./install/README.md","articles":[{"title":"Raspberry Piのセットアップ","level":"1.3.1","depth":2,"path":"install/setup_rpi.md","ref":"./install/setup_rpi.md","articles":[]},{"title":"Dockerのインストール","level":"1.3.2","depth":2,"path":"install/docker.md","ref":"./install/docker.md","articles":[]},{"title":"mirakcのインストール","level":"1.3.3","depth":2,"path":"install/mirakc.md","ref":"./install/mirakc.md","articles":[]},{"title":"Dockerイメージ","level":"1.3.4","depth":2,"path":"install/image.md","ref":"./install/image.md","articles":[]}]},"previous":{"title":"できるmirakc","level":"1.1","depth":1,"path":"README.md","ref":"README.md","articles":[]},"dir":"ltr"},"config":{"plugins":["anchors","back-to-top-button","blockquote-callout","collapsible-chapters","expand-active-chapter","japanese-support"],"root":"./src","styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"pluginsConfig":{"search":{},"collapsible-chapters":{},"lunr":{"maxIndexSize":1000000,"ignoreSpecialCharacters":false},"fontsettings":{"theme":"white","family":"sans","size":2},"blockquote-callout":{},"japanese-support":{},"highlight":{},"back-to-top-button":{},"expand-active-chapter":{},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false},"anchors":{}},"theme":"default","author":"masnagam","pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56},"embedFonts":false},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"variables":{},"title":"できるmirakc","language":"ja","gitbook":"*"},"file":{"path":"what.md","mtime":"2025-02-17T04:44:34.852Z","type":"markdown"},"gitbook":{"version":"6.0.2","time":"2025-02-17T04:44:44.129Z"},"basePath":".","book":{"language":""}});
+            gitbook.page.hasChanged({"page":{"title":"リンク集","level":"3.1","depth":1,"previous":{"title":"旧バージョンのドキュメント","level":"2.3","depth":1,"path":"older_versions.md","ref":"./older_versions.md","articles":[]},"dir":"ltr"},"config":{"plugins":["anchors","back-to-top-button","blockquote-callout","collapsible-chapters","expand-active-chapter","japanese-support"],"root":"./src","styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"pluginsConfig":{"search":{},"collapsible-chapters":{},"lunr":{"maxIndexSize":1000000,"ignoreSpecialCharacters":false},"fontsettings":{"theme":"white","family":"sans","size":2},"blockquote-callout":{},"japanese-support":{},"highlight":{},"back-to-top-button":{},"expand-active-chapter":{},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false},"anchors":{}},"theme":"default","author":"masnagam","pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56},"embedFonts":false},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"variables":{},"title":"できるmirakc","language":"ja","gitbook":"*"},"file":{"path":"links.md","mtime":"2025-02-17T04:44:34.852Z","type":"markdown"},"gitbook":{"version":"6.0.2","time":"2025-02-17T04:44:44.129Z"},"basePath":".","book":{"language":""}});
         });
     </script>
 </div>
