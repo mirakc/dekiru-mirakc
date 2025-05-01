@@ -21,7 +21,7 @@
     "gitbook-plugin-collapsible-chapters": "^0.1.8",
     "gitbook-plugin-expand-active-chapter": "^1.0.0",
     "gitbook-plugin-japanese-support": "0.0.1",
-    "honkit": "^6.0.2",
+    "honkit": "^6.0.3",
     "honkit-plugin-blockquote-callout": "^1.0.0"
   },
   "private": true
