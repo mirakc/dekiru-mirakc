@@ -20,23 +20,21 @@ tuners:
     command: recpt1 --device /dev/px4video2 {{{channel}}} - -
 ```
 
-ここで，`tuners[].command`にはテンプレート文字列が指定されており，`{{{`と`}}}`
-（Triple Mustache）または`{{`と`}}`（Double Mustache）で囲われた識別子（上記の例
-では`channel`）は，テンプレートパラメーターと呼ばれる特別な変数です．mirakcは，テ
-ンプレート言語として[Mustache]を採用しており，リスト型のテンプレートパラメーター
-の展開もサポートしています．`tuners[].command`以外にもいくつかの設定項目でテンプ
-レート文字列が指定可能で，設定項目毎に使用可能なテンプレートパラメーターは異なり
-ます．
+ここで，`tuners[].command`にはテンプレート文字列が指定されており，`{{{`と`}}}`（Triple Mustache）ま
+たは`{{`と`}}`（Double Mustache）で囲われた識別子（上記の例では`channel`）は，テンプレートパラメータ
+ーと呼ばれる特別な変数です．mirakcは，テンプレート言語として[Mustache]を採用しており，リスト型のテン
+プレートパラメーターの展開もサポートしています．`tuners[].command`以外にもいくつかの設定項目でテンプ
+レート文字列が指定可能で，設定項目毎に使用可能なテンプレートパラメーターは異なります．
 
 > [!IMPORTANT]
 > Double MustacheとTriple Mustacheでは動作が異なる点に注意してください．
 > 詳細は[こちら](https://mustache.github.io/mustache.5.html)に書かれています．
 
-mirakcのチューナー設定には`decoder`プロパティは存在しません．その代わりに，後述
-するフィルター設定を使用します．
+mirakcのチューナー設定には`decoder`プロパティは存在しません．その代わりに，後述するフィルター設定を
+使用します．
 
-Dockerを使用している場合，以下のように`compose.yaml`に使用するデバイスファ
-イルを記述する必要があります．
+Dockerを使用している場合，以下のように`compose.yaml`に使用するデバイスファイルを記述する必要がありま
+す．
 
 ```yaml
 services:
@@ -72,36 +70,33 @@ $ sudo docker compose up
 Stopping mirakc ... done
 ```
 
-ここで，各行の始めの`...`は実際に表示されるテキストではなく，ログの省略を意味し
-ます．
+ここで，各行の始めの`...`は実際に表示されるテキストではなく，ログの省略を意味します．
 
-たくさんのログが表示されますが，正しく動作していれば，上記のようなログを見つける
-ことができます．
+たくさんのログが表示されますが，正しく動作していれば，上記のようなログを見つけることができます．
 
 ## 既に稼働しているMirakurun/mirakcをチューナーとして利用する {#mirakurun}
 
-ちょっとした動作確認のために，わざわざチューナーのデバイスドライバーをインストー
-ルするのは面倒な作業です．このような場合には，以下のような設定を行い，既に稼働し
-ているMirakurunまたはmirakcをチューナーとして利用することをお勧めします（同様の
-ことはMirakurunでも可能です）．
+ちょっとした動作確認のために，わざわざチューナーのデバイスドライバーをインストールするのは面倒な作業
+です．このような場合には，以下のような設定を行い，既に稼働しているMirakurunまたはmirakcをチューナー
+として利用することをお勧めします（同様のことはMirakurunでも可能です）．
 
 ```yaml
 tuners:
   - name: mirakurun
     types: [GR, BS]
     command: >-
-      curl -s http://mirakurun:40772/api/channels/{{{channel_type}}}/{{{channel}}}/stream?decode=0
+      curl 'http://mirakurun:40772/api/channels/{{{channel_type}}}/{{{channel}}}/stream?decode=0' -sG
 ```
 
-上記の`http://mirakurun:40772`の部分は接続先のMirakurunまたはmirakcサーバーのURL
-に置き換えてください．
+上記の`http://mirakurun:40772`の部分は接続先のMirakurunまたはmirakcサーバーのURLに置き換えてくださ
+い．
 
-Mirakurunとは異なり，mirakcの`/api/channels/{{{channel_type}}}/{{{channel}}}/stream?decode=0`
-APIは，チューナーからの出力をそのまま送出します．NULLパケットすらドロップしま
-せん．そのため，TSパケットを処理するツールのテストなどにも使えて便利です．
+Mirakurunとは異なり，mirakcの`/api/channels/{{{channel_type}}}/{{{channel}}}/stream?decode=0`APIは，
+チューナーからの出力をそのまま送出します．NULLパケットすらドロップしません．そのため，TSパケットを処
+理するツールのテストなどにも使えて便利です．
 
 ```shell
-curl -s http://mirakc:40772/api/channels/GR/27/stream?decode=0 | \
+curl 'http://mirakc:40772/api/channels/GR/27/stream?decode=0' -sG | \
   MIRAKC_ARIB_LOG=debug mirakc-arib scan-services
 ```
 
@@ -134,8 +129,8 @@ tuners:
 > [!IMPORTANT]
 > チャンネル制限は3.3.0以降でのみ利用可能です
 
-複数のチューナーがあり，[何らかの理由](https://github.com/mirakc/mirakc/issues/2156)で特定のチュー
-ナーで利用可能なチャンネルを制限したい場合，`excluded-channels`プロパティで設定可能です．
+複数のチューナーがあり，[何らかの理由](https://github.com/mirakc/mirakc/issues/2156)で特定のチューナ
+ーで利用可能なチャンネルを制限したい場合，`excluded-channels`プロパティで設定可能です．
 
 ```yaml
 channels:

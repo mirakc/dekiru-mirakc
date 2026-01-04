@@ -12,7 +12,7 @@ Mediumで公開している「[できるmirakc](https://medium.com/chinachu/c98v
 
 HTMLの生成には[HonKit](https://github.com/honkit/honkit)を使っています．
 
-以下のコマンドでHTML生成後にサーバーが機能します．
+以下のコマンドでHTML生成後にサーバーが起動します．
 
 ```shell
 # Install dependencies

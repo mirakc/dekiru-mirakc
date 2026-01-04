@@ -1,13 +1,13 @@
 # Raspberry Piのセットアップ
 
-Raspberry Piのセットアップ手順については，「[Raspberry Pi 4で構築する録画マシン]」
-に記載されているため詳細な説明を行いません．
+Raspberry Piのセットアップ手順については，「[Raspberry Pi 4で構築する録画マシン]」に記載されているた
+め詳細な説明を行いません．
 
 以降の説明は，
 
 * Raspberry Pi 3B
 * Raspberry Pi OS Lite (64-bit)
-* PX-Q3U4 + [nns779/px4_drv]
+* PX-Q3U4 + [tsukumijima/px4_drv]
 
 で動作確認をしましたが，以下のような環境でもmirakcは動作します．
 
@@ -17,8 +17,8 @@ Raspberry Piのセットアップ手順については，「[Raspberry Pi 4で�
 
 ## デバイスの準備
 
-デバイスにログインしないことには何も始まりません．Raspbianを書き込んだマイクロSD
-カードに以下の修正を適用します．
+デバイスにログインしないことには何も始まりません．Raspbianを書き込んだマイクロSDカードに以下の修正を
+適用します．
 
 ```shell
 # SSHの有効化
@@ -38,8 +38,7 @@ echo "dtoverlay=disable-bt" >>/mnt/boot/config.txt
 ... coherent_pool=4M ...
 ```
 
-マイクロSDカードをRaspberry Piに挿入し，電源をオン．有効化してある`ssh`を使って
-ログインします．
+マイクロSDカードをRaspberry Piに挿入し，電源をオン．有効化してある`ssh`を使ってログインします．
 
 ```shell
 # 必要に応じてホストを追加
@@ -56,8 +55,7 @@ ssh-copy-id pi
 ssh pi
 ```
 
-`raspberrypi.local`に接続できない場合，何らかの理由でmDNSが機能していないことを
-意味します．
+`raspberrypi.local`に接続できない場合，何らかの理由でmDNSが機能していないことを意味します．
 
 ログインしたら，安全のために以下を実行しておきます．
 
@@ -69,8 +67,7 @@ passwd
 sudo passwd -l root
 ```
 
-SDカードの寿命が気になる人は，以下の設定に追加してtmpfsの設定も行っておきましょ
-う．
+SDカードの寿命が気になる人は，以下の設定に追加してtmpfsの設定も行っておきましょう．
 
 ```shell
 # swapの無効化
@@ -94,5 +91,5 @@ sudo reboot
 ```
 
 [Raspberry Pi 4で構築する録画マシン]: https://medium.com/chinachu/c98v-raspberry-pi-4-49c9692f5c09
-[nns779/px4_drv]: https://github.com/nns779/px4_drv
+[tsukumijima/px4_drv]: https://github.com/tsukumijima/px4_drv
 [Armbian]: https://en.wikipedia.org/wiki/Armbian

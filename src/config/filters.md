@@ -8,22 +8,22 @@ $ sudo docker compose up -d
 Starting mirakc ... done
 
 # 最初のサービス（ＮＨＫ総合１）のIDを表示
-$ curl -s http://localhost:40772/api/services | jq .[0].id
+$ curl http://localhost:40772/api/services -sG | jq '.[0].id'
 3273601024
 
 # ＮＨＫ総合１のTSストリーミングを実行（Ctrl+Cで停止）
-$ curl http://localhost:40772/api/services/3273601024/stream?decode=0 >/dev/null
+$ curl 'http://localhost:40772/api/services/3273601024/stream?decode=0' >/dev/null
   % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
                                  Dload  Upload   Total   Spent    Left  Speed
 100 16.8M    0 16.8M    0     0  1578k      0 --:--:--  0:00:10 --:--:-- 1725k
 ```
 
-しかし，今の設定のままでは，TSストリームを`ffmpeg`で変換したりすることはできませ
-ん．なぜならば，フィルターが設定されていないためです．
+しかし，今の設定のままでは，TSストリームを`ffmpeg`で変換したりすることはできません．なぜならば，フィ
+ルターが設定されていないためです．
 
-フィルターは，TSストリームを標準入力から受け取り，処理後のTSストリームを標準出力
-に出力する外部プログラムです．mirakc自体にはこのような機能は実装されておらず，
-フィルター設定で指定された外部プログラムにTSストリームの処理を委譲します．
+フィルターは，TSストリームを標準入力から受け取り，処理後のTSストリームを標準出力に出力する外部プログ
+ラムです．mirakc自体にはこのような機能は実装されておらず，フィルター設定で指定された外部プログラムに
+TSストリームの処理を委譲します．
 
 フィルターの動作を確認するため，以下のような設定を行ってみます．
 
@@ -43,14 +43,13 @@ filters:
 $ sudo docker compose restart
 
 # decode-filter付きTSストリーミングを実行
-$ curl -s http://localhost:40772/api/services/3273601024/stream?decode=1
+$ curl 'http://localhost:40772/api/services/3273601024/stream?decode=1' -sG
 GR/27 SID#1024
 ```
 
 TSストリームをチャンネル情報に置き換えることに成功しました．
 
-なお，`filters.decode-filter`は，Mirakurunの`tuners.yml`での`decoder`に相当する設
-定です．
+なお，`filters.decode-filter`は，Mirakurunの`tuners.yml`での`decoder`に相当する設定です．
 
 フィルターの動作確認も終了したので，実用的なフィルターを設定してみます．
 
@@ -66,8 +65,7 @@ filters:
       arib-b25-stream-test
 ```
 
-また，以下のように外部サーバーでTSストリームを処理し，その結果をクライアントに返
-すことも可能です．
+また，以下のように外部サーバーでTSストリームを処理し，その結果をクライアントに返すことも可能です．
 
 ```yaml
 filters:
@@ -80,24 +78,22 @@ filters:
       socat -,cool-write tcp-connect:tsd:40773
 ```
 
-[socat]は，配布している`mirakc/mirakc`イメージにも含まれているツールです．詳し
-い説明はリンク先を見るかGoogle先生に教えてもらってください．
+[socat]は，配布している`mirakc/mirakc`イメージにも含まれているツールです．詳しい説明はリンク先を見る
+かGoogle先生に教えてもらってください．
 
-`filters`プロパティーはチューナーごとに設定するのではなく，すべてのチューナーに
-対して共通で利用される設定です．そのため，特定のチューナーに対して特別な処理を行
-いたい場合は，渡されたテンプレートパラメーターを利用して処理を分岐するようなスク
-リプトを作成し，これをフィルターとして設定する必要があります．
+`filters`プロパティーはチューナーごとに設定するのではなく，すべてのチューナーに対して共通で利用され
+る設定です．そのため，特定のチューナーに対して特別な処理を行いたい場合は，渡されたテンプレートパラメ
+ーターを利用して処理を分岐するようなスクリプトを作成し，これをフィルターとして設定する必要がありま
+す．
 
-試しに，以下のような簡単な`bs-not-supported`スクリプトを作って，動作を確認してみ
-ます．
+試しに，以下のような簡単な`bs-not-supported.sh`スクリプトを作って，動作を確認してみます．
 
 ```shell
-#!/bin/sh
-
 CHANNEL_TYPE="$1"
 CHANNEL="$2"
 
-if [ "$CHANNEL_TYPE" = "GR" ]; then
+if [ "$CHANNEL_TYPE" = "GR" ]
+then
   echo "$CHANNEL"
 else
   echo "BS not supported"
@@ -111,29 +107,25 @@ fi
 filters:
   decode-filter:
     command: >-
-      bs-not-supported {{{channel_type}}} {{{channel}}}
+      sh /bs-not-supported.sh {{{channel_type}}} {{{channel}}}
 ```
 
 `compose.yaml`:
 
 ```yaml
 # 変更部分のみ記載
-...
     volumes:
-      - mirakc-epg:/var/lib/mirakc/epg
-      - ./config.yml:/etc/mirakc/config.yml:ro
-      # 忘れずに`chmod +x bs-not-supported`しておくこと
-      - ./bs-not-supported:/usr/local/bin/bs-not-supported:ro
-...
+      ...
+      - ./bs-not-supported.sh:/bs-not-supported.sh:ro
 ```
 
-以下のように表示されれば，`bs-not-supported`スクリプトは機能しています．
+以下のように表示されれば，`bs-not-supported.sh`スクリプトは機能しています．
 
 ```console
-$ curl http://localhost:40772/api/channels/GR/27/stream?decode=1
+$ curl 'http://localhost:40772/api/channels/GR/27/stream?decode=1' -sG
 27
 
-$ curl http://localhost:40772/api/channels/BS/BS15_0/stream?decode=1
+$ curl 'http://localhost:40772/api/channels/BS/BS15_0/stream?decode=1' -sG
 BS not supported
 ```
 
