@@ -10,5 +10,8 @@
     "collapsible-chapters",
     "expand-active-chapter",
     "japanese-support"
-  ]
+  ],
+  "styles": {
+    "website": "styles/website.css"
+  }
 }
