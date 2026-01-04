@@ -1025,16 +1025,14 @@
       <span class="hljs-attr">RUST_LOG:</span> <span class="hljs-string">info,mirakc=debug</span>
 </code></pre>
 <p>環境変数<code>MIRAKC_ARIB_LOG_NO_TIMESTAMP=1</code>を定義すると，<code>mirakc-arib</code>のログメッセージからタイムスタンプを削除できます．</p>
-<p>デフォルト設定では，<code>mirakc-arib</code>は何もログを出力しません．必ず，環境変数
-<code>MIRAKC_ARIB_LOG</code>でログレベルを指定してください．<code>RUST_LOG</code>のように，コマンド毎にログレベルを指定することも可能です．</p>
+<p>デフォルト設定では，<code>mirakc-arib</code>は何もログを出力しません．必ず，環境変数<code>MIRAKC_ARIB_LOG</code>でログレベルを指定してください．<code>RUST_LOG</code>のように，コマンド毎にログレベルを指定することも可能です．</p>
 <pre><code class="lang-yaml"><span class="hljs-comment"># compose.yamlからの抜粋</span>
 <span class="hljs-string">...</span>
     <span class="hljs-attr">environment:</span>
       <span class="hljs-comment"># filter-serviceとfilter-programはdebug，それ以外はinfo</span>
       <span class="hljs-attr">MIRAKC_ARIB_LOG:</span> <span class="hljs-string">info,filter-service=debug,filter-program=debug</span>
 </code></pre>
-<p><code>MIRAKC_ARIB_LOG</code>に指定可能なログレベルの一覧が
-<a href="[mirakc/mirakc-aribのREADME.md]">こちら</a>にあります．</p>
+<p><code>MIRAKC_ARIB_LOG</code>に指定可能なログレベルの一覧が<a href="[mirakc/mirakc-aribのREADME.md]">こちら</a>にあります．</p>
 <h2 id="pinelines"><a name="pinelines" class="plugin-anchor" href="#pinelines"><i class="fa fa-link" aria-hidden="true"></i></a>パイプラインの動作確認 </h2>
 <p>mirakcは，TSストリームに関する処理のほぼ全てを外部プログラムで実行します．この設計には，余分なリソースを消費するデメリットがある一方で，以下のようなメリットがあります．</p>
 <ul>
@@ -1042,28 +1040,27 @@
 <li>スクリプト等でTSストリーム処理をカスタマイズできる</li>
 <li>TSストリーム処理部のみ取り出しでデバッグできる</li>
 </ul>
-<p>mirakcでは，TSストリーム処理プログラムをパイプで連結したものを「パイプライン」と呼んでいます．パイプラインの基本的構成については
-<a href="https://github.com/mirakc/mirakc/blob/main/docs/inside-mirakc.md" target="_blank">こちら</a>を参照してください．</p>
+<p>mirakcでは，TSストリーム処理プログラムをパイプで連結したものを「パイプライン」と呼んでいます．パイプラインの基本的構成については<a href="https://github.com/mirakc/mirakc/blob/main/docs/inside-mirakc.md" target="_blank">こちら</a>
+を参照してください．</p>
 <p>ログレベルを<code>debug</code>に変更すると，パイプラインに関するログが出力されるようになります．</p>
 <pre><code>... DEBUG pipeline{id=0.0 label="tuner"}: ...
 ... DEBUG pipeline{id=0.0.1 label="epg.scan-services"}: ...
 ... DEBUG pipeline{id=0.1.1 label="epg.sync-clocks"}: ...
-</code></pre><p>上記のように，パイプラインには一意の<code>id</code>と処理毎に<code>label</code>が付与されています．これらを使いログを<code>grep</code>することで，特定のパイプラインの動作を確認できます．</p>
+</code></pre><p>上記のように，パイプラインには一意の<code>id</code>と処理毎に<code>label</code>が付与されています．これらを使いログを
+<code>grep</code>することで，特定のパイプラインの動作を確認できます．</p>
 <p>各パイプラインの最初のログには，以下のように実行したコマンドの情報が出力されます．</p>
 <pre><code>... Spawned command="&lt;実行したコマンド&gt;" pid=&lt;そのPID&gt;
-</code></pre><p>動作確認対象のパイプラインを構成するコマンドを集めた後，これらを直接実行することで問題の発生源を切り分けることが可能です．以下は<code>GET /api/channels/GR/27/stream</code>
-で実行されるパイプラインを直接実行する場合の例です．</p>
+</code></pre><p>動作確認対象のパイプラインを構成するコマンドを集めた後，これらを直接実行することで問題の発生源を切り分けることが可能です．以下は<code>GET /api/channels/GR/27/stream</code>で実行されるパイプラインを直接実行する場合の例です．</p>
 <pre><code class="lang-shell"><span class="hljs-meta prompt_"># </span><span class="language-bash">チューナーコマンドで`curl`を，`decode-filter`に`socat`を使用しています</span>
-curl -fsSL http://remote:40772/api/channels/GR/27/stream?decode=0 | \
+curl 'http://remote:40772/api/channels/GR/27/stream?decode=0' -sG | \
   socat -,cool-write tcp-connect:tsd:40773
 </code></pre>
-<p>通常のコマンド実行と同じなので，各プログラムのログレベルを変更することも，<code>gdb</code>
-などをアタッチすることも可能です．</p>
+<p>通常のコマンド実行と同じなので，各プログラムのログレベルを変更することも，<code>gdb</code>などをアタッチすることも可能です．</p>
 <h2 id="filters"><a name="filters" class="plugin-anchor" href="#filters"><i class="fa fa-link" aria-hidden="true"></i></a>フィルターの動作確認 </h2>
 <p>フィルターで問題が発生している場合，フィルターに指定した外部プログラムを単独実行することで，問題の切り分けが可能です．</p>
 <p>例えば，以下のコマンドで<code>mirakc-arib filter-service</code>の動作を確認できます．</p>
 <pre><code class="lang-shell">sudo docker exec -it mirakc sh -c \
-  'curl -s http://localhost:40772/api/channels/GR/27/stream?decode=0 | \
+  'curl "http://localhost:40772/api/channels/GR/27/stream?decode=0" -sG | \
      MIRAKC_ARIB_LOG=debug mirakc-arib filter-service --sid=1024 &gt;/dev/null'
 </code></pre>
 <p>本記事では説明しませんでしたが，ジョブ設定（<code>jobs</code>）に指定されている外部プログラムも上記と同様の方法で動作を確認できます．</p>
@@ -1072,7 +1069,7 @@ curl -fsSL http://remote:40772/api/channels/GR/27/stream?decode=0 | \
 <h3 id="epgstation-tuner-unavailable"><a name="epgstation-tuner-unavailable" class="plugin-anchor" href="#epgstation-tuner-unavailable"><i class="fa fa-link" aria-hidden="true"></i></a>空きチューナーが存在しない </h3>
 <p>EPG関連のジョブの優先度は低く設定されているため，ストリーミングにより全てのチューナーが使用されていると，番組表更新のためのジョブが実行できません．その結果，いつまで経っても番組表が更新されないという状況が発生します．</p>
 <p>以下のコマンドでチューナーの使用状況が確認できます．</p>
-<pre><code class="lang-shell">curl -s http://mirakc:40772/api/tuners | jq .[].isFree
+<pre><code class="lang-shell">curl http://mirakc:40772/api/tuners -sG | jq .[].isFree
 </code></pre>
 <p>全てのチューナーが使用されている場合，<code>false</code>のみが表示されます．</p>
 <p>この状況では，少なくとも１つのチューナーを開放しないと，番組表は更新されません．</p>
@@ -1080,9 +1077,11 @@ curl -fsSL http://remote:40772/api/channels/GR/27/stream?decode=0 | \
 <p>EPG関連ジョブは多くても１つだけ実行されるようになっています．そのため，あるEPG関連ジョブが終了しなくなると，他のEPG関連ジョブを実行することができず，番組表が更新されない状態に陥ります．</p>
 <p>この状態に陥った場合，以下のようなログが繰り返し出力されます．</p>
 <pre><code>... WARN mirakc::job: update-schedules: Already running, skip
-</code></pre><p><code>update-schedules</code>ジョブは，進捗しない状態が30秒続くと停止するようになっています．この値は，<code>config.jobs.update-schedules.command</code>のコマンドラインオプションとして指定可能です．詳しくは<code>mirakc-arib -h collect-eits</code>を参照してください．</p>
-<p>ジョブ停止時間を過ぎても停止しない場合，特定セクションのデータが到着しないような状況に陥っています．この場合は，<code>update-schedules</code>ジョブを停止するしかありません．
-<code>ps</code>コマンドでジョブのPIDを調べて<code>kill</code>してください．ジョブは登録してある時間になったら再び実行されるので，これを<code>kill</code>しても問題ありません．</p>
+</code></pre><p><code>update-schedules</code>ジョブは，進捗しない状態が30秒続くと停止するようになっています．この値は，
+<code>config.jobs.update-schedules.command</code>のコマンドラインオプションとして指定可能です．詳しくは
+<code>mirakc-arib -h collect-eits</code>を参照してください．</p>
+<p>ジョブ停止時間を過ぎても停止しない場合，特定セクションのデータが到着しないような状況に陥っています．この場合は，<code>update-schedules</code>ジョブを停止するしかありません．<code>ps</code>コマンドでジョブのPIDを調べて
+<code>kill</code>してください．ジョブは登録してある時間になったら再び実行されるので，これを<code>kill</code>しても問題ありません．</p>
 <p>いちいちPIDを調べて<code>kill</code>するのが面倒だという人は，<code>timeout</code>をジョブのコマンドに付けておきましょう．以下の例では，<code>update-schedules</code>ジョブの最大実行時間を10分に設定しています（<a href="https://github.com/Chinachu/Mirakurun/blob/master/doc/Configuration.md" target="_blank">Mirakurun互換の動作</a>）．</p>
 <pre><code class="lang-yaml"><span class="hljs-attr">jobs:</span>
   <span class="hljs-attr">update-schedules:</span>
@@ -1102,14 +1101,9 @@ curl -fsSL http://remote:40772/api/channels/GR/27/stream?decode=0 | \
 </ul>
 <p>解析の結果，環境依存問題であることがわかっています．まずはログレベルを上げてログメッセージから何が起きているのか確認してください．その後の対処は，発生している事象に依存するため，ここで明確に対処法を記述することはできません．上記報告済み不具合のやり取りを確認の上，自分で問題を解決してください．もちろん，mirakcの不具合と思われる事象については，問題を登録していただけると助かります．</p>
 <h2 id="decode"><a name="decode" class="plugin-anchor" href="#decode"><i class="fa fa-link" aria-hidden="true"></i></a>mirakc/mirakcイメージでTSストリームがデコードできない </h2>
-<p>mirakc/mirakcイメージにはTSストリームをデコードするためのコマンドが<strong>含まれていません</strong>．そのため，このイメージに対して<code>arib-b25-stream-test</code>を設定すると，以下のようなエラーが表示されて，
-TSストリームを取得できなくなります．</p>
-<pre><code class="lang-console"><span class="hljs-meta prompt_">$ </span><span class="language-bash">curl -sG http://localhost:40772/api/channels/GR/27/stream</span>
+<p>mirakc/mirakcイメージにはTSストリームをデコードするためのコマンドが<strong>含まれていません</strong>．そのため，このイメージに対して<code>arib-b25-stream-test</code>を設定すると，以下のようなエラーが表示されて，TSストリームを取得できなくなります．</p>
+<pre><code class="lang-console"><span class="hljs-meta prompt_">$ </span><span class="language-bash">curl http://localhost:40772/api/channels/GR/27/stream -sG</span>
 {"code":500,"reason":null,"errors":[]}
-<span class="hljs-meta prompt_">
-# </span><span class="language-bash">actix-webのログレベルをdebug以上に設定しておく必要があります</span>
-<span class="hljs-meta prompt_">$ </span><span class="language-bash">docker logs mirakc | grep arib-b25-stream-test</span>
-... DEBUG ... CommandFailed(UnableToSpawn("arib-b25-stream-test", ...
 </code></pre>
 <p>デコードするためには，以下のいずれかの対応が必要です．</p>
 <ul>
@@ -1124,8 +1118,7 @@ TSストリームを取得できなくなります．</p>
 <p><code>mirakc-timeshift-fs</code>起動時に以下のようなエラーメッセージが表示され起動できない場合，</p>
 <pre><code>Error: IoError(Os { code: 2, kind: NotFound, message: "No such file or directory" }
 </code></pre><p><code>fusermount</code>（もしくは<code>fusermount3</code>）が環境にインストールされていないか，インストール先が<code>PATH</code>に含まれていない可能性があります．</p>
-<p><a href="https://github.com/mirakc/mirakc/blob/main/docker/Dockerfile.debian" target="_blank">docker/Dockerfile.debian</a>
-などを参考に，不足パッケージをインストールし，<code>PATH</code>を適切に設定してください．</p>
+<p><a href="https://github.com/mirakc/mirakc/blob/main/docker/Dockerfile.debian" target="_blank">docker/Dockerfile.debian</a>などを参考に，不足パッケージをインストールし，<code>PATH</code>を適切に設定してください．</p>
 <p><code>-o allow_other</code>などのオプションを使用する場合は，起動前に<code>/etc/fuse.conf</code>を適切に設定しておく必要があります．詳細は<code>man fuse</code>を参照してください．</p>
 <h2 id="github-issues"><a name="github-issues" class="plugin-anchor" href="#github-issues"><i class="fa fa-link" aria-hidden="true"></i></a>GitHub Issuesの検索 </h2>
 <p>同様の問題が他の人の環境でも発生している場合，<a href="https://github.com/mirakc/mirakc/issues" target="_blank">GitHub Issues</a>に既に報告済みかもしれません．思いつくキーワードを指定して，報告済みの問題を検索することで，解決方法が見つかるかもしれません．</p>
@@ -1174,7 +1167,7 @@ TSストリームを取得できなくなります．</p>
     <script>
         var gitbook = gitbook || [];
         gitbook.push(function() {
-            gitbook.page.hasChanged({"page":{"title":"トラブルシューティング","level":"1.8","depth":1,"next":{"title":"tsdサーバーの詳しい話","level":"2.1","depth":1,"path":"tsd_server.md","ref":"./tsd_server.md","articles":[{"title":"b25コンテナー","level":"2.1.1","depth":2,"anchor":"#b25","path":"tsd_server.md","ref":"./tsd_server.md#b25","articles":[]},{"title":"bcasコンテナー","level":"2.1.2","depth":2,"anchor":"#bcas","path":"tsd_server.md","ref":"./tsd_server.md#bcas","articles":[]},{"title":"compose.yaml","level":"2.1.3","depth":2,"anchor":"#compose-yaml","path":"tsd_server.md","ref":"./tsd_server.md#compose-yaml","articles":[]}]},"previous":{"title":"カスタムイメージの作成","level":"1.7","depth":1,"path":"custom_image.md","ref":"./custom_image.md","articles":[{"title":"カスタムイメージのネイティブビルド","level":"1.7.1","depth":2,"anchor":"#native-build","path":"custom_image.md","ref":"./custom_image.md#native-build","articles":[]},{"title":"カスタムイメージのクロスビルド","level":"1.7.2","depth":2,"anchor":"#cross-build","path":"custom_image.md","ref":"./custom_image.md#cross-build","articles":[]}]},"articles":[{"title":"ログメッセージの確認","level":"1.8.1","depth":2,"anchor":"#logs","path":"troubleshooting.md","ref":"./troubleshooting.md#logs","articles":[]},{"title":"パイプラインの動作確認","level":"1.8.2","depth":2,"anchor":"#pinelines","path":"troubleshooting.md","ref":"./troubleshooting.md#pinelines","articles":[]},{"title":"フィルターの動作確認","level":"1.8.3","depth":2,"anchor":"#filters","path":"troubleshooting.md","ref":"./troubleshooting.md#filters","articles":[]},{"title":"EPGStationの番組表が更新されない","level":"1.8.4","depth":2,"anchor":"#epgstation","path":"troubleshooting.md","ref":"./troubleshooting.md#epgstation","articles":[]},{"title":"No space for tnuer#x.x.x, drop the chunk","level":"1.8.5","depth":2,"anchor":"#no-space","path":"troubleshooting.md","ref":"./troubleshooting.md#no-space","articles":[]},{"title":"mirakc/mirakcイメージでTSストリームがデコードできない","level":"1.8.6","depth":2,"anchor":"#decode","path":"troubleshooting.md","ref":"./troubleshooting.md#decode","articles":[]},{"title":"mirakc-timeshift-fsが起動しない","level":"1.8.7","depth":2,"anchor":"#timeshift-fs","path":"troubleshooting.md","ref":"./troubleshooting.md#timeshift-fs","articles":[]},{"title":"GitHub Issuesの検索","level":"1.8.8","depth":2,"anchor":"#github-issues","path":"troubleshooting.md","ref":"./troubleshooting.md#github-issues","articles":[]}],"dir":"ltr"},"config":{"plugins":["anchors","back-to-top-button","blockquote-callout","collapsible-chapters","expand-active-chapter","japanese-support"],"root":"./src","styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"pluginsConfig":{"search":{},"collapsible-chapters":{},"lunr":{"maxIndexSize":1000000,"ignoreSpecialCharacters":false},"fontsettings":{"theme":"white","family":"sans","size":2},"blockquote-callout":{},"japanese-support":{},"highlight":{},"back-to-top-button":{},"expand-active-chapter":{},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false},"anchors":{}},"theme":"default","author":"masnagam","pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56},"embedFonts":false},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"variables":{},"title":"できるmirakc","language":"ja","gitbook":"*"},"file":{"path":"troubleshooting.md","mtime":"2026-01-03T11:48:39.941Z","type":"markdown"},"gitbook":{"version":"6.1.4","time":"2026-01-03T11:48:49.015Z"},"basePath":".","book":{"language":""}});
+            gitbook.page.hasChanged({"page":{"title":"トラブルシューティング","level":"1.8","depth":1,"next":{"title":"tsdサーバーの詳しい話","level":"2.1","depth":1,"path":"tsd_server.md","ref":"./tsd_server.md","articles":[{"title":"b25コンテナー","level":"2.1.1","depth":2,"anchor":"#b25","path":"tsd_server.md","ref":"./tsd_server.md#b25","articles":[]},{"title":"bcasコンテナー","level":"2.1.2","depth":2,"anchor":"#bcas","path":"tsd_server.md","ref":"./tsd_server.md#bcas","articles":[]},{"title":"compose.yaml","level":"2.1.3","depth":2,"anchor":"#compose-yaml","path":"tsd_server.md","ref":"./tsd_server.md#compose-yaml","articles":[]}]},"previous":{"title":"カスタムイメージの作成","level":"1.7","depth":1,"path":"custom_image.md","ref":"./custom_image.md","articles":[{"title":"カスタムイメージのネイティブビルド","level":"1.7.1","depth":2,"anchor":"#native-build","path":"custom_image.md","ref":"./custom_image.md#native-build","articles":[]},{"title":"カスタムイメージのクロスビルド","level":"1.7.2","depth":2,"anchor":"#cross-build","path":"custom_image.md","ref":"./custom_image.md#cross-build","articles":[]}]},"articles":[{"title":"ログメッセージの確認","level":"1.8.1","depth":2,"anchor":"#logs","path":"troubleshooting.md","ref":"./troubleshooting.md#logs","articles":[]},{"title":"パイプラインの動作確認","level":"1.8.2","depth":2,"anchor":"#pinelines","path":"troubleshooting.md","ref":"./troubleshooting.md#pinelines","articles":[]},{"title":"フィルターの動作確認","level":"1.8.3","depth":2,"anchor":"#filters","path":"troubleshooting.md","ref":"./troubleshooting.md#filters","articles":[]},{"title":"EPGStationの番組表が更新されない","level":"1.8.4","depth":2,"anchor":"#epgstation","path":"troubleshooting.md","ref":"./troubleshooting.md#epgstation","articles":[]},{"title":"No space for tnuer#x.x.x, drop the chunk","level":"1.8.5","depth":2,"anchor":"#no-space","path":"troubleshooting.md","ref":"./troubleshooting.md#no-space","articles":[]},{"title":"mirakc/mirakcイメージでTSストリームがデコードできない","level":"1.8.6","depth":2,"anchor":"#decode","path":"troubleshooting.md","ref":"./troubleshooting.md#decode","articles":[]},{"title":"mirakc-timeshift-fsが起動しない","level":"1.8.7","depth":2,"anchor":"#timeshift-fs","path":"troubleshooting.md","ref":"./troubleshooting.md#timeshift-fs","articles":[]},{"title":"GitHub Issuesの検索","level":"1.8.8","depth":2,"anchor":"#github-issues","path":"troubleshooting.md","ref":"./troubleshooting.md#github-issues","articles":[]}],"dir":"ltr"},"config":{"plugins":["anchors","back-to-top-button","blockquote-callout","collapsible-chapters","expand-active-chapter","japanese-support"],"root":"./src","styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"pluginsConfig":{"search":{},"collapsible-chapters":{},"lunr":{"maxIndexSize":1000000,"ignoreSpecialCharacters":false},"fontsettings":{"theme":"white","family":"sans","size":2},"blockquote-callout":{},"japanese-support":{},"highlight":{},"back-to-top-button":{},"expand-active-chapter":{},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false},"anchors":{}},"theme":"default","author":"masnagam","pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56},"embedFonts":false},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"variables":{},"title":"できるmirakc","language":"ja","gitbook":"*"},"file":{"path":"troubleshooting.md","mtime":"2026-01-04T02:41:17.627Z","type":"markdown"},"gitbook":{"version":"6.1.4","time":"2026-01-04T02:41:25.851Z"},"basePath":".","book":{"language":""}});
         });
     </script>
 </div>

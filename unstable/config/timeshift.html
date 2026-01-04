@@ -1042,22 +1042,23 @@ total 3.1G
 <pre><code class="lang-console"><span class="hljs-meta prompt_">$ </span><span class="language-bash"><span class="hljs-built_in">sudo</span> docker compose up -d</span>
 </code></pre>
 <p>タイムシフト録画が動いていれば，以下のように表示されます．</p>
-<pre><code class="lang-console"><span class="hljs-meta prompt_">$ </span><span class="language-bash">curl -sG http://localhost:40772/api/timeshift | jq .[].name</span>
+<pre><code class="lang-console"><span class="hljs-meta prompt_">$ </span><span class="language-bash">curl http://localhost:40772/api/timeshift -sG | jq .[].name</span>
 "nhk-bs"
 </code></pre>
 <p>起動直後は何も録画されていないので何も視聴できませんが，１，２分程度待つと視聴可能な状態になります．</p>
 <pre><code class="lang-console"><span class="hljs-meta prompt_"># </span><span class="language-bash">直後は0で視聴できないが，そのうち0以外が表示されるようになる</span>
-<span class="hljs-meta prompt_">$ </span><span class="language-bash">curl -sG http://localhost:40772/api/timeshift/nhk-bs | jq .duration</span>
+<span class="hljs-meta prompt_">$ </span><span class="language-bash">curl http://localhost:40772/api/timeshift/nhk-bs -sG | jq .duration</span>
 75420
 </code></pre>
 <p><code>ffplay</code>がインストールされているデスクトップ環境上で以下のコマンドを実行すると，最初の番組からタイムシフト再生されます．</p>
 <pre><code class="lang-shell"><span class="hljs-meta prompt_"># </span><span class="language-bash">raspberrypi上ではなく，別のデスクトップ環境上で実行すること</span>
-curl -sG http://raspberrypi.local:40772/api/timeshift/nhk-bs/stream | ffplay -
+curl http://raspberrypi.local:40772/api/timeshift/nhk-bs/stream -sG | ffplay -
 </code></pre>
 <p>上記のWeb APIはタイムシフト録画をライブ視聴相当でストリーミングします．そのため，シークはできませんが，視聴中の番組が終了したら次の番組が自動で再生されます．</p>
 <p>特定の番組のみを視聴したい場合は，以下のWeb APIを使います．</p>
-<pre><code class="lang-shell">ID=$(curl -sG http://raspberrypi.local:40772/api/timeshift/nhk-bs/records | jq .[0].id)
-curl -sG http://raspberrypi.local:40772/api/timeshift/nhk-bs/records/$ID/stream | ffplay -
+<pre><code class="lang-shell">MIRAKC=http://raspberrypi.local:40772
+ID=$(curl $MIRAKC/api/timeshift/nhk-bs/records -sG | jq .[0].id)
+curl $MIRAKC/api/timeshift/nhk-bs/records/$ID/stream -sG | ffplay -
 </code></pre>
 <p>こちらはWeb API呼び出し時に録画されているところまでが再生可能範囲になります．シーク可能ですが，録画中の番組を再生した場合，途中までしか再生されません．普通は録画完了した番組の再生に使います．</p>
 <h2 id="what"><a name="what" class="plugin-anchor" href="#what"><i class="fa fa-link" aria-hidden="true"></i></a>タイムシフト録画とは？ </h2>
@@ -1085,8 +1086,7 @@ curl -sG http://raspberrypi.local:40772/api/timeshift/nhk-bs/records/$ID/stream 
 </li>
 <li>十分なディスク容量を用意する<ul>
 <li>容量が足りないと書き込みエラーが発生して機能しないため，予め<code>fallocate</code>などで<code>ts-file</code>を最大サイズで確保しておくことが望ましいです</li>
-<li><code>ts-file</code>の最大ファイルサイズは，チャンクサイズ（既定値は<code>154009600</code>で約154MB）に<code>num-chunks</code>
-を掛けた数</li>
+<li><code>ts-file</code>の最大ファイルサイズは，チャンクサイズ（既定値は<code>154009600</code>で約154MB）に<code>num-chunks</code>を掛けた数</li>
 <li><code>data-file</code>の最大ファイルサイズは計算不可能ですが，多くても数MB程度</li>
 </ul>
 </li>
@@ -1164,14 +1164,14 @@ curl -sG http://raspberrypi.local:40772/api/timeshift/nhk-bs/records/$ID/stream 
 <h2 id="ts-file"><a name="ts-file" class="plugin-anchor" href="#ts-file"><i class="fa fa-link" aria-hidden="true"></i></a>データ管理方法 </h2>
 <p>mirakcのタイムシフト録画では，録画データ（TSパケット）ファイル（<code>ts-file</code>）をチャンクという塊で管理します．そのため，番組の録画が進んでもチャンクがいっぱいになるまで録画済みとは扱われません．</p>
 <pre><code>ts-file
-+-------------------------------------------------
-| Chunk#0 | Chunk#1 | Chunk#2 | Chunk#3 | ...
-|xxxxxxxxx|xxx______|_________|xxxxxxxxx|x...
-+-------------------------------------------------
-|         |   |               |
-+-番組#100-+   +-番組#10だがもう-+-番組#10（途中から)---
-                見ることはできない
-</code></pre><p>上記では<code>Chunk#0</code>はデータで埋まっているため録画済みとして扱われます．一方，<code>Chunk#1</code>は現在書き込みを行っているチャンクで，データで埋まるまで録画画済みとは扱われません．<code>Chunk#1</code>には過去の録画データが記録されている場合がありますが，データは上書きされていきます．</p>
++------------------------------------------------------------------
+|   Chunk#0   |   Chunk#1   |   Chunk#2   |   Chunk#3   | ...
+|xxxxxxxxxxxxx|xxx__________|_____________|xxxxxxxxxxxxx|x...
++------------------------------------------------------------------
+|             |   |                       |
++-Program#100-+   +---Program#10----------+-Program#10-------------
+                (but no longer available)   (but the beginning is missing)
+</code></pre><p>上記では<code>Chunk#0</code>はデータで埋まっているため録画済みとして扱われます．一方，<code>Chunk#1</code>は現在書き込みを行っているチャンクで，データで埋まるまで録画済みとは扱われません．<code>Chunk#1</code>には過去の録画データが記録されている場合がありますが，データは上書きされていきます．</p>
 <p><code>Chunk#2</code>にも録画データが書き込まれているかもしれませんが，このデータは古くなったものとして扱われます．その結果，古い番組のデータが消えていきます．</p>
 <p>TSパケットの他に，録画済み番組情報などを記録しておく必要があり，<code>data-file</code>はそのために使用されます．<code>data-file</code>を定期的に更新する必要がありますが，これがチャンク単位で行われるようになっています．
 <code>data-file</code>を削除すると，<code>ts-file</code>があっても，どこにどの番組が録画されているのかわからなくなり，録画された番組はないものとして扱われます．</p>
@@ -1181,14 +1181,14 @@ curl -sG http://raspberrypi.local:40772/api/timeshift/nhk-bs/records/$ID/stream 
         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewbox="0 0 16 16"><path d="M0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8Zm8-6.5a6.5 6.5 0 1 0 0 13 6.5 6.5 0 0 0 0-13ZM6.5 7.75A.75.75 0 0 1 7.25 7h1a.75.75 0 0 1 .75.75v2.75h.25a.75.75 0 0 1 0 1.5h-2a.75.75 0 0 1 0-1.5h.25v-2h-.25a.75.75 0 0 1-.75-.75ZM8 6a1 1 0 1 1 0-2 1 1 0 0 1 0 2Z"></path></svg>
         <span>Note</span>
       </p>
-      <p><a href="https://github.com/mirakc/docker-timeshift-x/tree/main/gerbera" target="_blank"><code>mirakc/timeshift-gerbera</code></a>もしくは<a href="https://github.com/mirakc/docker-timeshift-x/tree/main/samba" target="_blank"><code>mirakc/timeshift-samba</code></a>を使えば，
-以下の説明に出てくるような複雑なマウント処理は必要ありません．
-開発初期にはこれらのDockerイメージは提供していなかったという歴史的経緯により，
-以下の説明では２つのコンテナー間でタイムシフト・ファイルシステムを共有するために複雑なマウント処理を行っています．</p>
+      <p><a href="https://github.com/mirakc/docker-timeshift-x/tree/main/gerbera" target="_blank"><code>mirakc/timeshift-gerbera</code></a>もしくは<a href="https://github.com/mirakc/docker-timeshift-x/tree/main/samba" target="_blank"><code>mirakc/timeshift-samba</code></a>を使えば，&gt; 以下の説明に出てくるよう
+な複雑なマウント処理は必要ありません．開発初期にはこれらのDockerイメージは提供していなかったという
+歴史的経緯により，以下の説明では２つのコンテナー間でタイムシフト・ファイルシステムを共有するために
+複雑なマウント処理を行っています．</p>
 
     </div>
-<p>mirakcはバックエンド機能しか提供しません．そのため，タイムシフト録画した番組を再生する場合，<code>curl</code>
-や<code>jq</code>などを使って，必要な情報を取得する必要があります．Web UIなどのフロントエンドを実装すればよいのでしょうが，今の所はその計画はありません．</p>
+<p>mirakcはバックエンド機能しか提供しません．そのため，タイムシフト録画した番組を再生する場合，<code>curl</code>や
+<code>jq</code>などを使って，必要な情報を取得する必要があります．Web UIなどのフロントエンドを実装すればよいのでしょうが，今の所はその計画はありません．</p>
 <p>タイムシフト録画した番組を再生できるとはいえ，流石にこのままでは不便なので（作った本人である私も）使いたくはありません．そこで，<a href="https://en.wikipedia.org/wiki/Filesystem_in_Userspace" target="_blank">FUSE</a>を使ってタイムシフト録画した番組を普通のファイルとして扱えるファイルシステムを用意しました．</p>
 <p>以下を<code>compose.yaml</code>に追記してください．</p>
 <pre><code class="lang-yaml"><span class="hljs-attr">services:</span>
@@ -1293,8 +1293,8 @@ $ </span><span class="language-bash"><span class="hljs-built_in">ls</span> times
 <p>音声トラックを切り替え可能なメディアプレーヤーで再生すれば，目的の言語の音声のみを再生できます．</p>
 <pre><code class="lang-shell"><span class="hljs-meta prompt_"># </span><span class="language-bash">ステレオ音声が２つのモノラル音声に分離されることを確認</span>
 <span class="hljs-meta prompt_"># </span><span class="language-bash">実際は多重音声（デュアルモノラル）の録画にフィルターを適用する</span>
-STREAM=http://raspberrypi.local:40772/api/timeshift/nhk-bs/stream
-curl -sG "$STREAM?post-filters[]=split-dual-mono" | ffprobe
+STREAM='http://raspberrypi.local:40772/api/timeshift/nhk-bs/stream'
+curl "$STREAM?post-filters[]=split-dual-mono" -sG | ffprobe
 </code></pre>
 <p>コンソール上のログから，ステレオ音声が分離されていることを確認できます．</p>
 <pre><code class="lang-console">Input #0, mpegts, from 'pipe:':
@@ -1363,7 +1363,7 @@ INFO mirakc_core::timeshift: Recording started recorder.name="nhk-bs"
     <script>
         var gitbook = gitbook || [];
         gitbook.push(function() {
-            gitbook.page.hasChanged({"page":{"title":"タイムシフト録画（全録）","level":"1.4.7","depth":2,"next":{"title":"イベント通知","level":"1.5","depth":1,"path":"events.md","ref":"./events.md","articles":[]},"previous":{"title":"録画予約","level":"1.4.6","depth":2,"path":"config/recording.md","ref":"./config/recording.md","articles":[{"title":"録画予約の登録・削除","level":"1.4.6.1","depth":3,"anchor":"#scheduling","path":"config/recording.md","ref":"./config/recording.md#scheduling","articles":[]},{"title":"放送中の番組の追跡","level":"1.4.6.2","depth":3,"anchor":"#onair-trackers","path":"config/recording.md","ref":"./config/recording.md#onair-trackers","articles":[]},{"title":"録画失敗時の動作","level":"1.4.6.3","depth":3,"anchor":"#failures","path":"config/recording.md","ref":"./config/recording.md#failures","articles":[]},{"title":"録画した番組の視聴","level":"1.4.6.4","depth":3,"anchor":"#playback","path":"config/recording.md","ref":"./config/recording.md#playback","articles":[]},{"title":"ルール・ベースの自動録画予約","level":"1.4.6.5","depth":3,"anchor":"#auto-scheduling","path":"config/recording.md","ref":"./config/recording.md#auto-scheduling","articles":[]}]},"articles":[{"title":"タイムシフト録画とは？","level":"1.4.7.1","depth":3,"anchor":"#what","path":"config/timeshift.md","ref":"./config/timeshift.md#what","articles":[]},{"title":"タイムシフト録画に必要なチャンク数の計算方法","level":"1.4.7.2","depth":3,"anchor":"#chunks","path":"config/timeshift.md","ref":"./config/timeshift.md#chunks","articles":[]},{"title":"データ管理方法","level":"1.4.7.3","depth":3,"anchor":"#ts-file","path":"config/timeshift.md","ref":"./config/timeshift.md#ts-file","articles":[]},{"title":"タイムシフト・ファイルシステム","level":"1.4.7.4","depth":3,"anchor":"#timeshift-fs","path":"config/timeshift.md","ref":"./config/timeshift.md#timeshift-fs","articles":[]},{"title":"多重音声（デュアルモノラル）について","level":"1.4.7.5","depth":3,"anchor":"#dual-mono","path":"config/timeshift.md","ref":"./config/timeshift.md#dual-mono","articles":[]},{"title":"タイムシフト録画の再実行","level":"1.4.7.6","depth":3,"anchor":"#auto-restart","path":"config/timeshift.md","ref":"./config/timeshift.md#auto-restart","articles":[]}],"dir":"ltr"},"config":{"plugins":["anchors","back-to-top-button","blockquote-callout","collapsible-chapters","expand-active-chapter","japanese-support"],"root":"./src","styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"pluginsConfig":{"search":{},"collapsible-chapters":{},"lunr":{"maxIndexSize":1000000,"ignoreSpecialCharacters":false},"fontsettings":{"theme":"white","family":"sans","size":2},"blockquote-callout":{},"japanese-support":{},"highlight":{},"back-to-top-button":{},"expand-active-chapter":{},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false},"anchors":{}},"theme":"default","author":"masnagam","pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56},"embedFonts":false},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"variables":{},"title":"できるmirakc","language":"ja","gitbook":"*"},"file":{"path":"config/timeshift.md","mtime":"2026-01-03T11:48:39.940Z","type":"markdown"},"gitbook":{"version":"6.1.4","time":"2026-01-03T11:48:49.015Z"},"basePath":"..","book":{"language":""}});
+            gitbook.page.hasChanged({"page":{"title":"タイムシフト録画（全録）","level":"1.4.7","depth":2,"next":{"title":"イベント通知","level":"1.5","depth":1,"path":"events.md","ref":"./events.md","articles":[]},"previous":{"title":"録画予約","level":"1.4.6","depth":2,"path":"config/recording.md","ref":"./config/recording.md","articles":[{"title":"録画予約の登録・削除","level":"1.4.6.1","depth":3,"anchor":"#scheduling","path":"config/recording.md","ref":"./config/recording.md#scheduling","articles":[]},{"title":"放送中の番組の追跡","level":"1.4.6.2","depth":3,"anchor":"#onair-trackers","path":"config/recording.md","ref":"./config/recording.md#onair-trackers","articles":[]},{"title":"録画失敗時の動作","level":"1.4.6.3","depth":3,"anchor":"#failures","path":"config/recording.md","ref":"./config/recording.md#failures","articles":[]},{"title":"録画した番組の視聴","level":"1.4.6.4","depth":3,"anchor":"#playback","path":"config/recording.md","ref":"./config/recording.md#playback","articles":[]},{"title":"ルール・ベースの自動録画予約","level":"1.4.6.5","depth":3,"anchor":"#auto-scheduling","path":"config/recording.md","ref":"./config/recording.md#auto-scheduling","articles":[]}]},"articles":[{"title":"タイムシフト録画とは？","level":"1.4.7.1","depth":3,"anchor":"#what","path":"config/timeshift.md","ref":"./config/timeshift.md#what","articles":[]},{"title":"タイムシフト録画に必要なチャンク数の計算方法","level":"1.4.7.2","depth":3,"anchor":"#chunks","path":"config/timeshift.md","ref":"./config/timeshift.md#chunks","articles":[]},{"title":"データ管理方法","level":"1.4.7.3","depth":3,"anchor":"#ts-file","path":"config/timeshift.md","ref":"./config/timeshift.md#ts-file","articles":[]},{"title":"タイムシフト・ファイルシステム","level":"1.4.7.4","depth":3,"anchor":"#timeshift-fs","path":"config/timeshift.md","ref":"./config/timeshift.md#timeshift-fs","articles":[]},{"title":"多重音声（デュアルモノラル）について","level":"1.4.7.5","depth":3,"anchor":"#dual-mono","path":"config/timeshift.md","ref":"./config/timeshift.md#dual-mono","articles":[]},{"title":"タイムシフト録画の再実行","level":"1.4.7.6","depth":3,"anchor":"#auto-restart","path":"config/timeshift.md","ref":"./config/timeshift.md#auto-restart","articles":[]}],"dir":"ltr"},"config":{"plugins":["anchors","back-to-top-button","blockquote-callout","collapsible-chapters","expand-active-chapter","japanese-support"],"root":"./src","styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"pluginsConfig":{"search":{},"collapsible-chapters":{},"lunr":{"maxIndexSize":1000000,"ignoreSpecialCharacters":false},"fontsettings":{"theme":"white","family":"sans","size":2},"blockquote-callout":{},"japanese-support":{},"highlight":{},"back-to-top-button":{},"expand-active-chapter":{},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false},"anchors":{}},"theme":"default","author":"masnagam","pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56},"embedFonts":false},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"variables":{},"title":"できるmirakc","language":"ja","gitbook":"*"},"file":{"path":"config/timeshift.md","mtime":"2026-01-04T02:41:17.627Z","type":"markdown"},"gitbook":{"version":"6.1.4","time":"2026-01-04T02:41:25.851Z"},"basePath":"..","book":{"language":""}});
         });
     </script>
 </div>

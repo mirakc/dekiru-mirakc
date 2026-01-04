@@ -1001,17 +1001,18 @@
 Starting mirakc ... done
 <span class="hljs-meta prompt_">
 # </span><span class="language-bash">最初のサービス（ＮＨＫ総合１）のIDを表示</span>
-<span class="hljs-meta prompt_">$ </span><span class="language-bash">curl -s http://localhost:40772/api/services | jq .[0].<span class="hljs-built_in">id</span></span>
+<span class="hljs-meta prompt_">$ </span><span class="language-bash">curl http://localhost:40772/api/services -sG | jq <span class="hljs-string">'.[0].id'</span></span>
 3273601024
 <span class="hljs-meta prompt_">
 # </span><span class="language-bash">ＮＨＫ総合１のTSストリーミングを実行（Ctrl+Cで停止）</span>
-<span class="hljs-meta prompt_">$ </span><span class="language-bash">curl http://localhost:40772/api/services/3273601024/stream?decode=0 &gt;/dev/null</span>
+<span class="hljs-meta prompt_">$ </span><span class="language-bash">curl <span class="hljs-string">'http://localhost:40772/api/services/3273601024/stream?decode=0'</span> &gt;/dev/null</span>
 <span class="hljs-meta prompt_">  % </span><span class="language-bash">Total    % Received % Xferd  Average Speed   Time    Time     Time  Current</span>
                                  Dload  Upload   Total   Spent    Left  Speed
 100 16.8M    0 16.8M    0     0  1578k      0 --:--:--  0:00:10 --:--:-- 1725k
 </code></pre>
 <p>しかし，今の設定のままでは，TSストリームを<code>ffmpeg</code>で変換したりすることはできません．なぜならば，フィルターが設定されていないためです．</p>
-<p>フィルターは，TSストリームを標準入力から受け取り，処理後のTSストリームを標準出力に出力する外部プログラムです．mirakc自体にはこのような機能は実装されておらず，フィルター設定で指定された外部プログラムにTSストリームの処理を委譲します．</p>
+<p>フィルターは，TSストリームを標準入力から受け取り，処理後のTSストリームを標準出力に出力する外部プログラムです．mirakc自体にはこのような機能は実装されておらず，フィルター設定で指定された外部プログラムに
+TSストリームの処理を委譲します．</p>
 <p>フィルターの動作を確認するため，以下のような設定を行ってみます．</p>
 <p><code>config.yml</code>:</p>
 <pre><code class="lang-yaml"><span class="hljs-attr">filters:</span>
@@ -1024,7 +1025,7 @@ Starting mirakc ... done
 <span class="hljs-meta prompt_">$ </span><span class="language-bash"><span class="hljs-built_in">sudo</span> docker compose restart</span>
 <span class="hljs-meta prompt_">
 # </span><span class="language-bash">decode-filter付きTSストリーミングを実行</span>
-<span class="hljs-meta prompt_">$ </span><span class="language-bash">curl -s http://localhost:40772/api/services/3273601024/stream?decode=1</span>
+<span class="hljs-meta prompt_">$ </span><span class="language-bash">curl <span class="hljs-string">'http://localhost:40772/api/services/3273601024/stream?decode=1'</span> -sG</span>
 GR/27 SID#1024
 </code></pre>
 <p>TSストリームをチャンネル情報に置き換えることに成功しました．</p>
@@ -1052,13 +1053,12 @@ GR/27 SID#1024
 </span></code></pre>
 <p><a href="http://www.dest-unreach.org/socat/doc/socat.html" target="_blank">socat</a>は，配布している<code>mirakc/mirakc</code>イメージにも含まれているツールです．詳しい説明はリンク先を見るかGoogle先生に教えてもらってください．</p>
 <p><code>filters</code>プロパティーはチューナーごとに設定するのではなく，すべてのチューナーに対して共通で利用される設定です．そのため，特定のチューナーに対して特別な処理を行いたい場合は，渡されたテンプレートパラメーターを利用して処理を分岐するようなスクリプトを作成し，これをフィルターとして設定する必要があります．</p>
-<p>試しに，以下のような簡単な<code>bs-not-supported</code>スクリプトを作って，動作を確認してみます．</p>
-<pre><code class="lang-shell"><span class="hljs-meta prompt_">#</span><span class="language-bash">!/bin/sh</span>
-
-CHANNEL_TYPE="$1"
+<p>試しに，以下のような簡単な<code>bs-not-supported.sh</code>スクリプトを作って，動作を確認してみます．</p>
+<pre><code class="lang-shell">CHANNEL_TYPE="$1"
 CHANNEL="$2"
 
-if [ "$CHANNEL_TYPE" = "GR" ]; then
+if [ "$CHANNEL_TYPE" = "GR" ]
+then
   echo "$CHANNEL"
 else
   echo "BS not supported"
@@ -1069,23 +1069,19 @@ fi
 <span class="hljs-attr">filters:</span>
   <span class="hljs-attr">decode-filter:</span>
     <span class="hljs-attr">command:</span> <span class="hljs-string">&gt;-
-      bs-not-supported {{{channel_type}}} {{{channel}}}
+      sh /bs-not-supported.sh {{{channel_type}}} {{{channel}}}
 </span></code></pre>
 <p><code>compose.yaml</code>:</p>
 <pre><code class="lang-yaml"><span class="hljs-comment"># 変更部分のみ記載</span>
-<span class="hljs-string">...</span>
     <span class="hljs-attr">volumes:</span>
-      <span class="hljs-bullet">-</span> <span class="hljs-string">mirakc-epg:/var/lib/mirakc/epg</span>
-      <span class="hljs-bullet">-</span> <span class="hljs-string">./config.yml:/etc/mirakc/config.yml:ro</span>
-      <span class="hljs-comment"># 忘れずに`chmod +x bs-not-supported`しておくこと</span>
-      <span class="hljs-bullet">-</span> <span class="hljs-string">./bs-not-supported:/usr/local/bin/bs-not-supported:ro</span>
-<span class="hljs-string">...</span>
+      <span class="hljs-string">...</span>
+      <span class="hljs-bullet">-</span> <span class="hljs-string">./bs-not-supported.sh:/bs-not-supported.sh:ro</span>
 </code></pre>
-<p>以下のように表示されれば，<code>bs-not-supported</code>スクリプトは機能しています．</p>
-<pre><code class="lang-console"><span class="hljs-meta prompt_">$ </span><span class="language-bash">curl http://localhost:40772/api/channels/GR/27/stream?decode=1</span>
+<p>以下のように表示されれば，<code>bs-not-supported.sh</code>スクリプトは機能しています．</p>
+<pre><code class="lang-console"><span class="hljs-meta prompt_">$ </span><span class="language-bash">curl <span class="hljs-string">'http://localhost:40772/api/channels/GR/27/stream?decode=1'</span> -sG</span>
 27
 <span class="hljs-meta prompt_">
-$ </span><span class="language-bash">curl http://localhost:40772/api/channels/BS/BS15_0/stream?decode=1</span>
+$ </span><span class="language-bash">curl <span class="hljs-string">'http://localhost:40772/api/channels/BS/BS15_0/stream?decode=1'</span> -sG</span>
 BS not supported
 </code></pre>
 </body></html>
@@ -1131,7 +1127,7 @@ BS not supported
     <script>
         var gitbook = gitbook || [];
         gitbook.push(function() {
-            gitbook.page.hasChanged({"page":{"title":"フィルター設定","level":"1.4.4","depth":2,"next":{"title":"局ロゴの表示","level":"1.4.5","depth":2,"path":"config/logos.md","ref":"./config/logos.md","articles":[]},"previous":{"title":"EGPデータキャッシュ","level":"1.4.3","depth":2,"path":"config/epg.md","ref":"./config/epg.md","articles":[]},"dir":"ltr"},"config":{"plugins":["anchors","back-to-top-button","blockquote-callout","collapsible-chapters","expand-active-chapter","japanese-support"],"root":"./src","styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"pluginsConfig":{"search":{},"collapsible-chapters":{},"lunr":{"maxIndexSize":1000000,"ignoreSpecialCharacters":false},"fontsettings":{"theme":"white","family":"sans","size":2},"blockquote-callout":{},"japanese-support":{},"highlight":{},"back-to-top-button":{},"expand-active-chapter":{},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false},"anchors":{}},"theme":"default","author":"masnagam","pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56},"embedFonts":false},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"variables":{},"title":"できるmirakc","language":"ja","gitbook":"*"},"file":{"path":"config/filters.md","mtime":"2026-01-03T11:48:39.940Z","type":"markdown"},"gitbook":{"version":"6.1.4","time":"2026-01-03T11:48:49.015Z"},"basePath":"..","book":{"language":""}});
+            gitbook.page.hasChanged({"page":{"title":"フィルター設定","level":"1.4.4","depth":2,"next":{"title":"局ロゴの表示","level":"1.4.5","depth":2,"path":"config/logos.md","ref":"./config/logos.md","articles":[]},"previous":{"title":"EGPデータキャッシュ","level":"1.4.3","depth":2,"path":"config/epg.md","ref":"./config/epg.md","articles":[]},"dir":"ltr"},"config":{"plugins":["anchors","back-to-top-button","blockquote-callout","collapsible-chapters","expand-active-chapter","japanese-support"],"root":"./src","styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"pluginsConfig":{"search":{},"collapsible-chapters":{},"lunr":{"maxIndexSize":1000000,"ignoreSpecialCharacters":false},"fontsettings":{"theme":"white","family":"sans","size":2},"blockquote-callout":{},"japanese-support":{},"highlight":{},"back-to-top-button":{},"expand-active-chapter":{},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false},"anchors":{}},"theme":"default","author":"masnagam","pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56},"embedFonts":false},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"variables":{},"title":"できるmirakc","language":"ja","gitbook":"*"},"file":{"path":"config/filters.md","mtime":"2026-01-04T02:41:17.626Z","type":"markdown"},"gitbook":{"version":"6.1.4","time":"2026-01-04T02:41:25.851Z"},"basePath":"..","book":{"language":""}});
         });
     </script>
 </div>

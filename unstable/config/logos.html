@@ -996,8 +996,7 @@
                                 
                                 <html><head></head><body><h1 id="局ロゴの表示"><a name="局ロゴの表示" class="plugin-anchor" href="#局ロゴの表示"><i class="fa fa-link" aria-hidden="true"></i></a>局ロゴの表示</h1>
 <p>番組表の表示が可能なテレビなどでは，番組表に局ロゴが表示されます．局ロゴはTSストリーム上で定期的に配信されており，テレビなどはこれを抽出・表示しています．</p>
-<p>残念ながら，mirakcは起動中の局ロゴ抽出をサポートしていません．しかし，
-<code>resource.logos</code>プロパティーを設定することで，任意の画像を局ロゴとして利用することが可能です．</p>
+<p>残念ながら，mirakcは起動中の局ロゴ抽出をサポートしていません．しかし，<code>resource.logos</code>プロパティーを設定することで，任意の画像を局ロゴとして利用することが可能です．</p>
 <p><code>config.yml</code>:</p>
 <pre><code class="lang-yaml"><span class="hljs-comment"># NHK総合のロゴ画像を指定</span>
 <span class="hljs-attr">resource:</span>
@@ -1005,21 +1004,21 @@
     <span class="hljs-bullet">-</span> <span class="hljs-attr">service-id:</span> <span class="hljs-number">3273601024</span>
       <span class="hljs-attr">image:</span> <span class="hljs-string">/var/lib/mirakc/logos/nhk.png</span>
 </code></pre>
-<p>ここで<code>nhk.png</code>は局ロゴとして使用する画像です．この画像はどこかから拾ってくるか（ライセンスに注意！），自力でTSストリームから抽出する必要があります．今回は
-<code>mirakc/mirakc</code>イメージに含まれている<code>mirakc-arib</code>を使って，TSストリームからロゴを抽出することにします．</p>
+<p>ここで<code>nhk.png</code>は局ロゴとして使用する画像です．この画像はどこかから拾ってくるか（ライセンスに注意！），自力でTSストリームから抽出する必要があります．今回は<code>mirakc/mirakc</code>イメージに含まれている
+<code>mirakc-arib</code>を使って，TSストリームからロゴを抽出することにします．</p>
 <pre><code class="lang-shell"><span class="hljs-meta prompt_"># </span><span class="language-bash">mirakcは起動済みとする</span>
 mkdir -p logos
-<span class="hljs-meta prompt_"># </span><span class="language-bash">`.data`はdata URL文字列</span>
+<span class="hljs-meta prompt_">
+# </span><span class="language-bash">`.data`はdata URL文字列</span>
 <span class="hljs-meta prompt_"># </span><span class="language-bash">Base64文字列の前に`data:image/png;<span class="hljs-built_in">base64</span>,`が付与されている</span>
 <span class="hljs-meta prompt_"># </span><span class="language-bash">Base64文字列内に`,`は存在しないので，これを区切り文字とできる</span>
-curl -sG http://localhost:40772/api/channels/GR/27/stream?decode=0 | \
+curl 'http://localhost:40772/api/channels/GR/27/stream?decode=0' -sG | \
   sudo docker run --rm -i --entrypoint=/usr/bin/env mirakc/mirakc:alpine \
     mirakc-arib collect-logos | head -1 | jq -Mr '.data' | \
     cut -d ',' -f 2 | base64 -d &gt;logos/nhk.png
 </code></pre>
 <p>局ロゴは頻繁には流れてこないので，抽出には数分（NHKの場合は１０分以下）かかります．お茶でも飲んでしばらく待ちましょう．</p>
-<p>抽出が完了したら，<code>compose.yaml</code>を以下のように書き換えて，コンテナーに
-<code>logos</code>フォルダーをマウントします．</p>
+<p>抽出が完了したら，<code>compose.yaml</code>を以下のように書き換えて，コンテナーに<code>logos</code>フォルダーをマウントします．</p>
 <pre><code class="lang-yaml"><span class="hljs-attr">services:</span>
   <span class="hljs-attr">mirakc:</span>
     <span class="hljs-string">...</span>
@@ -1029,7 +1028,7 @@ curl -sG http://localhost:40772/api/channels/GR/27/stream?decode=0 | \
       <span class="hljs-bullet">-</span> <span class="hljs-string">./logos:/var/lib/mirakc/logos:ro</span>
 </code></pre>
 <p>コンテナーを再起動して動作を確認します．</p>
-<pre><code class="lang-console"><span class="hljs-meta prompt_">$ </span><span class="language-bash">curl -I http://localhost:40772/api/services/3273601024/logo</span>
+<pre><code class="lang-console"><span class="hljs-meta prompt_">$ </span><span class="language-bash">curl http://localhost:40772/api/services/3273601024/logo -I</span>
 HTTP/1.1 200 OK
 content-length: 760
 server: mirakc-core/0.18.0
@@ -1042,10 +1041,10 @@ date: Sat, 19 Jun 2021 07:29:46 GMT
 </code></pre>
 <p>ブラウザーを使えば，実際に表示される画像を確認できます．</p>
 <p>設定した局ロゴは，<code>/api/iptv/*</code>にも反映されます．</p>
-<pre><code class="lang-console"><span class="hljs-meta prompt_">$ </span><span class="language-bash">curl -sG http://localhost:40772/api/iptv/playlist | grep tvg-logo</span>
+<pre><code class="lang-console"><span class="hljs-meta prompt_">$ </span><span class="language-bash">curl http://localhost:40772/api/iptv/playlist -sG | grep tvg-logo</span>
 ... tvg-logo="http://localhost:40772/api/services/3273601024/logo" ...
 <span class="hljs-meta prompt_">
-$ </span><span class="language-bash">curl -sG http://localhost:40772/api/iptv/epg | xmllint --format - | grep icon</span>
+$ </span><span class="language-bash">curl http://localhost:40772/api/iptv/epg -sG | xmllint --format - | grep icon</span>
     &lt;icon src="http://localhost:40772/api/services/3273601024/logo"/&gt;
 </code></pre>
 </body></html>
@@ -1091,7 +1090,7 @@ $ </span><span class="language-bash">curl -sG http://localhost:40772/api/iptv/ep
     <script>
         var gitbook = gitbook || [];
         gitbook.push(function() {
-            gitbook.page.hasChanged({"page":{"title":"局ロゴの表示","level":"1.4.5","depth":2,"next":{"title":"録画予約","level":"1.4.6","depth":2,"path":"config/recording.md","ref":"./config/recording.md","articles":[{"title":"録画予約の登録・削除","level":"1.4.6.1","depth":3,"anchor":"#scheduling","path":"config/recording.md","ref":"./config/recording.md#scheduling","articles":[]},{"title":"放送中の番組の追跡","level":"1.4.6.2","depth":3,"anchor":"#onair-trackers","path":"config/recording.md","ref":"./config/recording.md#onair-trackers","articles":[]},{"title":"録画失敗時の動作","level":"1.4.6.3","depth":3,"anchor":"#failures","path":"config/recording.md","ref":"./config/recording.md#failures","articles":[]},{"title":"録画した番組の視聴","level":"1.4.6.4","depth":3,"anchor":"#playback","path":"config/recording.md","ref":"./config/recording.md#playback","articles":[]},{"title":"ルール・ベースの自動録画予約","level":"1.4.6.5","depth":3,"anchor":"#auto-scheduling","path":"config/recording.md","ref":"./config/recording.md#auto-scheduling","articles":[]}]},"previous":{"title":"フィルター設定","level":"1.4.4","depth":2,"path":"config/filters.md","ref":"./config/filters.md","articles":[]},"dir":"ltr"},"config":{"plugins":["anchors","back-to-top-button","blockquote-callout","collapsible-chapters","expand-active-chapter","japanese-support"],"root":"./src","styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"pluginsConfig":{"search":{},"collapsible-chapters":{},"lunr":{"maxIndexSize":1000000,"ignoreSpecialCharacters":false},"fontsettings":{"theme":"white","family":"sans","size":2},"blockquote-callout":{},"japanese-support":{},"highlight":{},"back-to-top-button":{},"expand-active-chapter":{},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false},"anchors":{}},"theme":"default","author":"masnagam","pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56},"embedFonts":false},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"variables":{},"title":"できるmirakc","language":"ja","gitbook":"*"},"file":{"path":"config/logos.md","mtime":"2026-01-03T11:48:39.940Z","type":"markdown"},"gitbook":{"version":"6.1.4","time":"2026-01-03T11:48:49.015Z"},"basePath":"..","book":{"language":""}});
+            gitbook.page.hasChanged({"page":{"title":"局ロゴの表示","level":"1.4.5","depth":2,"next":{"title":"録画予約","level":"1.4.6","depth":2,"path":"config/recording.md","ref":"./config/recording.md","articles":[{"title":"録画予約の登録・削除","level":"1.4.6.1","depth":3,"anchor":"#scheduling","path":"config/recording.md","ref":"./config/recording.md#scheduling","articles":[]},{"title":"放送中の番組の追跡","level":"1.4.6.2","depth":3,"anchor":"#onair-trackers","path":"config/recording.md","ref":"./config/recording.md#onair-trackers","articles":[]},{"title":"録画失敗時の動作","level":"1.4.6.3","depth":3,"anchor":"#failures","path":"config/recording.md","ref":"./config/recording.md#failures","articles":[]},{"title":"録画した番組の視聴","level":"1.4.6.4","depth":3,"anchor":"#playback","path":"config/recording.md","ref":"./config/recording.md#playback","articles":[]},{"title":"ルール・ベースの自動録画予約","level":"1.4.6.5","depth":3,"anchor":"#auto-scheduling","path":"config/recording.md","ref":"./config/recording.md#auto-scheduling","articles":[]}]},"previous":{"title":"フィルター設定","level":"1.4.4","depth":2,"path":"config/filters.md","ref":"./config/filters.md","articles":[]},"dir":"ltr"},"config":{"plugins":["anchors","back-to-top-button","blockquote-callout","collapsible-chapters","expand-active-chapter","japanese-support"],"root":"./src","styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"pluginsConfig":{"search":{},"collapsible-chapters":{},"lunr":{"maxIndexSize":1000000,"ignoreSpecialCharacters":false},"fontsettings":{"theme":"white","family":"sans","size":2},"blockquote-callout":{},"japanese-support":{},"highlight":{},"back-to-top-button":{},"expand-active-chapter":{},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false},"anchors":{}},"theme":"default","author":"masnagam","pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56},"embedFonts":false},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"variables":{},"title":"できるmirakc","language":"ja","gitbook":"*"},"file":{"path":"config/logos.md","mtime":"2026-01-04T02:41:17.626Z","type":"markdown"},"gitbook":{"version":"6.1.4","time":"2026-01-04T02:41:25.851Z"},"basePath":"..","book":{"language":""}});
         });
     </script>
 </div>
