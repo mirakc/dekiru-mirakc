@@ -122,7 +122,17 @@ tuners:
     types: [GR]
     command: >-
       dvbv5-zap -a 0 -c /path/to/conf -r -P {{{channel}}} -o -
+
+  - name: siano-ts
+    types: [GR]
+    command: >-
+      siano-ts --channel {{{channel}}} --firmware /path/to/isdbt_rio.inp
 ```
+
+[siano-ts](https://github.com/Khronos31/siano-userland)は，PLEX PX-S1UDなどSiano RIO系USBチューナー
+向けのユーザー空間ドライバーです．libusbのみでUSBデバイスを操作するため，カーネルモジュールを必要と
+しません．そのため，デバイスドライバーを追加できないシステムでも使用できます．Dockerを使用している場
+合は，チューナーのデバイスファイルの代わりに`/dev/bus/usb`をコンテナーへ渡す必要があります．
 
 ## チャンネル制限 {#excluded-channels}
 

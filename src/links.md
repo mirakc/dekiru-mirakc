@@ -18,6 +18,9 @@
     を使っています
 * [mirakc+Amatsukaze+juicefsの組み合わせでテレビ録画を見る - mat2uken-blog](https://blog.mat2uken.blog/posts/mirakc-amatsukaze-juicefs/)
   * 自動録画予約を自力実装したり，想定通りの使用法
+* [地デジUSBチューナーのブロックノイズが嫌で、ドライバを作り直した（macOS※ / Windows / Android / Linux） - Zenn](https://zenn.dev/khronos31/articles/siano-ts-userspace-isdbt)
+  * PX-S1UDなどSiano RIO系チューナーを，カーネルモジュールなしで使えるようにした話．
+    [チューナー設定](./config/tuners.md#examples)の`siano-ts`の実装記事です
 
 ## compose.yaml
 
